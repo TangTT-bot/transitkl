@@ -1,4 +1,4 @@
-# TransitKL-capstone
+# TransitKL
 TransitKL is an offline-first Flutter application that:
 -Combines Rapid Rail, selected Rapid Bus services, and KTM Komuter information.
 -Stores processed GTFS schedules locally in SQLite.
