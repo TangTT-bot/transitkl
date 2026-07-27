@@ -1,0 +1,7 @@
+[project]
+name = "transitkl-gtfs-pipeline"
+version = "0.1.0"
+description = "GTFS audit and SQLite preprocessing tools for TransitKL"
+requires-python = ">=3.11"
+dependencies = []
+

@@ -1,14 +1,140 @@
 # TransitKL
-TransitKL is an offline-first Flutter application that:
--Combines Rapid Rail, selected Rapid Bus services, and KTM Komuter information.
--Stores processed GTFS schedules locally in SQLite.
--Searches stations, stops, routes, and timetables without internet access.
--Generates cross-operator journey recommendations.
--Uses modified Dijkstra routing that considers travel, waiting, walking, and transfer inconvenience.
--Shows journey legs, estimated duration, transfers, and data limitations.
--Stores favourites locally without accounts or a backend.
-The core academic contribution is not merely “a public transport app.” It is the combination of:
+
+TransitKL is an offline-first Flutter journey planner for Klang Valley public
+transport. It combines static GTFS schedules from Rapid Rail, selected Rapid
+Bus services, and KTM Komuter in one mobile application.
+
+## Project status
+
+The project is in its first implementation milestone:
+
+- Flutter application scaffolded for Android and iOS.
+- Reproducible GTFS audit and SQLite build pipeline in development.
+- Transfer-aware routing engine and mobile database integration are next.
+
+The current Flutter screen is intentionally a status screen. User interface
+features will be developed after the data pipeline and routing model are
+verified.
+
+## Minimum viable product
+
+- Search Klang Valley stations and stops.
+- Generate offline journey recommendations.
+- Present journey legs, estimated duration, interchanges, and transfers.
+- View static timetables without an internet connection.
+- Save favourite stations and journeys locally.
+- Clearly display feed dates, partial coverage, and static-data limitations.
+
+ERL, ticketing, payments, live vehicle tracking, and guaranteed disruption
+alerts are outside the initial scope.
+
+## Architecture
+
+```text
+Official GTFS feeds
+        |
+        v
+Python audit and preprocessing pipeline
+        |
+        v
+Generated read-only transit SQLite database
+        |
+        v
+Flutter data repositories -> routing engine -> application screens
+        |
+        v
+Separate writable user database for favourites and preferences
+```
+
+Downloaded feeds and generated databases are not committed. The small feed in
+`data/fixtures/mini_gtfs` is committed for repeatable automated tests.
+
+## Repository layout
+
+```text
+lib/                         Flutter application
+test/                        Flutter tests
+tools/gtfs_pipeline/         Python GTFS audit and database builder
+data/fixtures/               Synthetic test feeds committed to Git
+data/downloads/              Downloaded official feeds, ignored by Git
+data/processed/              Generated SQLite databases, ignored by Git
+docs/architecture/           Architecture decision records
+docs/data-audits/            Generated and reviewed feed audit reports
+```
+
+## Flutter setup
+
+Prerequisites:
+
+- Flutter stable SDK.
+- Android Studio or another configured Android SDK environment.
+- Python 3.11 or newer for the GTFS preprocessing pipeline.
+
+```powershell
+flutter pub get
+flutter analyze
+flutter test
+flutter run
+```
+
+The application currently uses Flutter's default Android minimum SDK, API 24.
+The proposal's API 23 statement should be updated or explicitly configured and
+tested before final submission.
+
+## GTFS pipeline
+
+The pipeline uses only the Python standard library.
+
+Verify Python is installed before using it:
+
+```powershell
+python --version
+```
+
+Run its automated tests:
+
+```powershell
+python -m unittest discover -s tools/gtfs_pipeline/tests -v
+```
+
+Download the Rapid Rail feed:
+
+```powershell
+python tools/gtfs_pipeline/run_pipeline.py download `
+  --url "https://api.data.gov.my/gtfs-static/prasarana?category=rapid-rail-kl" `
+  --output data/downloads/rapid-rail-kl.zip
+```
+
+Audit a feed and create human-readable and machine-readable reports:
+
+```powershell
+python tools/gtfs_pipeline/run_pipeline.py audit `
+  --input data/downloads/rapid-rail-kl.zip `
+  --feed-id prasarana_rapid_rail `
+  --markdown-report docs/data-audits/rapid-rail-kl.md `
+  --json-report data/processed/rapid-rail-kl-audit.json
+```
+
+Build the first offline SQLite database:
+
+```powershell
+python tools/gtfs_pipeline/run_pipeline.py build `
+  --input data/downloads/rapid-rail-kl.zip `
+  --feed-id prasarana_rapid_rail `
+  --database data/processed/rapid-rail-kl.sqlite
+```
+
+## Data sources and attribution
+
+Transit data is obtained from Malaysia's official open-data API and is made
+available under the Creative Commons Attribution 4.0 International licence.
+See [DATA_SOURCES.md](DATA_SOURCES.md) for endpoints and attribution details.
+
+## Academic contribution
+
+The core contribution is the combination of:
+
 1. Multi-operator GTFS preprocessing.
-2. An offline database architecture.
-3. A transfer-aware routing model.
-4. A usable mobile presentation of the result.
+2. An offline mobile database architecture.
+3. Transfer-aware modified Dijkstra routing.
+4. Accessible presentation of multimodal journey recommendations.

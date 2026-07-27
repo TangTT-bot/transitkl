@@ -1,0 +1,6 @@
+stop_id,stop_code,stop_name,stop_lat,stop_lon,location_type
+S1,001,Alpha Station,3.1000,101.6000,0
+S2,002,Beta Station,3.1100,101.6100,0
+S3,003,Central Interchange,3.1200,101.6200,0
+S4,004,Delta Station,3.1300,101.6300,0
+S5,005,Echo Station,3.1400,101.6400,0
