@@ -5,11 +5,11 @@ import 'package:transitkl/domain/routing/journey_planner.dart';
 import 'package:transitkl/domain/routing/routing_graph.dart';
 
 Future<void> main(List<String> arguments) async {
-  if (arguments.length != 4) {
+  if (arguments.length != 5) {
     stderr.writeln(
       'Usage: dart run tool/route_demo.dart '
       '<routing-graph.json> <origin name or ID> '
-      '<destination name or ID> <HH:MM[:SS]>',
+      '<destination name or ID> <YYYY-MM-DD> <HH:MM[:SS]>',
     );
     exitCode = 64;
     return;
@@ -22,7 +22,7 @@ Future<void> main(List<String> arguments) async {
       throw const FormatException('The routing graph root must be an object.');
     }
     final graph = RoutingGraph.fromJson(decoded.cast<String, Object?>());
-    final departureSeconds = _parseTime(arguments[3]);
+    final departure = _parseDeparture(arguments[3], arguments[4]);
     final origins = _findStops(graph, arguments[1]);
     final destinations = _findStops(graph, arguments[2]);
     if (origins.isEmpty) {
@@ -39,7 +39,7 @@ Future<void> main(List<String> arguments) async {
         final candidate = planner.plan(
           originStopId: origin.id,
           destinationStopId: destination.id,
-          departureSeconds: departureSeconds,
+          departure: departure,
         );
         if (candidate != null && _isBetter(candidate, bestJourney)) {
           bestJourney = candidate;
@@ -49,8 +49,8 @@ Future<void> main(List<String> arguments) async {
 
     if (bestJourney == null) {
       stdout.writeln(
-        'No route was found at ${_formatClock(departureSeconds)}. '
-        'The services may be outside their published frequency windows.',
+        'No route was found at ${_formatDateTime(departure)}. '
+        'The services may not run on that date or at that time.',
       );
       exitCode = 2;
       return;
@@ -103,8 +103,8 @@ void _printJourney(RoutingGraph graph, Journey journey) {
   final destination = graph.stops[journey.destinationStopId]!.name;
   stdout.writeln('$origin -> $destination');
   stdout.writeln(
-    'Depart ${_formatClock(journey.departureSeconds)}, '
-    'arrive ${_formatClock(journey.arrivalSeconds)} '
+    'Depart ${_formatDateTime(journey.departure)}, '
+    'arrive ${_formatDateTime(journey.arrival)} '
     '(${_formatDuration(journey.totalTravelSeconds)}, '
     '${journey.transferCount} transfer(s))',
   );
@@ -119,7 +119,8 @@ void _printJourney(RoutingGraph graph, Journey journey) {
           '${index + 1}. ${service.shortName} $from -> $to '
           '(${leg.stopIds.length - 1} segment(s), '
           '${_formatDuration(leg.rideSeconds)} riding, '
-          '${_formatDuration(leg.waitSeconds)} average wait)',
+          '${_formatDuration(leg.waitSeconds)} '
+          '${leg.isScheduled ? 'scheduled wait' : 'average wait'})',
         );
       case WalkingLeg():
         final distance = leg.distanceMetres == null
@@ -133,8 +134,17 @@ void _printJourney(RoutingGraph graph, Journey journey) {
   }
 }
 
-int _parseTime(String value) {
-  final parts = value.split(':');
+DateTime _parseDeparture(String dateValue, String timeValue) {
+  final date = DateTime.tryParse(dateValue);
+  if (date == null ||
+      dateValue.length != 10 ||
+      '${date.year.toString().padLeft(4, '0')}-'
+              '${date.month.toString().padLeft(2, '0')}-'
+              '${date.day.toString().padLeft(2, '0')}' !=
+          dateValue) {
+    throw FormatException('Date must use YYYY-MM-DD.');
+  }
+  final parts = timeValue.split(':');
   if (parts.length != 2 && parts.length != 3) {
     throw FormatException('Time must use HH:MM or HH:MM:SS.');
   }
@@ -142,9 +152,12 @@ int _parseTime(String value) {
   final minutes = int.parse(parts[1]);
   final seconds = parts.length == 3 ? int.parse(parts[2]) : 0;
   if (hours < 0 || minutes < 0 || minutes > 59 || seconds < 0 || seconds > 59) {
-    throw FormatException('Invalid time: $value');
+    throw FormatException('Invalid time: $timeValue');
   }
-  return hours * 3600 + minutes * 60 + seconds;
+  if (hours > 23) {
+    throw FormatException('CLI clock time must be between 00:00 and 23:59.');
+  }
+  return DateTime(date.year, date.month, date.day, hours, minutes, seconds);
 }
 
 String _normalize(String value) => value
@@ -153,13 +166,13 @@ String _normalize(String value) => value
     .trim()
     .replaceAll(RegExp(' +'), ' ');
 
-String _formatClock(int seconds) {
-  final hours = seconds ~/ 3600;
-  final minutes = (seconds % 3600) ~/ 60;
-  final remainder = seconds % 60;
-  return '${hours.toString().padLeft(2, '0')}:'
-      '${minutes.toString().padLeft(2, '0')}:'
-      '${remainder.toString().padLeft(2, '0')}';
+String _formatDateTime(DateTime value) {
+  return '${value.year.toString().padLeft(4, '0')}-'
+      '${value.month.toString().padLeft(2, '0')}-'
+      '${value.day.toString().padLeft(2, '0')} '
+      '${value.hour.toString().padLeft(2, '0')}:'
+      '${value.minute.toString().padLeft(2, '0')}:'
+      '${value.second.toString().padLeft(2, '0')}';
 }
 
 String _formatDuration(int seconds) {

@@ -50,7 +50,7 @@ class ProjectStatusScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Current milestone: transfer-aware routing validated on Rapid Rail data.',
+                    'Current milestone: calendar-aware frequency and scheduled routing.',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),

@@ -83,6 +83,7 @@ def main(argv: list[str] | None = None) -> int:
                 f"{args.output.resolve()} "
                 f"({len(payload['stops'])} stops, "
                 f"{len(payload['rideEdges'])} ride edges, "
+                f"{len(payload['scheduledTrips'])} scheduled trips, "
                 f"{len(payload['transferEdges'])} transfer edges)."
             )
             return 0

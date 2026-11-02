@@ -12,7 +12,7 @@ void main() {
     );
     expect(
       find.text(
-        'Current milestone: transfer-aware routing validated on Rapid Rail data.',
+        'Current milestone: calendar-aware frequency and scheduled routing.',
       ),
       findsOneWidget,
     );

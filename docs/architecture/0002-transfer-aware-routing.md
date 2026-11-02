@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted.
+Accepted. Extended by ADR 0003.
 
 ## Context
 
@@ -47,6 +47,6 @@ ranking alternatives.
 - Generated JSON graphs can exercise the same pure-Dart router before SQLite is
   embedded in the Flutter application.
 
-The current graph is frequency based. Exact scheduled-departure routing for
-KTM Komuter, service-day/calendar filtering, curated cross-name walkways, and
-accessibility-specific transfer costs remain later milestones.
+Calendar filtering and exact scheduled departures are added in ADR 0003.
+Curated cross-name walkways and accessibility-specific transfer costs remain
+later milestones.

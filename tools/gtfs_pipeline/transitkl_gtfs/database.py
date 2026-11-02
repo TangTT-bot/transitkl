@@ -130,11 +130,14 @@ CREATE TABLE ride_edges (
 CREATE TABLE headway_profiles (
     route_id TEXT NOT NULL,
     direction_id INTEGER NOT NULL,
+    service_id TEXT NOT NULL,
     start_seconds INTEGER NOT NULL,
     end_seconds INTEGER NOT NULL,
     headway_seconds INTEGER NOT NULL,
     sample_count INTEGER NOT NULL,
-    PRIMARY KEY (route_id, direction_id, start_seconds, end_seconds),
+    PRIMARY KEY (
+        route_id, direction_id, service_id, start_seconds, end_seconds
+    ),
     FOREIGN KEY (route_id) REFERENCES routes(route_id)
 );
 
@@ -158,7 +161,9 @@ CREATE INDEX idx_calendar_exceptions_date ON calendar_exceptions(service_date);
 CREATE INDEX idx_ride_edges_from_stop ON ride_edges(from_stop_id);
 CREATE INDEX idx_transfer_edges_from_stop ON transfer_edges(from_stop_id);
 CREATE INDEX idx_headway_profiles_service_time
-    ON headway_profiles(route_id, direction_id, start_seconds, end_seconds);
+    ON headway_profiles(
+        route_id, direction_id, service_id, start_seconds, end_seconds
+    );
 """
 
 
@@ -254,7 +259,7 @@ def _rows(source: FeedSource, file_name: str) -> list[dict[str, str]]:
 
 def _insert_metadata(connection: sqlite3.Connection, report: AuditReport) -> None:
     values = {
-        "schema_version": "2",
+        "schema_version": "3",
         "feed_id": report.feed_id,
         "source": report.source,
         "source_sha256": report.source_sha256,
@@ -552,11 +557,12 @@ def _derive_ride_edges(connection: sqlite3.Connection) -> None:
 
 
 def _derive_headway_profiles(connection: sqlite3.Connection) -> None:
-    samples: dict[tuple[str, int, int, int], list[int]] = defaultdict(list)
-    for route_id, direction_id, start, end, headway in connection.execute(
+    samples: dict[tuple[str, int, str, int, int], list[int]] = defaultdict(list)
+    for route_id, direction_id, service_id, start, end, headway in connection.execute(
         """
         SELECT trips.route_id,
                COALESCE(trips.direction_id, -1),
+               trips.service_id,
                frequencies.start_seconds,
                frequencies.end_seconds,
                frequencies.headway_seconds
@@ -564,7 +570,7 @@ def _derive_headway_profiles(connection: sqlite3.Connection) -> None:
         JOIN trips ON trips.trip_id = frequencies.trip_id
         """
     ):
-        samples[(route_id, direction_id, start, end)].append(headway)
+        samples[(route_id, direction_id, service_id, start, end)].append(headway)
 
     records = [
         (*key, round(statistics.median(headways)), len(headways))
@@ -573,9 +579,9 @@ def _derive_headway_profiles(connection: sqlite3.Connection) -> None:
     connection.executemany(
         """
         INSERT INTO headway_profiles(
-            route_id, direction_id, start_seconds, end_seconds,
+            route_id, direction_id, service_id, start_seconds, end_seconds,
             headway_seconds, sample_count
-        ) VALUES (?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
         """,
         records,
     )

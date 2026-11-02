@@ -24,11 +24,14 @@ from colliding when databases are merged in a later milestone.
 The generated schema is versioned in `feed_metadata` using `schema_version`.
 Only source feeds that pass the audit are built by default.
 
-Schema version 2 imports agencies, stops, routes, trips, stop times, service
+Schema version 3 imports agencies, stops, routes, trips, stop times, service
 calendars, calendar exceptions, and frequencies. It also derives median
-route/direction ride edges, headway profiles, and directed station transfer
-edges. `export-graph` converts those routing tables to the compact JSON format
-consumed by the pure-Dart journey planner and the local route demonstration.
+route/direction ride edges, calendar-specific headway profiles, and directed
+station transfer edges. `export-graph` converts those tables to routing graph
+version 2, including service calendars, exceptions, and exact stop times for
+trips that do not use `frequencies.txt`. The pure-Dart planner can therefore
+mix high-frequency services such as Rapid Rail with timetable-based services
+such as KTM Komuter.
 
 Transfers are derived from GTFS parent stations, same-name stops within 500
 metres, and directed `transfers.txt` records. Inferred walking time assumes 1.2

@@ -146,7 +146,7 @@ class DatabaseTests(unittest.TestCase):
             self.assertEqual(last_arrival, 24 * 3600 + 35 * 60)
             self.assertEqual(normalized_name, "central interchange")
             self.assertEqual(feed_id, "fixture")
-            self.assertEqual(schema_version, "2")
+            self.assertEqual(schema_version, "3")
             self.assertEqual(foreign_key_problems, [])
 
     def test_exports_routing_graph(self) -> None:
@@ -160,14 +160,62 @@ class DatabaseTests(unittest.TestCase):
             saved_payload = json.loads(graph_path.read_text(encoding="utf-8"))
 
             self.assertEqual(payload, saved_payload)
-            self.assertEqual(payload["schemaVersion"], 1)
+            self.assertEqual(payload["schemaVersion"], 2)
             self.assertEqual(len(payload["stops"]), 6)
             self.assertEqual(len(payload["services"]), 2)
+            self.assertEqual(len(payload["serviceCalendars"]), 1)
+            self.assertEqual(payload["scheduledTrips"], [])
             self.assertEqual(len(payload["rideEdges"]), 4)
             self.assertEqual(len(payload["transferEdges"]), 2)
             self.assertEqual(
+                {
+                    window["calendarId"]
+                    for service in payload["services"]
+                    for window in service["headways"]
+                },
+                {"fixture:WKD"},
+            )
+            self.assertEqual(
                 {edge["source"] for edge in payload["transferEdges"]},
                 {"normalized_name"},
+            )
+
+    def test_exports_exact_schedule_trips_and_calendar_exceptions(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output = Path(temporary_directory)
+            archive_path = output / "scheduled-fixture.zip"
+            database_path = output / "transit.sqlite"
+            graph_path = output / "routing.json"
+            with ZipFile(archive_path, "w") as archive:
+                for source_file in FIXTURE.glob("*.txt"):
+                    content = source_file.read_text(encoding="utf-8")
+                    if source_file.name == "routes.txt":
+                        content += "R3,DEMO,EX,Exact Line,2,333333,FFFFFF\n"
+                    elif source_file.name == "trips.txt":
+                        content += "R3,WKD,T3,Echo Station,0\n"
+                    elif source_file.name == "stop_times.txt":
+                        content += (
+                            "T3,08:00:00,08:00:00,S1,1,0,0\n"
+                            "T3,08:30:00,08:30:00,S5,2,0,0\n"
+                        )
+                    archive.writestr(source_file.name, content)
+
+            build_database(archive_path, "fixture", database_path)
+            payload = export_routing_graph(database_path, graph_path)
+
+            self.assertEqual(len(payload["scheduledTrips"]), 1)
+            trip = payload["scheduledTrips"][0]
+            self.assertEqual(trip["id"], "fixture:T3")
+            self.assertEqual(trip["calendarId"], "fixture:WKD")
+            self.assertEqual(trip["stopTimes"][0]["departureSeconds"], 8 * 3600)
+            calendar = payload["serviceCalendars"][0]
+            self.assertEqual(calendar["startDate"], "2026-01-01")
+            self.assertEqual(
+                calendar["exceptions"],
+                [
+                    {"date": "2026-08-31", "isRunning": False},
+                    {"date": "2026-09-01", "isRunning": True},
+                ],
             )
 
     def test_gtfs_transfers_override_inferred_edges_directionally(self) -> None:

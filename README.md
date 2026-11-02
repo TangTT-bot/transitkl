@@ -6,11 +6,12 @@ Bus services, and KTM Komuter in one mobile application.
 
 ## Project status
 
-The project has completed its data-and-routing proof-of-concept milestone:
+The project has completed its calendar-aware routing proof-of-concept milestone:
 
 - Flutter application scaffolded for Android and iOS.
 - Reproducible GTFS audit and versioned SQLite build pipeline implemented.
 - Transfer-aware modified Dijkstra router implemented in pure Dart.
+- Frequency estimates and exact scheduled departures use GTFS service calendars.
 - Official Rapid Rail data builds into a working routing graph.
 - Mobile SQLite integration and journey-search screens are next.
 
@@ -140,13 +141,15 @@ Run an end-to-end route calculation against the official feed:
 ```powershell
 dart run tool/route_demo.dart `
   data/processed/rapid-rail-kl-routing.json `
-  "GOMBAK" "KAJANG" "08:00"
+  "GOMBAK" "KAJANG" "2026-11-02" "08:00"
 ```
 
-The demo accepts an exact stop ID or a station name. Generated databases and
-graphs stay ignored by Git. Routing design decisions and current limitations
-are documented in
-[`docs/architecture/0002-transfer-aware-routing.md`](docs/architecture/0002-transfer-aware-routing.md).
+The demo accepts an exact stop ID or a station name. The date must fall within
+the feed's service calendar. Generated databases and graphs stay ignored by
+Git. Routing design decisions and current limitations are documented in
+[`docs/architecture/0002-transfer-aware-routing.md`](docs/architecture/0002-transfer-aware-routing.md)
+and
+[`docs/architecture/0003-calendar-aware-scheduled-routing.md`](docs/architecture/0003-calendar-aware-scheduled-routing.md).
 
 ## Data sources and attribution
 
