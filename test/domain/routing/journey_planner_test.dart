@@ -13,7 +13,7 @@ void main() {
 
       expect(journey, isNotNull);
       expect(journey!.totalTravelSeconds, 1890);
-      expect(journey.generalizedCostSeconds, 2190);
+      expect(journey.generalizedCostSeconds, 2490);
       expect(journey.transferCount, 1);
       expect(journey.legs, hasLength(3));
 

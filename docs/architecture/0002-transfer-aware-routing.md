@@ -30,7 +30,7 @@ record overrides the inferred edge, including a forbidden transfer.
 
 The Dart router applies Dijkstra's algorithm to `(stop, active service)` states.
 It charges half the active headway as the expected wait when boarding, charges
-no new wait while continuing on the same service, and adds a five-minute
+no new wait while continuing on the same service, and adds a ten-minute
 generalized-cost penalty when changing services. Walking and waiting still
 contribute to actual elapsed time; the transfer penalty does not. This gives the
 application both a realistic displayed duration and a separate value for

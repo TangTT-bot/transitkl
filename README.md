@@ -6,18 +6,20 @@ Bus services, and KTM Komuter in one mobile application.
 
 ## Project status
 
-The project has completed its calendar-aware routing proof-of-concept milestone:
+The project has completed its first usable offline journey-planning milestone:
 
 - Flutter application scaffolded for Android and iOS.
 - Reproducible GTFS audit and versioned SQLite build pipeline implemented.
 - Transfer-aware modified Dijkstra router implemented in pure Dart.
 - Frequency estimates and exact scheduled departures use GTFS service calendars.
 - Official Rapid Rail data builds into a working routing graph.
-- Mobile SQLite integration and journey-search screens are next.
+- The Flutter app loads a bundled, validated Rapid Rail graph.
+- Users can search stations, choose a departure date/time, and view journey legs.
+- KTM Komuter and selected Rapid Bus integration are next.
 
-The current Flutter screen is intentionally a status screen. User interface
-features will be developed after the data pipeline and routing model are
-verified.
+The current app is an end-to-end vertical slice: official data passes through
+the audit/build pipeline, is bundled behind a repository interface, and is
+used by the production Dart router and Flutter journey screen.
 
 ## Minimum viable product
 
@@ -40,10 +42,10 @@ Official GTFS feeds
 Python audit and preprocessing pipeline
         |
         v
-Generated read-only transit SQLite database
+Generated SQLite database and compact routing graph
         |
         v
-Flutter data repositories -> routing engine -> application screens
+Bundled graph -> Flutter repository -> routing engine -> application screens
         |
         v
 Separate writable user database for favourites and preferences
@@ -57,6 +59,7 @@ Downloaded feeds and generated databases are not committed. The small feed in
 ```text
 lib/                         Flutter application
 test/                        Flutter tests
+assets/data/                 Validated offline graph bundled in the app
 tool/                        Local Dart routing demonstration command
 tools/gtfs_pipeline/         Python GTFS audit and database builder
 data/fixtures/               Synthetic test feeds committed to Git
@@ -80,6 +83,10 @@ flutter analyze
 flutter test
 flutter run
 ```
+
+On the home screen, type a station name into both fields, select a suggestion,
+choose a date and time within the displayed feed range, then select **Find
+journey**. No internet connection is required.
 
 The application currently uses Flutter's default Android minimum SDK, API 24.
 The proposal's API 23 statement should be updated or explicitly configured and
@@ -150,6 +157,22 @@ Git. Routing design decisions and current limitations are documented in
 [`docs/architecture/0002-transfer-aware-routing.md`](docs/architecture/0002-transfer-aware-routing.md)
 and
 [`docs/architecture/0003-calendar-aware-scheduled-routing.md`](docs/architecture/0003-calendar-aware-scheduled-routing.md).
+The current Flutter asset/repository decision is recorded in
+[`docs/architecture/0004-bundle-validated-routing-graph.md`](docs/architecture/0004-bundle-validated-routing-graph.md).
+Convenience and multi-criteria routing requirements are defined in
+[`docs/architecture/0005-convenience-aware-routing-objectives.md`](docs/architecture/0005-convenience-aware-routing-objectives.md).
+
+After an official feed refresh passes audit, rebuild and export it, then update
+the app asset:
+
+```powershell
+Copy-Item data/processed/rapid-rail-kl-routing.json `
+  assets/data/rapid-rail-kl-routing.json
+```
+
+Do not replace the bundled asset with an unaudited feed. See
+[`docs/PROJECT_PROGRESS.md`](docs/PROJECT_PROGRESS.md) for the current milestone
+map and remaining work.
 
 ## Data sources and attribution
 
@@ -164,4 +187,5 @@ The core contribution is the combination of:
 1. Multi-operator GTFS preprocessing.
 2. An offline mobile database architecture.
 3. Transfer-aware modified Dijkstra routing.
-4. Accessible presentation of multimodal journey recommendations.
+4. Convenience-aware ranking across time, transfers, and walking.
+5. Accessible presentation of multimodal journey recommendations.

@@ -1,9 +1,13 @@
 import 'routing_graph.dart';
 
 final class JourneyPlanner {
+  /// Ranking penalty for changing services in the default Recommended profile.
+  /// It affects route choice, never the displayed arrival time.
+  static const int recommendedTransferPenaltySeconds = 10 * 60;
+
   JourneyPlanner(
     this.graph, {
-    this.transferPenaltySeconds = 300,
+    this.transferPenaltySeconds = recommendedTransferPenaltySeconds,
     this.maximumJourneySeconds = 6 * Duration.secondsPerHour,
   }) {
     if (transferPenaltySeconds < 0) {
