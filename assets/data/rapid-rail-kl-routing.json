@@ -1,0 +1,4784 @@
+{
+  "schemaVersion": 2,
+  "feed": {
+    "id": "prasarana_rapid_rail",
+    "sourceSha256": "532afb6c518489ec612912cefe957c3f05ccb66efad9ce3f61b95981f67df669",
+    "serviceDateStart": "20190101",
+    "serviceDateEnd": "20261231"
+  },
+  "serviceCalendars": [
+    {
+      "id": "prasarana_rapid_rail:MonFri",
+      "weekdays": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "startDate": "2019-01-01",
+      "endDate": "2026-12-31",
+      "exceptions": []
+    },
+    {
+      "id": "prasarana_rapid_rail:Sat",
+      "weekdays": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false
+      ],
+      "startDate": "2019-01-01",
+      "endDate": "2026-12-31",
+      "exceptions": []
+    },
+    {
+      "id": "prasarana_rapid_rail:Sun",
+      "weekdays": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ],
+      "startDate": "2019-01-01",
+      "endDate": "2026-12-31",
+      "exceptions": []
+    }
+  ],
+  "stops": [
+    {
+      "id": "prasarana_rapid_rail:AG1",
+      "name": "SENTUL TIMUR",
+      "normalizedName": "sentul timur",
+      "latitude": 3.185897,
+      "longitude": 101.695217
+    },
+    {
+      "id": "prasarana_rapid_rail:AG10",
+      "name": "PUDU",
+      "normalizedName": "pudu",
+      "latitude": 3.134879,
+      "longitude": 101.711957
+    },
+    {
+      "id": "prasarana_rapid_rail:AG11",
+      "name": "CHAN SOW LIN",
+      "normalizedName": "chan sow lin",
+      "latitude": 3.128105,
+      "longitude": 101.715637
+    },
+    {
+      "id": "prasarana_rapid_rail:AG12",
+      "name": "MIHARJA",
+      "normalizedName": "miharja",
+      "latitude": 3.120973,
+      "longitude": 101.717922
+    },
+    {
+      "id": "prasarana_rapid_rail:AG13",
+      "name": "MALURI",
+      "normalizedName": "maluri",
+      "latitude": 3.12329,
+      "longitude": 101.727283
+    },
+    {
+      "id": "prasarana_rapid_rail:AG14",
+      "name": "PANDAN JAYA",
+      "normalizedName": "pandan jaya",
+      "latitude": 3.130141,
+      "longitude": 101.739122
+    },
+    {
+      "id": "prasarana_rapid_rail:AG15",
+      "name": "PANDAN INDAH",
+      "normalizedName": "pandan indah",
+      "latitude": 3.134581,
+      "longitude": 101.746509
+    },
+    {
+      "id": "prasarana_rapid_rail:AG16",
+      "name": "CEMPAKA",
+      "normalizedName": "cempaka",
+      "latitude": 3.138324,
+      "longitude": 101.752979
+    },
+    {
+      "id": "prasarana_rapid_rail:AG17",
+      "name": "CAHAYA",
+      "normalizedName": "cahaya",
+      "latitude": 3.140575,
+      "longitude": 101.756677
+    },
+    {
+      "id": "prasarana_rapid_rail:AG18",
+      "name": "AMPANG",
+      "normalizedName": "ampang",
+      "latitude": 3.150318,
+      "longitude": 101.760049
+    },
+    {
+      "id": "prasarana_rapid_rail:AG2",
+      "name": "SENTUL",
+      "normalizedName": "sentul",
+      "latitude": 3.178484,
+      "longitude": 101.695542
+    },
+    {
+      "id": "prasarana_rapid_rail:AG3",
+      "name": "TITIWANGSA",
+      "normalizedName": "titiwangsa",
+      "latitude": 3.173497,
+      "longitude": 101.695367
+    },
+    {
+      "id": "prasarana_rapid_rail:AG4",
+      "name": "PWTC",
+      "normalizedName": "pwtc",
+      "latitude": 3.166333,
+      "longitude": 101.693586
+    },
+    {
+      "id": "prasarana_rapid_rail:AG5",
+      "name": "SULTAN ISMAIL",
+      "normalizedName": "sultan ismail",
+      "latitude": 3.161245,
+      "longitude": 101.694109
+    },
+    {
+      "id": "prasarana_rapid_rail:AG6",
+      "name": "BANDARAYA - UOB",
+      "normalizedName": "bandaraya uob",
+      "latitude": 3.155567,
+      "longitude": 101.694485
+    },
+    {
+      "id": "prasarana_rapid_rail:AG7",
+      "name": "MASJID JAMEK",
+      "normalizedName": "masjid jamek",
+      "latitude": 3.14927,
+      "longitude": 101.696377
+    },
+    {
+      "id": "prasarana_rapid_rail:AG8",
+      "name": "PLAZA RAKYAT",
+      "normalizedName": "plaza rakyat",
+      "latitude": 3.144049,
+      "longitude": 101.702105
+    },
+    {
+      "id": "prasarana_rapid_rail:AG9",
+      "name": "HANG TUAH",
+      "normalizedName": "hang tuah",
+      "latitude": 3.140012,
+      "longitude": 101.705984
+    },
+    {
+      "id": "prasarana_rapid_rail:BRT1",
+      "name": "SUNWAY-SETIA JAYA",
+      "normalizedName": "sunway setia jaya",
+      "latitude": 3.0828,
+      "longitude": 101.6123
+    },
+    {
+      "id": "prasarana_rapid_rail:BRT2",
+      "name": "MENTARI",
+      "normalizedName": "mentari",
+      "latitude": 3.0761,
+      "longitude": 101.6101
+    },
+    {
+      "id": "prasarana_rapid_rail:BRT3",
+      "name": "SUNWAY LAGOON",
+      "normalizedName": "sunway lagoon",
+      "latitude": 3.0706,
+      "longitude": 101.6107
+    },
+    {
+      "id": "prasarana_rapid_rail:BRT4",
+      "name": "SUNMED",
+      "normalizedName": "sunmed",
+      "latitude": 3.0656,
+      "longitude": 101.6087
+    },
+    {
+      "id": "prasarana_rapid_rail:BRT5",
+      "name": "SunU-Monash",
+      "normalizedName": "sunu monash",
+      "latitude": 3.0654,
+      "longitude": 101.6016
+    },
+    {
+      "id": "prasarana_rapid_rail:BRT6",
+      "name": "SOUTH QUAY-USJ 1",
+      "normalizedName": "south quay usj 1",
+      "latitude": 3.0617,
+      "longitude": 101.5969
+    },
+    {
+      "id": "prasarana_rapid_rail:BRT7",
+      "name": "USJ7",
+      "normalizedName": "usj7",
+      "latitude": 3.0553,
+      "longitude": 101.5919
+    },
+    {
+      "id": "prasarana_rapid_rail:KG04",
+      "name": "KWASA DAMANSARA",
+      "normalizedName": "kwasa damansara",
+      "latitude": 3.176146,
+      "longitude": 101.572052
+    },
+    {
+      "id": "prasarana_rapid_rail:KG05",
+      "name": "KWASA SENTRAL",
+      "normalizedName": "kwasa sentral",
+      "latitude": 3.170112,
+      "longitude": 101.564651
+    },
+    {
+      "id": "prasarana_rapid_rail:KG06",
+      "name": "KOTA DAMANSARA",
+      "normalizedName": "kota damansara",
+      "latitude": 3.150134,
+      "longitude": 101.57869
+    },
+    {
+      "id": "prasarana_rapid_rail:KG07",
+      "name": "SURIAN",
+      "normalizedName": "surian",
+      "latitude": 3.14948,
+      "longitude": 101.593925
+    },
+    {
+      "id": "prasarana_rapid_rail:KG08",
+      "name": "MUTIARA DAMANSARA",
+      "normalizedName": "mutiara damansara",
+      "latitude": 3.155301,
+      "longitude": 101.609077
+    },
+    {
+      "id": "prasarana_rapid_rail:KG09",
+      "name": "BANDAR UTAMA",
+      "normalizedName": "bandar utama",
+      "latitude": 3.14671,
+      "longitude": 101.618599
+    },
+    {
+      "id": "prasarana_rapid_rail:KG10",
+      "name": "TAMAN TUN DR ISMAIL",
+      "normalizedName": "taman tun dr ismail",
+      "latitude": 3.13613,
+      "longitude": 101.630539
+    },
+    {
+      "id": "prasarana_rapid_rail:KG12",
+      "name": "PHILEO DAMANSARA",
+      "normalizedName": "phileo damansara",
+      "latitude": 3.129864,
+      "longitude": 101.642471
+    },
+    {
+      "id": "prasarana_rapid_rail:KG13",
+      "name": "PUSAT BANDAR DAMANSARA",
+      "normalizedName": "pusat bandar damansara",
+      "latitude": 3.143444,
+      "longitude": 101.662857
+    },
+    {
+      "id": "prasarana_rapid_rail:KG14",
+      "name": "SEMANTAN",
+      "normalizedName": "semantan",
+      "latitude": 3.150977,
+      "longitude": 101.665497
+    },
+    {
+      "id": "prasarana_rapid_rail:KG15",
+      "name": "MUZIUM NEGARA",
+      "normalizedName": "muzium negara",
+      "latitude": 3.137317,
+      "longitude": 101.687336
+    },
+    {
+      "id": "prasarana_rapid_rail:KG16",
+      "name": "PASAR SENI",
+      "normalizedName": "pasar seni",
+      "latitude": 3.142293265,
+      "longitude": 101.6955642
+    },
+    {
+      "id": "prasarana_rapid_rail:KG17",
+      "name": "MERDEKA",
+      "normalizedName": "merdeka",
+      "latitude": 3.141969,
+      "longitude": 101.70205
+    },
+    {
+      "id": "prasarana_rapid_rail:KG18A",
+      "name": "BUKIT BINTANG",
+      "normalizedName": "bukit bintang",
+      "latitude": 3.146503,
+      "longitude": 101.710947
+    },
+    {
+      "id": "prasarana_rapid_rail:KG20",
+      "name": "TUN RAZAK EXCHANGE",
+      "normalizedName": "tun razak exchange",
+      "latitude": 3.142403,
+      "longitude": 101.720156
+    },
+    {
+      "id": "prasarana_rapid_rail:KG21",
+      "name": "COCHRANE",
+      "normalizedName": "cochrane",
+      "latitude": 3.132829,
+      "longitude": 101.722962
+    },
+    {
+      "id": "prasarana_rapid_rail:KG22",
+      "name": "MALURI",
+      "normalizedName": "maluri",
+      "latitude": 3.123623,
+      "longitude": 101.727809
+    },
+    {
+      "id": "prasarana_rapid_rail:KG23",
+      "name": "TAMAN PERTAMA",
+      "normalizedName": "taman pertama",
+      "latitude": 3.112547,
+      "longitude": 101.729371
+    },
+    {
+      "id": "prasarana_rapid_rail:KG24",
+      "name": "TAMAN MIDAH",
+      "normalizedName": "taman midah",
+      "latitude": 3.104505,
+      "longitude": 101.732186
+    },
+    {
+      "id": "prasarana_rapid_rail:KG25",
+      "name": "TAMAN MUTIARA",
+      "normalizedName": "taman mutiara",
+      "latitude": 3.090989,
+      "longitude": 101.740453
+    },
+    {
+      "id": "prasarana_rapid_rail:KG26",
+      "name": "TAMAN CONNAUGHT",
+      "normalizedName": "taman connaught",
+      "latitude": 3.079172,
+      "longitude": 101.74522
+    },
+    {
+      "id": "prasarana_rapid_rail:KG27",
+      "name": "TAMAN SUNTEX",
+      "normalizedName": "taman suntex",
+      "latitude": 3.071578,
+      "longitude": 101.763552
+    },
+    {
+      "id": "prasarana_rapid_rail:KG28",
+      "name": "SRI RAYA",
+      "normalizedName": "sri raya",
+      "latitude": 3.062273,
+      "longitude": 101.772899
+    },
+    {
+      "id": "prasarana_rapid_rail:KG29",
+      "name": "BANDAR TUN HUSSEIN ONN",
+      "normalizedName": "bandar tun hussein onn",
+      "latitude": 3.048223,
+      "longitude": 101.775109
+    },
+    {
+      "id": "prasarana_rapid_rail:KG30",
+      "name": "BATU 11 CHERAS",
+      "normalizedName": "batu 11 cheras",
+      "latitude": 3.041339,
+      "longitude": 101.773383
+    },
+    {
+      "id": "prasarana_rapid_rail:KG31",
+      "name": "BUKIT DUKUNG",
+      "normalizedName": "bukit dukung",
+      "latitude": 3.026413,
+      "longitude": 101.771072
+    },
+    {
+      "id": "prasarana_rapid_rail:KG33",
+      "name": "SUNGAI JERNIH",
+      "normalizedName": "sungai jernih",
+      "latitude": 3.000948,
+      "longitude": 101.783857
+    },
+    {
+      "id": "prasarana_rapid_rail:KG34",
+      "name": "STADIUM KAJANG",
+      "normalizedName": "stadium kajang",
+      "latitude": 2.994514,
+      "longitude": 101.786338
+    },
+    {
+      "id": "prasarana_rapid_rail:KG35",
+      "name": "KAJANG",
+      "normalizedName": "kajang",
+      "latitude": 2.982778,
+      "longitude": 101.790278
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ1",
+      "name": "GOMBAK",
+      "normalizedName": "gombak",
+      "latitude": 3.231793,
+      "longitude": 101.724427
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ10",
+      "name": "KLCC",
+      "normalizedName": "klcc",
+      "latitude": 3.158935,
+      "longitude": 101.713287
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ11",
+      "name": "KAMPUNG BARU - CBP COOPBANK PERTAMA",
+      "normalizedName": "kampung baru cbp coopbank pertama",
+      "latitude": 3.161386,
+      "longitude": 101.706608
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ12",
+      "name": "DANG WANGI",
+      "normalizedName": "dang wangi",
+      "latitude": 3.156942,
+      "longitude": 101.701975
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ13",
+      "name": "MASJID JAMEK",
+      "normalizedName": "masjid jamek",
+      "latitude": 3.149714,
+      "longitude": 101.696815
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ14",
+      "name": "PASAR SENI",
+      "normalizedName": "pasar seni",
+      "latitude": 3.142439,
+      "longitude": 101.69531
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ15",
+      "name": "KL SENTRAL - REDONE",
+      "normalizedName": "kl sentral redone",
+      "latitude": 3.13442,
+      "longitude": 101.68625
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ16",
+      "name": "BANGSAR - BANK RAKYAT",
+      "normalizedName": "bangsar bank rakyat",
+      "latitude": 3.127588,
+      "longitude": 101.679062
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ17",
+      "name": "ABDULLAH HUKUM",
+      "normalizedName": "abdullah hukum",
+      "latitude": 3.118735,
+      "longitude": 101.672897
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ18",
+      "name": "KERINCHI",
+      "normalizedName": "kerinchi",
+      "latitude": 3.115506,
+      "longitude": 101.668572
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ19",
+      "name": "UNIVERSITI",
+      "normalizedName": "universiti",
+      "latitude": 3.114616,
+      "longitude": 101.661639
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ2",
+      "name": "TAMAN MELATI",
+      "normalizedName": "taman melati",
+      "latitude": 3.219558,
+      "longitude": 101.72197
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ20",
+      "name": "TAMAN JAYA",
+      "normalizedName": "taman jaya",
+      "latitude": 3.104086,
+      "longitude": 101.645248
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ21",
+      "name": "ASIA JAYA",
+      "normalizedName": "asia jaya",
+      "latitude": 3.104343,
+      "longitude": 101.637695
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ22",
+      "name": "TAMAN PARAMOUNT",
+      "normalizedName": "taman paramount",
+      "latitude": 3.104716,
+      "longitude": 101.623192
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ23",
+      "name": "TAMAN BAHAGIA",
+      "normalizedName": "taman bahagia",
+      "latitude": 3.11079,
+      "longitude": 101.612856
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ24",
+      "name": "KELANA JAYA",
+      "normalizedName": "kelana jaya",
+      "latitude": 3.112497,
+      "longitude": 101.6043
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ25",
+      "name": "LEMBAH SUBANG",
+      "normalizedName": "lembah subang",
+      "latitude": 3.112094,
+      "longitude": 101.591034
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ26",
+      "name": "ARA DAMANSARA",
+      "normalizedName": "ara damansara",
+      "latitude": 3.108643,
+      "longitude": 101.586372
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ27",
+      "name": "GLENMARIE",
+      "normalizedName": "glenmarie",
+      "latitude": 3.094732,
+      "longitude": 101.590622
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ28",
+      "name": "SUBANG JAYA",
+      "normalizedName": "subang jaya",
+      "latitude": 3.08466,
+      "longitude": 101.588127
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ29",
+      "name": "SS 15",
+      "normalizedName": "ss 15",
+      "latitude": 3.075972,
+      "longitude": 101.585983
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ3",
+      "name": "WANGSA MAJU",
+      "normalizedName": "wangsa maju",
+      "latitude": 3.205751,
+      "longitude": 101.731796
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ30",
+      "name": "SS 18",
+      "normalizedName": "ss 18",
+      "latitude": 3.067182,
+      "longitude": 101.585945
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ31",
+      "name": "USJ 7",
+      "normalizedName": "usj 7",
+      "latitude": 3.054956,
+      "longitude": 101.592194
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ32",
+      "name": "TAIPAN",
+      "normalizedName": "taipan",
+      "latitude": 3.04815,
+      "longitude": 101.590233
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ33",
+      "name": "WAWASAN",
+      "normalizedName": "wawasan",
+      "latitude": 3.035062,
+      "longitude": 101.588348
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ34",
+      "name": "USJ 21",
+      "normalizedName": "usj 21",
+      "latitude": 3.029881,
+      "longitude": 101.581711
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ35",
+      "name": "ALAM MEGAH",
+      "normalizedName": "alam megah",
+      "latitude": 3.023151,
+      "longitude": 101.572029
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ36",
+      "name": "SUBANG ALAM",
+      "normalizedName": "subang alam",
+      "latitude": 3.009421,
+      "longitude": 101.572281
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ37",
+      "name": "PUTRA HEIGHTS",
+      "normalizedName": "putra heights",
+      "latitude": 2.996227,
+      "longitude": 101.575462
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ4",
+      "name": "SRI RAMPAI",
+      "normalizedName": "sri rampai",
+      "latitude": 3.199176,
+      "longitude": 101.73747
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ5",
+      "name": "SETIAWANGSA",
+      "normalizedName": "setiawangsa",
+      "latitude": 3.17576,
+      "longitude": 101.73584
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ6",
+      "name": "JELATEK",
+      "normalizedName": "jelatek",
+      "latitude": 3.167204,
+      "longitude": 101.735344
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ7",
+      "name": "DATO' KERAMAT",
+      "normalizedName": "dato keramat",
+      "latitude": 3.16509,
+      "longitude": 101.73184
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ8",
+      "name": "DAMAI",
+      "normalizedName": "damai",
+      "latitude": 3.164406,
+      "longitude": 101.724489
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ9",
+      "name": "AMPANG PARK",
+      "normalizedName": "ampang park",
+      "latitude": 3.159894,
+      "longitude": 101.719017
+    },
+    {
+      "id": "prasarana_rapid_rail:MR1",
+      "name": "KL SENTRAL",
+      "normalizedName": "kl sentral",
+      "latitude": 3.132852,
+      "longitude": 101.687817
+    },
+    {
+      "id": "prasarana_rapid_rail:MR10",
+      "name": "CHOW KIT",
+      "normalizedName": "chow kit",
+      "latitude": 3.167358,
+      "longitude": 101.698379
+    },
+    {
+      "id": "prasarana_rapid_rail:MR11",
+      "name": "TITIWANGSA",
+      "normalizedName": "titiwangsa",
+      "latitude": 3.173192,
+      "longitude": 101.696022
+    },
+    {
+      "id": "prasarana_rapid_rail:MR2",
+      "name": "TUN SAMBANTHAN",
+      "normalizedName": "tun sambanthan",
+      "latitude": 3.13132,
+      "longitude": 101.69085
+    },
+    {
+      "id": "prasarana_rapid_rail:MR3",
+      "name": "MAHARAJALELA",
+      "normalizedName": "maharajalela",
+      "latitude": 3.138743,
+      "longitude": 101.699268
+    },
+    {
+      "id": "prasarana_rapid_rail:MR4",
+      "name": "HANG TUAH",
+      "normalizedName": "hang tuah",
+      "latitude": 3.140511,
+      "longitude": 101.706029
+    },
+    {
+      "id": "prasarana_rapid_rail:MR5",
+      "name": "IMBI",
+      "normalizedName": "imbi",
+      "latitude": 3.14283,
+      "longitude": 101.70945
+    },
+    {
+      "id": "prasarana_rapid_rail:MR6",
+      "name": "BUKIT BINTANG",
+      "normalizedName": "bukit bintang",
+      "latitude": 3.146022,
+      "longitude": 101.7115
+    },
+    {
+      "id": "prasarana_rapid_rail:MR7",
+      "name": "RAJA CHULAN",
+      "normalizedName": "raja chulan",
+      "latitude": 3.150878,
+      "longitude": 101.710432
+    },
+    {
+      "id": "prasarana_rapid_rail:MR8",
+      "name": "BUKIT NANAS",
+      "normalizedName": "bukit nanas",
+      "latitude": 3.156214,
+      "longitude": 101.704809
+    },
+    {
+      "id": "prasarana_rapid_rail:MR9",
+      "name": "MEDAN TUANKU",
+      "normalizedName": "medan tuanku",
+      "latitude": 3.15935,
+      "longitude": 101.69888
+    },
+    {
+      "id": "prasarana_rapid_rail:PY01",
+      "name": "KWASA DAMANSARA",
+      "normalizedName": "kwasa damansara",
+      "latitude": 3.1763324,
+      "longitude": 101.5721456
+    },
+    {
+      "id": "prasarana_rapid_rail:PY03",
+      "name": "KAMPUNG SELAMAT",
+      "normalizedName": "kampung selamat",
+      "latitude": 3.197266,
+      "longitude": 101.578499
+    },
+    {
+      "id": "prasarana_rapid_rail:PY04",
+      "name": "SUNGAI BULOH",
+      "normalizedName": "sungai buloh",
+      "latitude": 3.206429,
+      "longitude": 101.581779
+    },
+    {
+      "id": "prasarana_rapid_rail:PY05",
+      "name": "DAMANSARA DAMAI",
+      "normalizedName": "damansara damai",
+      "latitude": 3.199892,
+      "longitude": 101.592623
+    },
+    {
+      "id": "prasarana_rapid_rail:PY06",
+      "name": "SRI DAMANSARA BARAT",
+      "normalizedName": "sri damansara barat",
+      "latitude": 3.198197,
+      "longitude": 101.608302
+    },
+    {
+      "id": "prasarana_rapid_rail:PY07",
+      "name": "SRI DAMANSARA SENTRAL",
+      "normalizedName": "sri damansara sentral",
+      "latitude": 3.198815,
+      "longitude": 101.621396
+    },
+    {
+      "id": "prasarana_rapid_rail:PY08",
+      "name": "SRI DAMANSARA TIMUR",
+      "normalizedName": "sri damansara timur",
+      "latitude": 3.207832,
+      "longitude": 101.628716
+    },
+    {
+      "id": "prasarana_rapid_rail:PY09",
+      "name": "METRO PRIMA",
+      "normalizedName": "metro prima",
+      "latitude": 3.214438,
+      "longitude": 101.639402
+    },
+    {
+      "id": "prasarana_rapid_rail:PY10",
+      "name": "KEPONG BARU",
+      "normalizedName": "kepong baru",
+      "latitude": 3.211663,
+      "longitude": 101.648193
+    },
+    {
+      "id": "prasarana_rapid_rail:PY11",
+      "name": "JINJANG",
+      "normalizedName": "jinjang",
+      "latitude": 3.209544,
+      "longitude": 101.655829
+    },
+    {
+      "id": "prasarana_rapid_rail:PY12",
+      "name": "SRI DELIMA",
+      "normalizedName": "sri delima",
+      "latitude": 3.207108,
+      "longitude": 101.665749
+    },
+    {
+      "id": "prasarana_rapid_rail:PY13",
+      "name": "KAMPUNG BATU",
+      "normalizedName": "kampung batu",
+      "latitude": 3.205521,
+      "longitude": 101.675473
+    },
+    {
+      "id": "prasarana_rapid_rail:PY14",
+      "name": "KENTOMEN",
+      "normalizedName": "kentomen",
+      "latitude": 3.19563,
+      "longitude": 101.6797
+    },
+    {
+      "id": "prasarana_rapid_rail:PY15",
+      "name": "JALAN IPOH",
+      "normalizedName": "jalan ipoh",
+      "latitude": 3.189319,
+      "longitude": 101.681145
+    },
+    {
+      "id": "prasarana_rapid_rail:PY16",
+      "name": "SENTUL BARAT",
+      "normalizedName": "sentul barat",
+      "latitude": 3.179369,
+      "longitude": 101.684742
+    },
+    {
+      "id": "prasarana_rapid_rail:PY17",
+      "name": "TITIWANGSA",
+      "normalizedName": "titiwangsa",
+      "latitude": 3.17408,
+      "longitude": 101.69581
+    },
+    {
+      "id": "prasarana_rapid_rail:PY18",
+      "name": "HOSPITAL KUALA LUMPUR",
+      "normalizedName": "hospital kuala lumpur",
+      "latitude": 3.17405,
+      "longitude": 101.70239
+    },
+    {
+      "id": "prasarana_rapid_rail:PY19",
+      "name": "RAJA UDA",
+      "normalizedName": "raja uda",
+      "latitude": 3.16794,
+      "longitude": 101.71017
+    },
+    {
+      "id": "prasarana_rapid_rail:PY20",
+      "name": "AMPANG PARK",
+      "normalizedName": "ampang park",
+      "latitude": 3.16225,
+      "longitude": 101.71781
+    },
+    {
+      "id": "prasarana_rapid_rail:PY21",
+      "name": "PERSIARAN KLCC",
+      "normalizedName": "persiaran klcc",
+      "latitude": 3.15712,
+      "longitude": 101.71834
+    },
+    {
+      "id": "prasarana_rapid_rail:PY22",
+      "name": "CONLAY",
+      "normalizedName": "conlay",
+      "latitude": 3.15145,
+      "longitude": 101.71801
+    },
+    {
+      "id": "prasarana_rapid_rail:PY23",
+      "name": "TUN RAZAK EXCHANGE",
+      "normalizedName": "tun razak exchange",
+      "latitude": 3.14289,
+      "longitude": 101.72034
+    },
+    {
+      "id": "prasarana_rapid_rail:PY24",
+      "name": "CHAN SOW LIN",
+      "normalizedName": "chan sow lin",
+      "latitude": 3.12839,
+      "longitude": 101.71663
+    },
+    {
+      "id": "prasarana_rapid_rail:PY27",
+      "name": "KUCHAI",
+      "normalizedName": "kuchai",
+      "latitude": 3.089546,
+      "longitude": 101.694124
+    },
+    {
+      "id": "prasarana_rapid_rail:PY28",
+      "name": "TAMAN NAGA EMAS",
+      "normalizedName": "taman naga emas",
+      "latitude": 3.077688,
+      "longitude": 101.699867
+    },
+    {
+      "id": "prasarana_rapid_rail:PY29",
+      "name": "SUNGAI BESI",
+      "normalizedName": "sungai besi",
+      "latitude": 3.063737,
+      "longitude": 101.7084
+    },
+    {
+      "id": "prasarana_rapid_rail:PY31",
+      "name": "SERDANG RAYA UTARA",
+      "normalizedName": "serdang raya utara",
+      "latitude": 3.041674,
+      "longitude": 101.704928
+    },
+    {
+      "id": "prasarana_rapid_rail:PY32",
+      "name": "SERDANG RAYA SELATAN",
+      "normalizedName": "serdang raya selatan",
+      "latitude": 3.028463,
+      "longitude": 101.707514
+    },
+    {
+      "id": "prasarana_rapid_rail:PY33",
+      "name": "SERDANG JAYA",
+      "normalizedName": "serdang jaya",
+      "latitude": 3.0216,
+      "longitude": 101.709
+    },
+    {
+      "id": "prasarana_rapid_rail:PY34",
+      "name": "UPM",
+      "normalizedName": "upm",
+      "latitude": 3.008489,
+      "longitude": 101.705396
+    },
+    {
+      "id": "prasarana_rapid_rail:PY36",
+      "name": "TAMAN EQUINE",
+      "normalizedName": "taman equine",
+      "latitude": 2.98942,
+      "longitude": 101.67244
+    },
+    {
+      "id": "prasarana_rapid_rail:PY37",
+      "name": "PUTRA PERMAI",
+      "normalizedName": "putra permai",
+      "latitude": 2.98339,
+      "longitude": 101.66099
+    },
+    {
+      "id": "prasarana_rapid_rail:PY38",
+      "name": "16 SIERRA",
+      "normalizedName": "16 sierra",
+      "latitude": 2.964974,
+      "longitude": 101.654812
+    },
+    {
+      "id": "prasarana_rapid_rail:PY39",
+      "name": "CYBERJAYA UTARA",
+      "normalizedName": "cyberjaya utara",
+      "latitude": 2.95,
+      "longitude": 101.6573
+    },
+    {
+      "id": "prasarana_rapid_rail:PY40",
+      "name": "CYBERJAYA CITY CENTRE",
+      "normalizedName": "cyberjaya city centre",
+      "latitude": 2.9384,
+      "longitude": 101.6659
+    },
+    {
+      "id": "prasarana_rapid_rail:PY41",
+      "name": "PUTRAJAYA SENTRAL",
+      "normalizedName": "putrajaya sentral",
+      "latitude": 2.9313,
+      "longitude": 101.6715
+    },
+    {
+      "id": "prasarana_rapid_rail:SA1",
+      "name": "BANDAR UTAMA",
+      "normalizedName": "bandar utama",
+      "latitude": 3.144722,
+      "longitude": 101.618611
+    },
+    {
+      "id": "prasarana_rapid_rail:SA10",
+      "name": "STADIUM SHAH ALAM",
+      "normalizedName": "stadium shah alam",
+      "latitude": 3.079722,
+      "longitude": 101.548889
+    },
+    {
+      "id": "prasarana_rapid_rail:SA12",
+      "name": "DATO' MENTERI - SA SENTRAL",
+      "normalizedName": "dato menteri sa sentral",
+      "latitude": 3.069722,
+      "longitude": 101.521111
+    },
+    {
+      "id": "prasarana_rapid_rail:SA14",
+      "name": "UITM SHAH ALAM",
+      "normalizedName": "uitm shah alam",
+      "latitude": 3.0625,
+      "longitude": 101.501111
+    },
+    {
+      "id": "prasarana_rapid_rail:SA15",
+      "name": "SEKSYEN 7",
+      "normalizedName": "seksyen 7",
+      "latitude": 3.067222,
+      "longitude": 101.486667
+    },
+    {
+      "id": "prasarana_rapid_rail:SA17",
+      "name": "BANDAR BARU KLANG",
+      "normalizedName": "bandar baru klang",
+      "latitude": 3.0625,
+      "longitude": 101.465556
+    },
+    {
+      "id": "prasarana_rapid_rail:SA18",
+      "name": "PASAR KLANG",
+      "normalizedName": "pasar klang",
+      "latitude": 3.067778,
+      "longitude": 101.450833
+    },
+    {
+      "id": "prasarana_rapid_rail:SA19",
+      "name": "JALAN MERU",
+      "normalizedName": "jalan meru",
+      "latitude": 3.058889,
+      "longitude": 101.451944
+    },
+    {
+      "id": "prasarana_rapid_rail:SA2",
+      "name": "KAYU ARA",
+      "normalizedName": "kayu ara",
+      "latitude": 3.134722,
+      "longitude": 101.616667
+    },
+    {
+      "id": "prasarana_rapid_rail:SA20",
+      "name": "JAMBATAN KOTA",
+      "normalizedName": "jambatan kota",
+      "latitude": 3.047222,
+      "longitude": 101.4475
+    },
+    {
+      "id": "prasarana_rapid_rail:SA21",
+      "name": "TAMAN SELATAN",
+      "normalizedName": "taman selatan",
+      "latitude": 3.026667,
+      "longitude": 101.442222
+    },
+    {
+      "id": "prasarana_rapid_rail:SA22",
+      "name": "SERI ANDALAS",
+      "normalizedName": "seri andalas",
+      "latitude": 3.015833,
+      "longitude": 101.440556
+    },
+    {
+      "id": "prasarana_rapid_rail:SA23",
+      "name": "KLANG JAYA",
+      "normalizedName": "klang jaya",
+      "latitude": 3.005278,
+      "longitude": 101.441667
+    },
+    {
+      "id": "prasarana_rapid_rail:SA24",
+      "name": "BANDAR BUKIT TINGGI",
+      "normalizedName": "bandar bukit tinggi",
+      "latitude": 2.993056,
+      "longitude": 101.445833
+    },
+    {
+      "id": "prasarana_rapid_rail:SA26",
+      "name": "JOHAN SETIA",
+      "normalizedName": "johan setia",
+      "latitude": 2.976111,
+      "longitude": 101.459167
+    },
+    {
+      "id": "prasarana_rapid_rail:SA3",
+      "name": "BANDAR UTAMA 11",
+      "normalizedName": "bandar utama 11",
+      "latitude": 3.133333,
+      "longitude": 101.604444
+    },
+    {
+      "id": "prasarana_rapid_rail:SA5",
+      "name": "DAMANSARA IDAMAN",
+      "normalizedName": "damansara idaman",
+      "latitude": 3.122778,
+      "longitude": 101.594167
+    },
+    {
+      "id": "prasarana_rapid_rail:SA6",
+      "name": "SUBANG",
+      "normalizedName": "subang",
+      "latitude": 3.106111,
+      "longitude": 101.591111
+    },
+    {
+      "id": "prasarana_rapid_rail:SA7",
+      "name": "GLENMARIE 2",
+      "normalizedName": "glenmarie 2",
+      "latitude": 3.095278,
+      "longitude": 101.588611
+    },
+    {
+      "id": "prasarana_rapid_rail:SA9",
+      "name": "KERJAYA",
+      "normalizedName": "kerjaya",
+      "latitude": 3.082222,
+      "longitude": 101.561944
+    },
+    {
+      "id": "prasarana_rapid_rail:SP1",
+      "name": "SENTUL TIMUR",
+      "normalizedName": "sentul timur",
+      "latitude": 3.185897,
+      "longitude": 101.695217
+    },
+    {
+      "id": "prasarana_rapid_rail:SP10",
+      "name": "PUDU",
+      "normalizedName": "pudu",
+      "latitude": 3.134879,
+      "longitude": 101.711957
+    },
+    {
+      "id": "prasarana_rapid_rail:SP11",
+      "name": "CHAN SOW LIN",
+      "normalizedName": "chan sow lin",
+      "latitude": 3.128105,
+      "longitude": 101.715637
+    },
+    {
+      "id": "prasarana_rapid_rail:SP12",
+      "name": "CHERAS",
+      "normalizedName": "cheras",
+      "latitude": 3.112609,
+      "longitude": 101.714178
+    },
+    {
+      "id": "prasarana_rapid_rail:SP13",
+      "name": "SALAK SELATAN",
+      "normalizedName": "salak selatan",
+      "latitude": 3.102201,
+      "longitude": 101.706179
+    },
+    {
+      "id": "prasarana_rapid_rail:SP14",
+      "name": "BANDAR TUN RAZAK",
+      "normalizedName": "bandar tun razak",
+      "latitude": 3.089576,
+      "longitude": 101.712466
+    },
+    {
+      "id": "prasarana_rapid_rail:SP15",
+      "name": "BANDAR TASIK SELATAN",
+      "normalizedName": "bandar tasik selatan",
+      "latitude": 3.076058,
+      "longitude": 101.711107
+    },
+    {
+      "id": "prasarana_rapid_rail:SP16",
+      "name": "SUNGAI BESI",
+      "normalizedName": "sungai besi",
+      "latitude": 3.063842,
+      "longitude": 101.708062
+    },
+    {
+      "id": "prasarana_rapid_rail:SP17",
+      "name": "BUKIT JALIL",
+      "normalizedName": "bukit jalil",
+      "latitude": 3.058196,
+      "longitude": 101.692125
+    },
+    {
+      "id": "prasarana_rapid_rail:SP18",
+      "name": "SRI PETALING",
+      "normalizedName": "sri petaling",
+      "latitude": 3.061445,
+      "longitude": 101.687074
+    },
+    {
+      "id": "prasarana_rapid_rail:SP19",
+      "name": "AWAN BESAR",
+      "normalizedName": "awan besar",
+      "latitude": 3.062131,
+      "longitude": 101.670555
+    },
+    {
+      "id": "prasarana_rapid_rail:SP2",
+      "name": "SENTUL",
+      "normalizedName": "sentul",
+      "latitude": 3.178484,
+      "longitude": 101.695542
+    },
+    {
+      "id": "prasarana_rapid_rail:SP20",
+      "name": "MUHIBBAH",
+      "normalizedName": "muhibbah",
+      "latitude": 3.062229,
+      "longitude": 101.662552
+    },
+    {
+      "id": "prasarana_rapid_rail:SP21",
+      "name": "ALAM SUTERA",
+      "normalizedName": "alam sutera",
+      "latitude": 3.0547,
+      "longitude": 101.656468
+    },
+    {
+      "id": "prasarana_rapid_rail:SP22",
+      "name": "KINRARA",
+      "normalizedName": "kinrara",
+      "latitude": 3.050506,
+      "longitude": 101.644294
+    },
+    {
+      "id": "prasarana_rapid_rail:SP24",
+      "name": "IOI PUCHONG JAYA",
+      "normalizedName": "ioi puchong jaya",
+      "latitude": 3.048101,
+      "longitude": 101.62095
+    },
+    {
+      "id": "prasarana_rapid_rail:SP25",
+      "name": "PUSAT BANDAR PUCHONG",
+      "normalizedName": "pusat bandar puchong",
+      "latitude": 3.033194,
+      "longitude": 101.616057
+    },
+    {
+      "id": "prasarana_rapid_rail:SP26",
+      "name": "TAMAN PERINDUSTRIAN PUCHONG",
+      "normalizedName": "taman perindustrian puchong",
+      "latitude": 3.022814,
+      "longitude": 101.613514
+    },
+    {
+      "id": "prasarana_rapid_rail:SP27",
+      "name": "BANDAR PUTERI",
+      "normalizedName": "bandar puteri",
+      "latitude": 3.017111,
+      "longitude": 101.612855
+    },
+    {
+      "id": "prasarana_rapid_rail:SP28",
+      "name": "PUCHONG PERDANA",
+      "normalizedName": "puchong perdana",
+      "latitude": 3.007913,
+      "longitude": 101.605021
+    },
+    {
+      "id": "prasarana_rapid_rail:SP29",
+      "name": "PUCHONG PRIMA",
+      "normalizedName": "puchong prima",
+      "latitude": 2.999808,
+      "longitude": 101.596692
+    },
+    {
+      "id": "prasarana_rapid_rail:SP3",
+      "name": "TITIWANGSA",
+      "normalizedName": "titiwangsa",
+      "latitude": 3.173497,
+      "longitude": 101.695367
+    },
+    {
+      "id": "prasarana_rapid_rail:SP31",
+      "name": "PUTRA HEIGHTS",
+      "normalizedName": "putra heights",
+      "latitude": 2.996016,
+      "longitude": 101.575521
+    },
+    {
+      "id": "prasarana_rapid_rail:SP4",
+      "name": "PWTC",
+      "normalizedName": "pwtc",
+      "latitude": 3.166333,
+      "longitude": 101.693586
+    },
+    {
+      "id": "prasarana_rapid_rail:SP5",
+      "name": "SULTAN ISMAIL",
+      "normalizedName": "sultan ismail",
+      "latitude": 3.161245,
+      "longitude": 101.694109
+    },
+    {
+      "id": "prasarana_rapid_rail:SP6",
+      "name": "BANDARAYA - UOB",
+      "normalizedName": "bandaraya uob",
+      "latitude": 3.155567,
+      "longitude": 101.694485
+    },
+    {
+      "id": "prasarana_rapid_rail:SP7",
+      "name": "MASJID JAMEK",
+      "normalizedName": "masjid jamek",
+      "latitude": 3.14927,
+      "longitude": 101.696377
+    },
+    {
+      "id": "prasarana_rapid_rail:SP8",
+      "name": "PLAZA RAKYAT",
+      "normalizedName": "plaza rakyat",
+      "latitude": 3.144049,
+      "longitude": 101.702105
+    },
+    {
+      "id": "prasarana_rapid_rail:SP9",
+      "name": "HANG TUAH",
+      "normalizedName": "hang tuah",
+      "latitude": 3.140012,
+      "longitude": 101.705984
+    }
+  ],
+  "services": [
+    {
+      "id": "prasarana_rapid_rail:AG::direction:0",
+      "routeId": "prasarana_rapid_rail:AG",
+      "directionId": 0,
+      "shortName": "AGL",
+      "longName": "LRT Ampang Line",
+      "routeType": 1,
+      "color": "e57200",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 32400,
+          "headwaySeconds": 180
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 180
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 84300,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 84300,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 84300,
+          "headwaySeconds": 300
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:AG::direction:1",
+      "routeId": "prasarana_rapid_rail:AG",
+      "directionId": 1,
+      "shortName": "AGL",
+      "longName": "LRT Ampang Line",
+      "routeType": 1,
+      "color": "e57200",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 32400,
+          "headwaySeconds": 180
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 180
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 84300,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 84300,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 84300,
+          "headwaySeconds": 300
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:BRT::direction:0",
+      "routeId": "prasarana_rapid_rail:BRT",
+      "directionId": 0,
+      "shortName": "BRT",
+      "longName": "BRT Sunway Line",
+      "routeType": 0,
+      "color": "115740",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 25200,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 25200,
+          "endSeconds": 32400,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 86400,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 86400,
+          "headwaySeconds": 360
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 86400,
+          "headwaySeconds": 360
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:BRT::direction:1",
+      "routeId": "prasarana_rapid_rail:BRT",
+      "directionId": 1,
+      "shortName": "BRT",
+      "longName": "BRT Sunway Line",
+      "routeType": 0,
+      "color": "115740",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 25200,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 25200,
+          "endSeconds": 32400,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 86400,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 86400,
+          "headwaySeconds": 360
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 86400,
+          "headwaySeconds": 360
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:KGL::direction:0",
+      "routeId": "prasarana_rapid_rail:KGL",
+      "directionId": 0,
+      "shortName": "KGL",
+      "longName": "MRT Kajang Line",
+      "routeType": 1,
+      "color": "047940",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 32400,
+          "headwaySeconds": 360
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 360
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 86400,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 82500,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 82500,
+          "headwaySeconds": 600
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:KGL::direction:1",
+      "routeId": "prasarana_rapid_rail:KGL",
+      "directionId": 1,
+      "shortName": "KGL",
+      "longName": "MRT Kajang Line",
+      "routeType": 1,
+      "color": "047940",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 32400,
+          "headwaySeconds": 360
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 360
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 86400,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 82500,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 82500,
+          "headwaySeconds": 600
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ::direction:0",
+      "routeId": "prasarana_rapid_rail:KJ",
+      "directionId": 0,
+      "shortName": "KJL",
+      "longName": "LRT Kelana Jaya Line",
+      "routeType": 1,
+      "color": "D50032",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 25200,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 25200,
+          "endSeconds": 32400,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 83700,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 83700,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 83700,
+          "headwaySeconds": 420
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:KJ::direction:1",
+      "routeId": "prasarana_rapid_rail:KJ",
+      "directionId": 1,
+      "shortName": "KJL",
+      "longName": "LRT Kelana Jaya Line",
+      "routeType": 1,
+      "color": "D50032",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 25200,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 25200,
+          "endSeconds": 32400,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 83700,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 83700,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 83700,
+          "headwaySeconds": 420
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:MR::direction:0",
+      "routeId": "prasarana_rapid_rail:MR",
+      "directionId": 0,
+      "shortName": "MRL",
+      "longName": "KL Monorail Line",
+      "routeType": 1,
+      "color": "84bd00",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 32400,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 84600,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 84600,
+          "headwaySeconds": 720
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 84600,
+          "headwaySeconds": 720
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:MR::direction:1",
+      "routeId": "prasarana_rapid_rail:MR",
+      "directionId": 1,
+      "shortName": "MRL",
+      "longName": "KL Monorail Line",
+      "routeType": 1,
+      "color": "84bd00",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 32400,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 84600,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 84600,
+          "headwaySeconds": 720
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 84600,
+          "headwaySeconds": 720
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:PH::direction:0",
+      "routeId": "prasarana_rapid_rail:PH",
+      "directionId": 0,
+      "shortName": "SPL",
+      "longName": "LRT Sri Petaling Line",
+      "routeType": 1,
+      "color": "76232f",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 32400,
+          "headwaySeconds": 180
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 180
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 86400,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 86400,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 86400,
+          "headwaySeconds": 300
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:PH::direction:1",
+      "routeId": "prasarana_rapid_rail:PH",
+      "directionId": 1,
+      "shortName": "SPL",
+      "longName": "LRT Sri Petaling Line",
+      "routeType": 1,
+      "color": "76232f",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 32400,
+          "headwaySeconds": 180
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 180
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 86400,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 86400,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 86400,
+          "headwaySeconds": 300
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:PYL::direction:0",
+      "routeId": "prasarana_rapid_rail:PYL",
+      "directionId": 0,
+      "shortName": "PYL",
+      "longName": "MRT Putrajaya Line",
+      "routeType": 1,
+      "color": "FFCD00",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 25200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 25200,
+          "endSeconds": 32400,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 61200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 68400,
+          "headwaySeconds": 300
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 68400,
+          "endSeconds": 79200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 79200,
+          "endSeconds": 86400,
+          "headwaySeconds": 720
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 82500,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 82500,
+          "headwaySeconds": 600
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:PYL::direction:1",
+      "routeId": "prasarana_rapid_rail:PYL",
+      "directionId": 1,
+      "shortName": "PYL",
+      "longName": "MRT Putrajaya Line",
+      "routeType": 1,
+      "color": "FFCD00",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 25200,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 25200,
+          "endSeconds": 34200,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 34200,
+          "endSeconds": 61200,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 61200,
+          "endSeconds": 70200,
+          "headwaySeconds": 240
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 70200,
+          "endSeconds": 79200,
+          "headwaySeconds": 420
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 79200,
+          "endSeconds": 86400,
+          "headwaySeconds": 840
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 82500,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 82500,
+          "headwaySeconds": 600
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:SA::direction:0",
+      "routeId": "prasarana_rapid_rail:SA",
+      "directionId": 0,
+      "shortName": "SAL",
+      "longName": "LRT Shah Alam Line",
+      "routeType": 1,
+      "color": "00A9E0",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 25200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 25200,
+          "endSeconds": 32400,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 59400,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 59400,
+          "endSeconds": 70200,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 70200,
+          "endSeconds": 86400,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 86400,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 84600,
+          "headwaySeconds": 600
+        }
+      ]
+    },
+    {
+      "id": "prasarana_rapid_rail:SA::direction:1",
+      "routeId": "prasarana_rapid_rail:SA",
+      "directionId": 1,
+      "shortName": "SAL",
+      "longName": "LRT Shah Alam Line",
+      "routeType": 1,
+      "color": "00A9E0",
+      "textColor": "FFFFFF",
+      "headways": [
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 21600,
+          "endSeconds": 25200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 25200,
+          "endSeconds": 32400,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 32400,
+          "endSeconds": 59400,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 59400,
+          "endSeconds": 70200,
+          "headwaySeconds": 480
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:MonFri",
+          "startSeconds": 70200,
+          "endSeconds": 85200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sat",
+          "startSeconds": 21600,
+          "endSeconds": 85200,
+          "headwaySeconds": 600
+        },
+        {
+          "calendarId": "prasarana_rapid_rail:Sun",
+          "startSeconds": 21600,
+          "endSeconds": 83400,
+          "headwaySeconds": 600
+        }
+      ]
+    }
+  ],
+  "scheduledTrips": [],
+  "rideEdges": [
+    {
+      "fromStopId": "prasarana_rapid_rail:AG1",
+      "toStopId": "prasarana_rapid_rail:AG2",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 79
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG10",
+      "toStopId": "prasarana_rapid_rail:AG11",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 87
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG10",
+      "toStopId": "prasarana_rapid_rail:AG9",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 73
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG11",
+      "toStopId": "prasarana_rapid_rail:AG10",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 87
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG11",
+      "toStopId": "prasarana_rapid_rail:AG12",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 76
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG12",
+      "toStopId": "prasarana_rapid_rail:AG11",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 82
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG12",
+      "toStopId": "prasarana_rapid_rail:AG13",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 86
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG13",
+      "toStopId": "prasarana_rapid_rail:AG12",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 83
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG13",
+      "toStopId": "prasarana_rapid_rail:AG14",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 108
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG14",
+      "toStopId": "prasarana_rapid_rail:AG13",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 109
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG14",
+      "toStopId": "prasarana_rapid_rail:AG15",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 81
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG15",
+      "toStopId": "prasarana_rapid_rail:AG14",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 80
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG15",
+      "toStopId": "prasarana_rapid_rail:AG16",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 72
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG16",
+      "toStopId": "prasarana_rapid_rail:AG15",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG16",
+      "toStopId": "prasarana_rapid_rail:AG17",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 56
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG17",
+      "toStopId": "prasarana_rapid_rail:AG16",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 54
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG17",
+      "toStopId": "prasarana_rapid_rail:AG18",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 119
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG18",
+      "toStopId": "prasarana_rapid_rail:AG17",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 105
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG2",
+      "toStopId": "prasarana_rapid_rail:AG1",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 79
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG2",
+      "toStopId": "prasarana_rapid_rail:AG3",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 62
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG3",
+      "toStopId": "prasarana_rapid_rail:AG2",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 62
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG3",
+      "toStopId": "prasarana_rapid_rail:AG4",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 85
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG4",
+      "toStopId": "prasarana_rapid_rail:AG3",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 85
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG4",
+      "toStopId": "prasarana_rapid_rail:AG5",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG5",
+      "toStopId": "prasarana_rapid_rail:AG4",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG5",
+      "toStopId": "prasarana_rapid_rail:AG6",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 69
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG6",
+      "toStopId": "prasarana_rapid_rail:AG5",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 69
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG6",
+      "toStopId": "prasarana_rapid_rail:AG7",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 95
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG7",
+      "toStopId": "prasarana_rapid_rail:AG6",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 95
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG7",
+      "toStopId": "prasarana_rapid_rail:AG8",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 92
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG8",
+      "toStopId": "prasarana_rapid_rail:AG7",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 92
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG8",
+      "toStopId": "prasarana_rapid_rail:AG9",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 66
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG9",
+      "toStopId": "prasarana_rapid_rail:AG10",
+      "serviceId": "prasarana_rapid_rail:AG::direction:1",
+      "travelSeconds": 73
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG9",
+      "toStopId": "prasarana_rapid_rail:AG8",
+      "serviceId": "prasarana_rapid_rail:AG::direction:0",
+      "travelSeconds": 66
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT1",
+      "toStopId": "prasarana_rapid_rail:BRT2",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:0",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT2",
+      "toStopId": "prasarana_rapid_rail:BRT1",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT2",
+      "toStopId": "prasarana_rapid_rail:BRT3",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:0",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT3",
+      "toStopId": "prasarana_rapid_rail:BRT2",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT3",
+      "toStopId": "prasarana_rapid_rail:BRT4",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT4",
+      "toStopId": "prasarana_rapid_rail:BRT3",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT4",
+      "toStopId": "prasarana_rapid_rail:BRT5",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT5",
+      "toStopId": "prasarana_rapid_rail:BRT4",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT5",
+      "toStopId": "prasarana_rapid_rail:BRT6",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT6",
+      "toStopId": "prasarana_rapid_rail:BRT5",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:1",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT6",
+      "toStopId": "prasarana_rapid_rail:BRT7",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:BRT7",
+      "toStopId": "prasarana_rapid_rail:BRT6",
+      "serviceId": "prasarana_rapid_rail:BRT::direction:1",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG04",
+      "toStopId": "prasarana_rapid_rail:KG05",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG05",
+      "toStopId": "prasarana_rapid_rail:KG04",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG05",
+      "toStopId": "prasarana_rapid_rail:KG06",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG06",
+      "toStopId": "prasarana_rapid_rail:KG05",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG06",
+      "toStopId": "prasarana_rapid_rail:KG07",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG07",
+      "toStopId": "prasarana_rapid_rail:KG06",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG07",
+      "toStopId": "prasarana_rapid_rail:KG08",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG08",
+      "toStopId": "prasarana_rapid_rail:KG07",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG08",
+      "toStopId": "prasarana_rapid_rail:KG09",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG09",
+      "toStopId": "prasarana_rapid_rail:KG08",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG09",
+      "toStopId": "prasarana_rapid_rail:KG10",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG10",
+      "toStopId": "prasarana_rapid_rail:KG09",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG10",
+      "toStopId": "prasarana_rapid_rail:KG12",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG12",
+      "toStopId": "prasarana_rapid_rail:KG10",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG12",
+      "toStopId": "prasarana_rapid_rail:KG13",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 240
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG13",
+      "toStopId": "prasarana_rapid_rail:KG12",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 240
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG13",
+      "toStopId": "prasarana_rapid_rail:KG14",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG14",
+      "toStopId": "prasarana_rapid_rail:KG13",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG14",
+      "toStopId": "prasarana_rapid_rail:KG15",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 240
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG15",
+      "toStopId": "prasarana_rapid_rail:KG14",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 240
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG15",
+      "toStopId": "prasarana_rapid_rail:KG16",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG16",
+      "toStopId": "prasarana_rapid_rail:KG15",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG16",
+      "toStopId": "prasarana_rapid_rail:KG17",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG17",
+      "toStopId": "prasarana_rapid_rail:KG16",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG17",
+      "toStopId": "prasarana_rapid_rail:KG18A",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG18A",
+      "toStopId": "prasarana_rapid_rail:KG17",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG18A",
+      "toStopId": "prasarana_rapid_rail:KG20",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG20",
+      "toStopId": "prasarana_rapid_rail:KG18A",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG20",
+      "toStopId": "prasarana_rapid_rail:KG21",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG21",
+      "toStopId": "prasarana_rapid_rail:KG20",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG21",
+      "toStopId": "prasarana_rapid_rail:KG22",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG22",
+      "toStopId": "prasarana_rapid_rail:KG21",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG22",
+      "toStopId": "prasarana_rapid_rail:KG23",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG23",
+      "toStopId": "prasarana_rapid_rail:KG22",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG23",
+      "toStopId": "prasarana_rapid_rail:KG24",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG24",
+      "toStopId": "prasarana_rapid_rail:KG23",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG24",
+      "toStopId": "prasarana_rapid_rail:KG25",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG25",
+      "toStopId": "prasarana_rapid_rail:KG24",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG25",
+      "toStopId": "prasarana_rapid_rail:KG26",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG26",
+      "toStopId": "prasarana_rapid_rail:KG25",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG26",
+      "toStopId": "prasarana_rapid_rail:KG27",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG27",
+      "toStopId": "prasarana_rapid_rail:KG26",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG27",
+      "toStopId": "prasarana_rapid_rail:KG28",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG28",
+      "toStopId": "prasarana_rapid_rail:KG27",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG28",
+      "toStopId": "prasarana_rapid_rail:KG29",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG29",
+      "toStopId": "prasarana_rapid_rail:KG28",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG29",
+      "toStopId": "prasarana_rapid_rail:KG30",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG30",
+      "toStopId": "prasarana_rapid_rail:KG29",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG30",
+      "toStopId": "prasarana_rapid_rail:KG31",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG31",
+      "toStopId": "prasarana_rapid_rail:KG30",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 180
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG31",
+      "toStopId": "prasarana_rapid_rail:KG33",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 240
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG33",
+      "toStopId": "prasarana_rapid_rail:KG31",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 240
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG33",
+      "toStopId": "prasarana_rapid_rail:KG34",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG34",
+      "toStopId": "prasarana_rapid_rail:KG33",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG34",
+      "toStopId": "prasarana_rapid_rail:KG35",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG35",
+      "toStopId": "prasarana_rapid_rail:KG34",
+      "serviceId": "prasarana_rapid_rail:KGL::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ1",
+      "toStopId": "prasarana_rapid_rail:KJ2",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 155
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ10",
+      "toStopId": "prasarana_rapid_rail:KJ11",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 114
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ10",
+      "toStopId": "prasarana_rapid_rail:KJ9",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 115
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ11",
+      "toStopId": "prasarana_rapid_rail:KJ10",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 133
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ11",
+      "toStopId": "prasarana_rapid_rail:KJ12",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 97
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ12",
+      "toStopId": "prasarana_rapid_rail:KJ11",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 99
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ12",
+      "toStopId": "prasarana_rapid_rail:KJ13",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 141
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ13",
+      "toStopId": "prasarana_rapid_rail:KJ12",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 119
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ13",
+      "toStopId": "prasarana_rapid_rail:KJ14",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 147
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ14",
+      "toStopId": "prasarana_rapid_rail:KJ13",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 146
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ14",
+      "toStopId": "prasarana_rapid_rail:KJ15",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 173
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ15",
+      "toStopId": "prasarana_rapid_rail:KJ14",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 179
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ15",
+      "toStopId": "prasarana_rapid_rail:KJ16",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 123
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ16",
+      "toStopId": "prasarana_rapid_rail:KJ15",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 146
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ16",
+      "toStopId": "prasarana_rapid_rail:KJ17",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 135
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ17",
+      "toStopId": "prasarana_rapid_rail:KJ16",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 143
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ17",
+      "toStopId": "prasarana_rapid_rail:KJ18",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 112
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ18",
+      "toStopId": "prasarana_rapid_rail:KJ17",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 112
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ18",
+      "toStopId": "prasarana_rapid_rail:KJ19",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 108
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ19",
+      "toStopId": "prasarana_rapid_rail:KJ18",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 112
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ19",
+      "toStopId": "prasarana_rapid_rail:KJ20",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 202
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ2",
+      "toStopId": "prasarana_rapid_rail:KJ1",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 143
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ2",
+      "toStopId": "prasarana_rapid_rail:KJ3",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 160
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ20",
+      "toStopId": "prasarana_rapid_rail:KJ19",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 211
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ20",
+      "toStopId": "prasarana_rapid_rail:KJ21",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 99
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ21",
+      "toStopId": "prasarana_rapid_rail:KJ20",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 99
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ21",
+      "toStopId": "prasarana_rapid_rail:KJ22",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 145
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ22",
+      "toStopId": "prasarana_rapid_rail:KJ21",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 146
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ22",
+      "toStopId": "prasarana_rapid_rail:KJ23",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 131
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ23",
+      "toStopId": "prasarana_rapid_rail:KJ22",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 135
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ23",
+      "toStopId": "prasarana_rapid_rail:KJ24",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 178
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ24",
+      "toStopId": "prasarana_rapid_rail:KJ23",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 117
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ24",
+      "toStopId": "prasarana_rapid_rail:KJ25",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 155
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ25",
+      "toStopId": "prasarana_rapid_rail:KJ24",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 153
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ25",
+      "toStopId": "prasarana_rapid_rail:KJ26",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 93
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ26",
+      "toStopId": "prasarana_rapid_rail:KJ25",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 95
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ26",
+      "toStopId": "prasarana_rapid_rail:KJ27",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 151
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ27",
+      "toStopId": "prasarana_rapid_rail:KJ26",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 172
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ27",
+      "toStopId": "prasarana_rapid_rail:KJ28",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 159
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ28",
+      "toStopId": "prasarana_rapid_rail:KJ27",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 196
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ28",
+      "toStopId": "prasarana_rapid_rail:KJ29",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 185
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ29",
+      "toStopId": "prasarana_rapid_rail:KJ28",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 183
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ29",
+      "toStopId": "prasarana_rapid_rail:KJ30",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 124
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ3",
+      "toStopId": "prasarana_rapid_rail:KJ2",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 163
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ3",
+      "toStopId": "prasarana_rapid_rail:KJ4",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 109
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ30",
+      "toStopId": "prasarana_rapid_rail:KJ29",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 114
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ30",
+      "toStopId": "prasarana_rapid_rail:KJ31",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 254
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ31",
+      "toStopId": "prasarana_rapid_rail:KJ30",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 250
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ31",
+      "toStopId": "prasarana_rapid_rail:KJ32",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 113
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ32",
+      "toStopId": "prasarana_rapid_rail:KJ31",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 110
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ32",
+      "toStopId": "prasarana_rapid_rail:KJ33",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 155
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ33",
+      "toStopId": "prasarana_rapid_rail:KJ32",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ33",
+      "toStopId": "prasarana_rapid_rail:KJ34",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 138
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ34",
+      "toStopId": "prasarana_rapid_rail:KJ33",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 138
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ34",
+      "toStopId": "prasarana_rapid_rail:KJ35",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 219
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ35",
+      "toStopId": "prasarana_rapid_rail:KJ34",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 219
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ35",
+      "toStopId": "prasarana_rapid_rail:KJ36",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 149
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ36",
+      "toStopId": "prasarana_rapid_rail:KJ35",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 144
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ36",
+      "toStopId": "prasarana_rapid_rail:KJ37",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 182
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ37",
+      "toStopId": "prasarana_rapid_rail:KJ36",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 181
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ4",
+      "toStopId": "prasarana_rapid_rail:KJ3",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 127
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ4",
+      "toStopId": "prasarana_rapid_rail:KJ5",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 255
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ5",
+      "toStopId": "prasarana_rapid_rail:KJ4",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 250
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ5",
+      "toStopId": "prasarana_rapid_rail:KJ6",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 111
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ6",
+      "toStopId": "prasarana_rapid_rail:KJ5",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 104
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ6",
+      "toStopId": "prasarana_rapid_rail:KJ7",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 102
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ7",
+      "toStopId": "prasarana_rapid_rail:KJ6",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 100
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ7",
+      "toStopId": "prasarana_rapid_rail:KJ8",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 112
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ8",
+      "toStopId": "prasarana_rapid_rail:KJ7",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 111
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ8",
+      "toStopId": "prasarana_rapid_rail:KJ9",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 138
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ9",
+      "toStopId": "prasarana_rapid_rail:KJ10",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:1",
+      "travelSeconds": 115
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ9",
+      "toStopId": "prasarana_rapid_rail:KJ8",
+      "serviceId": "prasarana_rapid_rail:KJ::direction:0",
+      "travelSeconds": 116
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR1",
+      "toStopId": "prasarana_rapid_rail:MR2",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR10",
+      "toStopId": "prasarana_rapid_rail:MR11",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR10",
+      "toStopId": "prasarana_rapid_rail:MR9",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR11",
+      "toStopId": "prasarana_rapid_rail:MR10",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR2",
+      "toStopId": "prasarana_rapid_rail:MR1",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR2",
+      "toStopId": "prasarana_rapid_rail:MR3",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 210
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR3",
+      "toStopId": "prasarana_rapid_rail:MR2",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 210
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR3",
+      "toStopId": "prasarana_rapid_rail:MR4",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR4",
+      "toStopId": "prasarana_rapid_rail:MR3",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR4",
+      "toStopId": "prasarana_rapid_rail:MR5",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 90
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR5",
+      "toStopId": "prasarana_rapid_rail:MR4",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 90
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR5",
+      "toStopId": "prasarana_rapid_rail:MR6",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR6",
+      "toStopId": "prasarana_rapid_rail:MR5",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR6",
+      "toStopId": "prasarana_rapid_rail:MR7",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR7",
+      "toStopId": "prasarana_rapid_rail:MR6",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR7",
+      "toStopId": "prasarana_rapid_rail:MR8",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR8",
+      "toStopId": "prasarana_rapid_rail:MR7",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR8",
+      "toStopId": "prasarana_rapid_rail:MR9",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR9",
+      "toStopId": "prasarana_rapid_rail:MR10",
+      "serviceId": "prasarana_rapid_rail:MR::direction:0",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR9",
+      "toStopId": "prasarana_rapid_rail:MR8",
+      "serviceId": "prasarana_rapid_rail:MR::direction:1",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY01",
+      "toStopId": "prasarana_rapid_rail:PY03",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 189
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY03",
+      "toStopId": "prasarana_rapid_rail:PY01",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 189
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY03",
+      "toStopId": "prasarana_rapid_rail:PY04",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 107
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY04",
+      "toStopId": "prasarana_rapid_rail:PY03",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 107
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY04",
+      "toStopId": "prasarana_rapid_rail:PY05",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 126
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY05",
+      "toStopId": "prasarana_rapid_rail:PY04",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 126
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY05",
+      "toStopId": "prasarana_rapid_rail:PY06",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 110
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY06",
+      "toStopId": "prasarana_rapid_rail:PY05",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 110
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY06",
+      "toStopId": "prasarana_rapid_rail:PY07",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 104
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY07",
+      "toStopId": "prasarana_rapid_rail:PY06",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 104
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY07",
+      "toStopId": "prasarana_rapid_rail:PY08",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 101
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY08",
+      "toStopId": "prasarana_rapid_rail:PY07",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 101
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY08",
+      "toStopId": "prasarana_rapid_rail:PY09",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 114
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY09",
+      "toStopId": "prasarana_rapid_rail:PY08",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 114
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY09",
+      "toStopId": "prasarana_rapid_rail:PY10",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 73
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY10",
+      "toStopId": "prasarana_rapid_rail:PY09",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 73
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY10",
+      "toStopId": "prasarana_rapid_rail:PY11",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 78
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY11",
+      "toStopId": "prasarana_rapid_rail:PY10",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 78
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY11",
+      "toStopId": "prasarana_rapid_rail:PY12",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 88
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY12",
+      "toStopId": "prasarana_rapid_rail:PY11",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 88
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY12",
+      "toStopId": "prasarana_rapid_rail:PY13",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 88
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY13",
+      "toStopId": "prasarana_rapid_rail:PY12",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 88
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY13",
+      "toStopId": "prasarana_rapid_rail:PY14",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 101
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY14",
+      "toStopId": "prasarana_rapid_rail:PY13",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 101
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY14",
+      "toStopId": "prasarana_rapid_rail:PY15",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 72
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY15",
+      "toStopId": "prasarana_rapid_rail:PY14",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 72
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY15",
+      "toStopId": "prasarana_rapid_rail:PY16",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 116
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY16",
+      "toStopId": "prasarana_rapid_rail:PY15",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 116
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY16",
+      "toStopId": "prasarana_rapid_rail:PY17",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 104
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY17",
+      "toStopId": "prasarana_rapid_rail:PY16",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 104
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY17",
+      "toStopId": "prasarana_rapid_rail:PY18",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY18",
+      "toStopId": "prasarana_rapid_rail:PY17",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY18",
+      "toStopId": "prasarana_rapid_rail:PY19",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 104
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY19",
+      "toStopId": "prasarana_rapid_rail:PY18",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 104
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY19",
+      "toStopId": "prasarana_rapid_rail:PY20",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 100
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY20",
+      "toStopId": "prasarana_rapid_rail:PY19",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 100
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY20",
+      "toStopId": "prasarana_rapid_rail:PY21",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 61
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY21",
+      "toStopId": "prasarana_rapid_rail:PY20",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 61
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY21",
+      "toStopId": "prasarana_rapid_rail:PY22",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 72
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY22",
+      "toStopId": "prasarana_rapid_rail:PY21",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 72
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY22",
+      "toStopId": "prasarana_rapid_rail:PY23",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 82
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY23",
+      "toStopId": "prasarana_rapid_rail:PY22",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 82
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY23",
+      "toStopId": "prasarana_rapid_rail:PY24",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 133
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY24",
+      "toStopId": "prasarana_rapid_rail:PY23",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 133
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY24",
+      "toStopId": "prasarana_rapid_rail:PY27",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 340
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY27",
+      "toStopId": "prasarana_rapid_rail:PY24",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 340
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY27",
+      "toStopId": "prasarana_rapid_rail:PY28",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 104
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY28",
+      "toStopId": "prasarana_rapid_rail:PY27",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 104
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY28",
+      "toStopId": "prasarana_rapid_rail:PY29",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 146
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY29",
+      "toStopId": "prasarana_rapid_rail:PY28",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 146
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY29",
+      "toStopId": "prasarana_rapid_rail:PY31",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 160
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY31",
+      "toStopId": "prasarana_rapid_rail:PY29",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 160
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY31",
+      "toStopId": "prasarana_rapid_rail:PY32",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 102
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY32",
+      "toStopId": "prasarana_rapid_rail:PY31",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 102
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY32",
+      "toStopId": "prasarana_rapid_rail:PY33",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 73
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY33",
+      "toStopId": "prasarana_rapid_rail:PY32",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 73
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY33",
+      "toStopId": "prasarana_rapid_rail:PY34",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 126
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY34",
+      "toStopId": "prasarana_rapid_rail:PY33",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 126
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY34",
+      "toStopId": "prasarana_rapid_rail:PY36",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 240
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY36",
+      "toStopId": "prasarana_rapid_rail:PY34",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 240
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY36",
+      "toStopId": "prasarana_rapid_rail:PY37",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 103
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY37",
+      "toStopId": "prasarana_rapid_rail:PY36",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 103
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY37",
+      "toStopId": "prasarana_rapid_rail:PY38",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 142
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY38",
+      "toStopId": "prasarana_rapid_rail:PY37",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 142
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY38",
+      "toStopId": "prasarana_rapid_rail:PY39",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY39",
+      "toStopId": "prasarana_rapid_rail:PY38",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 150
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY39",
+      "toStopId": "prasarana_rapid_rail:PY40",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 125
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY40",
+      "toStopId": "prasarana_rapid_rail:PY39",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 125
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY40",
+      "toStopId": "prasarana_rapid_rail:PY41",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:0",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY41",
+      "toStopId": "prasarana_rapid_rail:PY40",
+      "serviceId": "prasarana_rapid_rail:PYL::direction:1",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA1",
+      "toStopId": "prasarana_rapid_rail:SA2",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 116
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA10",
+      "toStopId": "prasarana_rapid_rail:SA12",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 355
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA10",
+      "toStopId": "prasarana_rapid_rail:SA9",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 151
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA12",
+      "toStopId": "prasarana_rapid_rail:SA10",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 355
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA12",
+      "toStopId": "prasarana_rapid_rail:SA14",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 262
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA14",
+      "toStopId": "prasarana_rapid_rail:SA12",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 262
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA14",
+      "toStopId": "prasarana_rapid_rail:SA15",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 173
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA15",
+      "toStopId": "prasarana_rapid_rail:SA14",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 173
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA15",
+      "toStopId": "prasarana_rapid_rail:SA17",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 247
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA17",
+      "toStopId": "prasarana_rapid_rail:SA15",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 247
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA17",
+      "toStopId": "prasarana_rapid_rail:SA18",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 178
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA18",
+      "toStopId": "prasarana_rapid_rail:SA17",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 178
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA18",
+      "toStopId": "prasarana_rapid_rail:SA19",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 102
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA19",
+      "toStopId": "prasarana_rapid_rail:SA18",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 102
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA19",
+      "toStopId": "prasarana_rapid_rail:SA20",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 142
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA2",
+      "toStopId": "prasarana_rapid_rail:SA1",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 116
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA2",
+      "toStopId": "prasarana_rapid_rail:SA3",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 140
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA20",
+      "toStopId": "prasarana_rapid_rail:SA19",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 142
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA20",
+      "toStopId": "prasarana_rapid_rail:SA21",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 242
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA21",
+      "toStopId": "prasarana_rapid_rail:SA20",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 242
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA21",
+      "toStopId": "prasarana_rapid_rail:SA22",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 125
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA22",
+      "toStopId": "prasarana_rapid_rail:SA21",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 125
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA22",
+      "toStopId": "prasarana_rapid_rail:SA23",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 121
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA23",
+      "toStopId": "prasarana_rapid_rail:SA22",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 121
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA23",
+      "toStopId": "prasarana_rapid_rail:SA24",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 147
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA24",
+      "toStopId": "prasarana_rapid_rail:SA23",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 147
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA24",
+      "toStopId": "prasarana_rapid_rail:SA26",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 264
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA26",
+      "toStopId": "prasarana_rapid_rail:SA24",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 264
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA3",
+      "toStopId": "prasarana_rapid_rail:SA2",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 140
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA3",
+      "toStopId": "prasarana_rapid_rail:SA5",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 168
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA5",
+      "toStopId": "prasarana_rapid_rail:SA3",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 168
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA5",
+      "toStopId": "prasarana_rapid_rail:SA6",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 193
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA6",
+      "toStopId": "prasarana_rapid_rail:SA5",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 193
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA6",
+      "toStopId": "prasarana_rapid_rail:SA7",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 127
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA7",
+      "toStopId": "prasarana_rapid_rail:SA6",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 127
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA7",
+      "toStopId": "prasarana_rapid_rail:SA9",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 357
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA9",
+      "toStopId": "prasarana_rapid_rail:SA10",
+      "serviceId": "prasarana_rapid_rail:SA::direction:0",
+      "travelSeconds": 151
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA9",
+      "toStopId": "prasarana_rapid_rail:SA7",
+      "serviceId": "prasarana_rapid_rail:SA::direction:1",
+      "travelSeconds": 357
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP1",
+      "toStopId": "prasarana_rapid_rail:SP2",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 79
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP10",
+      "toStopId": "prasarana_rapid_rail:SP11",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 87
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP10",
+      "toStopId": "prasarana_rapid_rail:SP9",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 71
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP11",
+      "toStopId": "prasarana_rapid_rail:SP10",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 91
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP11",
+      "toStopId": "prasarana_rapid_rail:SP12",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 128
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP12",
+      "toStopId": "prasarana_rapid_rail:SP11",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 138
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP12",
+      "toStopId": "prasarana_rapid_rail:SP13",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 111
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP13",
+      "toStopId": "prasarana_rapid_rail:SP12",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 111
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP13",
+      "toStopId": "prasarana_rapid_rail:SP14",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 126
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP14",
+      "toStopId": "prasarana_rapid_rail:SP13",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 120
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP14",
+      "toStopId": "prasarana_rapid_rail:SP15",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 133
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP15",
+      "toStopId": "prasarana_rapid_rail:SP14",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 134
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP15",
+      "toStopId": "prasarana_rapid_rail:SP16",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 107
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP16",
+      "toStopId": "prasarana_rapid_rail:SP15",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 106
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP16",
+      "toStopId": "prasarana_rapid_rail:SP17",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 153
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP17",
+      "toStopId": "prasarana_rapid_rail:SP16",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 147
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP17",
+      "toStopId": "prasarana_rapid_rail:SP18",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 111
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP18",
+      "toStopId": "prasarana_rapid_rail:SP17",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 77
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP18",
+      "toStopId": "prasarana_rapid_rail:SP19",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 90
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP19",
+      "toStopId": "prasarana_rapid_rail:SP18",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 90
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP19",
+      "toStopId": "prasarana_rapid_rail:SP20",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 111
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP2",
+      "toStopId": "prasarana_rapid_rail:SP1",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 83
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP2",
+      "toStopId": "prasarana_rapid_rail:SP3",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 62
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP20",
+      "toStopId": "prasarana_rapid_rail:SP19",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 111
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP20",
+      "toStopId": "prasarana_rapid_rail:SP21",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 114
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP21",
+      "toStopId": "prasarana_rapid_rail:SP20",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 114
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP21",
+      "toStopId": "prasarana_rapid_rail:SP22",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 207
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP22",
+      "toStopId": "prasarana_rapid_rail:SP21",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 207
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP22",
+      "toStopId": "prasarana_rapid_rail:SP24",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 208
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP24",
+      "toStopId": "prasarana_rapid_rail:SP22",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 208
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP24",
+      "toStopId": "prasarana_rapid_rail:SP25",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP25",
+      "toStopId": "prasarana_rapid_rail:SP24",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP25",
+      "toStopId": "prasarana_rapid_rail:SP26",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 102
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP26",
+      "toStopId": "prasarana_rapid_rail:SP25",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 102
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP26",
+      "toStopId": "prasarana_rapid_rail:SP27",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 86
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP27",
+      "toStopId": "prasarana_rapid_rail:SP26",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 86
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP27",
+      "toStopId": "prasarana_rapid_rail:SP28",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 111
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP28",
+      "toStopId": "prasarana_rapid_rail:SP27",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 111
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP28",
+      "toStopId": "prasarana_rapid_rail:SP29",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 147
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP29",
+      "toStopId": "prasarana_rapid_rail:SP28",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 147
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP29",
+      "toStopId": "prasarana_rapid_rail:SP31",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 214
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP3",
+      "toStopId": "prasarana_rapid_rail:SP2",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 64
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP3",
+      "toStopId": "prasarana_rapid_rail:SP4",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 85
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP31",
+      "toStopId": "prasarana_rapid_rail:SP29",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 214
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP4",
+      "toStopId": "prasarana_rapid_rail:SP3",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 82
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP4",
+      "toStopId": "prasarana_rapid_rail:SP5",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP5",
+      "toStopId": "prasarana_rapid_rail:SP4",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 70
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP5",
+      "toStopId": "prasarana_rapid_rail:SP6",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 69
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP6",
+      "toStopId": "prasarana_rapid_rail:SP5",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 69
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP6",
+      "toStopId": "prasarana_rapid_rail:SP7",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 95
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP7",
+      "toStopId": "prasarana_rapid_rail:SP6",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 96
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP7",
+      "toStopId": "prasarana_rapid_rail:SP8",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 92
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP8",
+      "toStopId": "prasarana_rapid_rail:SP7",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 91
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP8",
+      "toStopId": "prasarana_rapid_rail:SP9",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 66
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP9",
+      "toStopId": "prasarana_rapid_rail:SP10",
+      "serviceId": "prasarana_rapid_rail:PH::direction:1",
+      "travelSeconds": 73
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP9",
+      "toStopId": "prasarana_rapid_rail:SP8",
+      "serviceId": "prasarana_rapid_rail:PH::direction:0",
+      "travelSeconds": 73
+    }
+  ],
+  "transferEdges": [
+    {
+      "fromStopId": "prasarana_rapid_rail:AG1",
+      "toStopId": "prasarana_rapid_rail:SP1",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG10",
+      "toStopId": "prasarana_rapid_rail:SP10",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG11",
+      "toStopId": "prasarana_rapid_rail:PY24",
+      "walkSeconds": 120,
+      "distanceMetres": 115,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG11",
+      "toStopId": "prasarana_rapid_rail:SP11",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG13",
+      "toStopId": "prasarana_rapid_rail:KG22",
+      "walkSeconds": 120,
+      "distanceMetres": 69,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG2",
+      "toStopId": "prasarana_rapid_rail:SP2",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG3",
+      "toStopId": "prasarana_rapid_rail:MR11",
+      "walkSeconds": 120,
+      "distanceMetres": 80,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG3",
+      "toStopId": "prasarana_rapid_rail:PY17",
+      "walkSeconds": 120,
+      "distanceMetres": 81,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG3",
+      "toStopId": "prasarana_rapid_rail:SP3",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG4",
+      "toStopId": "prasarana_rapid_rail:SP4",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG5",
+      "toStopId": "prasarana_rapid_rail:SP5",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG6",
+      "toStopId": "prasarana_rapid_rail:SP6",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG7",
+      "toStopId": "prasarana_rapid_rail:KJ13",
+      "walkSeconds": 120,
+      "distanceMetres": 69,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG7",
+      "toStopId": "prasarana_rapid_rail:SP7",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG8",
+      "toStopId": "prasarana_rapid_rail:SP8",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG9",
+      "toStopId": "prasarana_rapid_rail:MR4",
+      "walkSeconds": 120,
+      "distanceMetres": 56,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG9",
+      "toStopId": "prasarana_rapid_rail:SP9",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG04",
+      "toStopId": "prasarana_rapid_rail:PY01",
+      "walkSeconds": 120,
+      "distanceMetres": 23,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG09",
+      "toStopId": "prasarana_rapid_rail:SA1",
+      "walkSeconds": 185,
+      "distanceMetres": 221,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG16",
+      "toStopId": "prasarana_rapid_rail:KJ14",
+      "walkSeconds": 120,
+      "distanceMetres": 33,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG18A",
+      "toStopId": "prasarana_rapid_rail:MR6",
+      "walkSeconds": 120,
+      "distanceMetres": 81,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG20",
+      "toStopId": "prasarana_rapid_rail:PY23",
+      "walkSeconds": 120,
+      "distanceMetres": 58,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG22",
+      "toStopId": "prasarana_rapid_rail:AG13",
+      "walkSeconds": 120,
+      "distanceMetres": 69,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ13",
+      "toStopId": "prasarana_rapid_rail:AG7",
+      "walkSeconds": 120,
+      "distanceMetres": 69,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ13",
+      "toStopId": "prasarana_rapid_rail:SP7",
+      "walkSeconds": 120,
+      "distanceMetres": 69,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ14",
+      "toStopId": "prasarana_rapid_rail:KG16",
+      "walkSeconds": 120,
+      "distanceMetres": 33,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ37",
+      "toStopId": "prasarana_rapid_rail:SP31",
+      "walkSeconds": 120,
+      "distanceMetres": 24,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ9",
+      "toStopId": "prasarana_rapid_rail:PY20",
+      "walkSeconds": 246,
+      "distanceMetres": 294,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR11",
+      "toStopId": "prasarana_rapid_rail:AG3",
+      "walkSeconds": 120,
+      "distanceMetres": 80,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR11",
+      "toStopId": "prasarana_rapid_rail:PY17",
+      "walkSeconds": 120,
+      "distanceMetres": 102,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR11",
+      "toStopId": "prasarana_rapid_rail:SP3",
+      "walkSeconds": 120,
+      "distanceMetres": 80,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR4",
+      "toStopId": "prasarana_rapid_rail:AG9",
+      "walkSeconds": 120,
+      "distanceMetres": 56,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR4",
+      "toStopId": "prasarana_rapid_rail:SP9",
+      "walkSeconds": 120,
+      "distanceMetres": 56,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR6",
+      "toStopId": "prasarana_rapid_rail:KG18A",
+      "walkSeconds": 120,
+      "distanceMetres": 81,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY01",
+      "toStopId": "prasarana_rapid_rail:KG04",
+      "walkSeconds": 120,
+      "distanceMetres": 23,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY17",
+      "toStopId": "prasarana_rapid_rail:AG3",
+      "walkSeconds": 120,
+      "distanceMetres": 81,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY17",
+      "toStopId": "prasarana_rapid_rail:MR11",
+      "walkSeconds": 120,
+      "distanceMetres": 102,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY17",
+      "toStopId": "prasarana_rapid_rail:SP3",
+      "walkSeconds": 120,
+      "distanceMetres": 81,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY20",
+      "toStopId": "prasarana_rapid_rail:KJ9",
+      "walkSeconds": 246,
+      "distanceMetres": 294,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY23",
+      "toStopId": "prasarana_rapid_rail:KG20",
+      "walkSeconds": 120,
+      "distanceMetres": 58,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY24",
+      "toStopId": "prasarana_rapid_rail:AG11",
+      "walkSeconds": 120,
+      "distanceMetres": 115,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY24",
+      "toStopId": "prasarana_rapid_rail:SP11",
+      "walkSeconds": 120,
+      "distanceMetres": 115,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:PY29",
+      "toStopId": "prasarana_rapid_rail:SP16",
+      "walkSeconds": 120,
+      "distanceMetres": 39,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SA1",
+      "toStopId": "prasarana_rapid_rail:KG09",
+      "walkSeconds": 185,
+      "distanceMetres": 221,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP1",
+      "toStopId": "prasarana_rapid_rail:AG1",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP10",
+      "toStopId": "prasarana_rapid_rail:AG10",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP11",
+      "toStopId": "prasarana_rapid_rail:AG11",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP11",
+      "toStopId": "prasarana_rapid_rail:PY24",
+      "walkSeconds": 120,
+      "distanceMetres": 115,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP16",
+      "toStopId": "prasarana_rapid_rail:PY29",
+      "walkSeconds": 120,
+      "distanceMetres": 39,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP2",
+      "toStopId": "prasarana_rapid_rail:AG2",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP3",
+      "toStopId": "prasarana_rapid_rail:AG3",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP3",
+      "toStopId": "prasarana_rapid_rail:MR11",
+      "walkSeconds": 120,
+      "distanceMetres": 80,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP3",
+      "toStopId": "prasarana_rapid_rail:PY17",
+      "walkSeconds": 120,
+      "distanceMetres": 81,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP31",
+      "toStopId": "prasarana_rapid_rail:KJ37",
+      "walkSeconds": 120,
+      "distanceMetres": 24,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP4",
+      "toStopId": "prasarana_rapid_rail:AG4",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP5",
+      "toStopId": "prasarana_rapid_rail:AG5",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP6",
+      "toStopId": "prasarana_rapid_rail:AG6",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP7",
+      "toStopId": "prasarana_rapid_rail:AG7",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP7",
+      "toStopId": "prasarana_rapid_rail:KJ13",
+      "walkSeconds": 120,
+      "distanceMetres": 69,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP8",
+      "toStopId": "prasarana_rapid_rail:AG8",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP9",
+      "toStopId": "prasarana_rapid_rail:AG9",
+      "walkSeconds": 120,
+      "distanceMetres": 0,
+      "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP9",
+      "toStopId": "prasarana_rapid_rail:MR4",
+      "walkSeconds": 120,
+      "distanceMetres": 56,
+      "source": "normalized_name"
+    }
+  ]
+}
