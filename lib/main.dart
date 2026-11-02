@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void main() { 
+void main() {
   runApp(const TransitKlApp());
 }
 
@@ -13,9 +13,7 @@ class TransitKlApp extends StatelessWidget {
       title: 'TransitKL',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF006A60),
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF006A60)),
         useMaterial3: true,
       ),
       home: const ProjectStatusScreen(),
@@ -52,7 +50,7 @@ class ProjectStatusScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Current milestone: GTFS data pipeline and offline database.',
+                    'Current milestone: transfer-aware routing validated on Rapid Rail data.',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),

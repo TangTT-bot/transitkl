@@ -12,7 +12,7 @@ void main() {
     );
     expect(
       find.text(
-        'Current milestone: GTFS data pipeline and offline database.',
+        'Current milestone: transfer-aware routing validated on Rapid Rail data.',
       ),
       findsOneWidget,
     );

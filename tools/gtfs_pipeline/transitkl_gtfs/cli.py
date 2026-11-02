@@ -7,6 +7,7 @@ from urllib.error import URLError
 from .audit import AuditReport, audit_feed
 from .database import FeedValidationError, build_database
 from .download import download_feed
+from .routing_graph import export_routing_graph
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -39,6 +40,13 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Build despite audit errors. Intended only for diagnosis.",
     )
+
+    export_parser = subparsers.add_parser(
+        "export-graph",
+        help="Export a compact JSON routing graph from a built SQLite database.",
+    )
+    export_parser.add_argument("--database", required=True, type=Path)
+    export_parser.add_argument("--output", required=True, type=Path)
     return parser
 
 
@@ -66,6 +74,17 @@ def main(argv: list[str] | None = None) -> int:
             _write_reports(report, args.markdown_report, args.json_report)
             _print_summary(report)
             print(f"Built SQLite database at {args.database.resolve()}")
+            return 0
+
+        if args.command == "export-graph":
+            payload = export_routing_graph(args.database, args.output)
+            print(
+                "Exported routing graph to "
+                f"{args.output.resolve()} "
+                f"({len(payload['stops'])} stops, "
+                f"{len(payload['rideEdges'])} ride edges, "
+                f"{len(payload['transferEdges'])} transfer edges)."
+            )
             return 0
     except (OSError, URLError, FeedValidationError, ValueError) as error:
         print(f"Error: {error}")

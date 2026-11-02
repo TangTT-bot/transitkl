@@ -6,11 +6,13 @@ Bus services, and KTM Komuter in one mobile application.
 
 ## Project status
 
-The project is in its first implementation milestone:
+The project has completed its data-and-routing proof-of-concept milestone:
 
 - Flutter application scaffolded for Android and iOS.
-- Reproducible GTFS audit and SQLite build pipeline in development.
-- Transfer-aware routing engine and mobile database integration are next.
+- Reproducible GTFS audit and versioned SQLite build pipeline implemented.
+- Transfer-aware modified Dijkstra router implemented in pure Dart.
+- Official Rapid Rail data builds into a working routing graph.
+- Mobile SQLite integration and journey-search screens are next.
 
 The current Flutter screen is intentionally a status screen. User interface
 features will be developed after the data pipeline and routing model are
@@ -54,6 +56,7 @@ Downloaded feeds and generated databases are not committed. The small feed in
 ```text
 lib/                         Flutter application
 test/                        Flutter tests
+tool/                        Local Dart routing demonstration command
 tools/gtfs_pipeline/         Python GTFS audit and database builder
 data/fixtures/               Synthetic test feeds committed to Git
 data/downloads/              Downloaded official feeds, ignored by Git
@@ -123,6 +126,27 @@ python tools/gtfs_pipeline/run_pipeline.py build `
   --feed-id prasarana_rapid_rail `
   --database data/processed/rapid-rail-kl.sqlite
 ```
+
+Export the derived graph used by the pure-Dart routing engine:
+
+```powershell
+python tools/gtfs_pipeline/run_pipeline.py export-graph `
+  --database data/processed/rapid-rail-kl.sqlite `
+  --output data/processed/rapid-rail-kl-routing.json
+```
+
+Run an end-to-end route calculation against the official feed:
+
+```powershell
+dart run tool/route_demo.dart `
+  data/processed/rapid-rail-kl-routing.json `
+  "GOMBAK" "KAJANG" "08:00"
+```
+
+The demo accepts an exact stop ID or a station name. Generated databases and
+graphs stay ignored by Git. Routing design decisions and current limitations
+are documented in
+[`docs/architecture/0002-transfer-aware-routing.md`](docs/architecture/0002-transfer-aware-routing.md).
 
 ## Data sources and attribution
 

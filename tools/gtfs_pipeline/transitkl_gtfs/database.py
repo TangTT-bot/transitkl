@@ -3,7 +3,11 @@ from __future__ import annotations
 import os
 import re
 import sqlite3
+import math
+import statistics
 import unicodedata
+from collections import defaultdict
+from collections.abc import Callable
 from pathlib import Path
 from .audit import AuditReport, audit_feed, parse_gtfs_time
 from .feed import FeedSource
@@ -110,12 +114,51 @@ CREATE TABLE frequencies (
     FOREIGN KEY (trip_id) REFERENCES trips(trip_id)
 );
 
+CREATE TABLE ride_edges (
+    from_stop_id TEXT NOT NULL,
+    to_stop_id TEXT NOT NULL,
+    route_id TEXT NOT NULL,
+    direction_id INTEGER NOT NULL,
+    travel_seconds INTEGER NOT NULL,
+    sample_count INTEGER NOT NULL,
+    PRIMARY KEY (from_stop_id, to_stop_id, route_id, direction_id),
+    FOREIGN KEY (from_stop_id) REFERENCES stops(stop_id),
+    FOREIGN KEY (to_stop_id) REFERENCES stops(stop_id),
+    FOREIGN KEY (route_id) REFERENCES routes(route_id)
+);
+
+CREATE TABLE headway_profiles (
+    route_id TEXT NOT NULL,
+    direction_id INTEGER NOT NULL,
+    start_seconds INTEGER NOT NULL,
+    end_seconds INTEGER NOT NULL,
+    headway_seconds INTEGER NOT NULL,
+    sample_count INTEGER NOT NULL,
+    PRIMARY KEY (route_id, direction_id, start_seconds, end_seconds),
+    FOREIGN KEY (route_id) REFERENCES routes(route_id)
+);
+
+CREATE TABLE transfer_edges (
+    from_stop_id TEXT NOT NULL,
+    to_stop_id TEXT NOT NULL,
+    walk_seconds INTEGER NOT NULL,
+    distance_metres INTEGER,
+    source TEXT NOT NULL,
+    PRIMARY KEY (from_stop_id, to_stop_id),
+    FOREIGN KEY (from_stop_id) REFERENCES stops(stop_id),
+    FOREIGN KEY (to_stop_id) REFERENCES stops(stop_id)
+);
+
 CREATE INDEX idx_stops_normalized_name ON stops(normalized_name);
 CREATE INDEX idx_trips_route_service ON trips(route_id, service_id);
 CREATE INDEX idx_stop_times_stop_id ON stop_times(stop_id);
 CREATE INDEX idx_stop_times_trip_sequence ON stop_times(trip_id, stop_sequence);
 CREATE INDEX idx_frequencies_trip_start ON frequencies(trip_id, start_seconds);
 CREATE INDEX idx_calendar_exceptions_date ON calendar_exceptions(service_date);
+CREATE INDEX idx_ride_edges_from_stop ON ride_edges(from_stop_id);
+CREATE INDEX idx_transfer_edges_from_stop ON transfer_edges(from_stop_id);
+CREATE INDEX idx_headway_profiles_service_time
+    ON headway_profiles(route_id, direction_id, start_seconds, end_seconds);
 """
 
 
@@ -156,6 +199,9 @@ def build_database(
         _insert_trips(connection, source, feed_id)
         _insert_stop_times(connection, source, feed_id)
         _insert_frequencies(connection, source, feed_id)
+        _derive_ride_edges(connection)
+        _derive_headway_profiles(connection)
+        _derive_transfer_edges(connection, source, feed_id)
 
         foreign_key_problems = list(connection.execute("PRAGMA foreign_key_check"))
         if foreign_key_problems:
@@ -208,7 +254,7 @@ def _rows(source: FeedSource, file_name: str) -> list[dict[str, str]]:
 
 def _insert_metadata(connection: sqlite3.Connection, report: AuditReport) -> None:
     values = {
-        "schema_version": "1",
+        "schema_version": "2",
         "feed_id": report.feed_id,
         "source": report.source,
         "source_sha256": report.source_sha256,
@@ -455,3 +501,241 @@ def _insert_frequencies(
         """,
         records,
     )
+
+
+def _derive_ride_edges(connection: sqlite3.Connection) -> None:
+    trip_services = {
+        trip_id: (route_id, direction_id if direction_id is not None else -1)
+        for trip_id, route_id, direction_id in connection.execute(
+            "SELECT trip_id, route_id, direction_id FROM trips"
+        )
+    }
+    stop_times_by_trip: dict[str, list[tuple[int, str, int | None, int | None]]] = (
+        defaultdict(list)
+    )
+    for trip_id, sequence, stop_id, arrival, departure in connection.execute(
+        """
+        SELECT trip_id, stop_sequence, stop_id, arrival_seconds, departure_seconds
+        FROM stop_times
+        ORDER BY trip_id, stop_sequence
+        """
+    ):
+        stop_times_by_trip[trip_id].append(
+            (sequence, stop_id, arrival, departure)
+        )
+
+    samples: dict[tuple[str, str, str, int], list[int]] = defaultdict(list)
+    for trip_id, stop_times in stop_times_by_trip.items():
+        route_id, direction_id = trip_services[trip_id]
+        for current, following in zip(stop_times, stop_times[1:]):
+            departure = current[3] if current[3] is not None else current[2]
+            arrival = following[2] if following[2] is not None else following[3]
+            if departure is None or arrival is None or arrival < departure:
+                continue
+            samples[(current[1], following[1], route_id, direction_id)].append(
+                arrival - departure
+            )
+
+    records = [
+        (*key, round(statistics.median(durations)), len(durations))
+        for key, durations in sorted(samples.items())
+    ]
+    connection.executemany(
+        """
+        INSERT INTO ride_edges(
+            from_stop_id, to_stop_id, route_id, direction_id,
+            travel_seconds, sample_count
+        ) VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        records,
+    )
+
+
+def _derive_headway_profiles(connection: sqlite3.Connection) -> None:
+    samples: dict[tuple[str, int, int, int], list[int]] = defaultdict(list)
+    for route_id, direction_id, start, end, headway in connection.execute(
+        """
+        SELECT trips.route_id,
+               COALESCE(trips.direction_id, -1),
+               frequencies.start_seconds,
+               frequencies.end_seconds,
+               frequencies.headway_seconds
+        FROM frequencies
+        JOIN trips ON trips.trip_id = frequencies.trip_id
+        """
+    ):
+        samples[(route_id, direction_id, start, end)].append(headway)
+
+    records = [
+        (*key, round(statistics.median(headways)), len(headways))
+        for key, headways in sorted(samples.items())
+    ]
+    connection.executemany(
+        """
+        INSERT INTO headway_profiles(
+            route_id, direction_id, start_seconds, end_seconds,
+            headway_seconds, sample_count
+        ) VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        records,
+    )
+
+
+def _derive_transfer_edges(
+    connection: sqlite3.Connection,
+    source: FeedSource,
+    feed_id: str,
+    *,
+    maximum_same_name_distance_metres: int = 500,
+    minimum_station_walk_seconds: int = 120,
+    walking_metres_per_second: float = 1.2,
+) -> None:
+    stops = {
+        stop_id: {
+            "normalized_name": normalized_name,
+            "latitude": latitude,
+            "longitude": longitude,
+            "parent_station": parent_station,
+        }
+        for stop_id, normalized_name, latitude, longitude, parent_station in connection.execute(
+            """
+            SELECT stop_id, normalized_name, stop_lat, stop_lon, parent_station
+            FROM stops
+            """
+        )
+    }
+    edges: dict[tuple[str, str], tuple[int, int | None, str]] = {}
+
+    def add_directed(
+        first_stop_id: str,
+        second_stop_id: str,
+        source_name: str,
+        explicit_walk_seconds: int | None = None,
+        *,
+        replace: bool = False,
+    ) -> None:
+        if first_stop_id == second_stop_id:
+            return
+        first = stops.get(first_stop_id)
+        second = stops.get(second_stop_id)
+        if first is None or second is None:
+            return
+        distance = _distance_metres(first, second)
+        walk_seconds = (
+            explicit_walk_seconds
+            if explicit_walk_seconds is not None
+            else max(
+                minimum_station_walk_seconds,
+                math.ceil((distance or 0) / walking_metres_per_second),
+            )
+        )
+        distance_metres = round(distance) if distance is not None else None
+        existing = edges.get((first_stop_id, second_stop_id))
+        candidate = (walk_seconds, distance_metres, source_name)
+        if replace or existing is None or candidate[0] < existing[0]:
+            edges[(first_stop_id, second_stop_id)] = candidate
+
+    def add_bidirectional(
+        first_stop_id: str,
+        second_stop_id: str,
+        source_name: str,
+        explicit_walk_seconds: int | None = None,
+    ) -> None:
+        for from_stop_id, to_stop_id in (
+            (first_stop_id, second_stop_id),
+            (second_stop_id, first_stop_id),
+        ):
+            add_directed(
+                from_stop_id,
+                to_stop_id,
+                source_name,
+                explicit_walk_seconds,
+            )
+
+    parent_groups: dict[str, list[str]] = defaultdict(list)
+    name_groups: dict[str, list[str]] = defaultdict(list)
+    for stop_id, stop in stops.items():
+        parent_station = stop["parent_station"]
+        if parent_station:
+            parent_groups[str(parent_station)].append(stop_id)
+        normalized_name = str(stop["normalized_name"])
+        if normalized_name:
+            name_groups[normalized_name].append(stop_id)
+
+    for group in parent_groups.values():
+        _connect_stop_group(group, "parent_station", add_bidirectional)
+
+    for group in name_groups.values():
+        for index, first_stop_id in enumerate(group):
+            for second_stop_id in group[index + 1 :]:
+                distance = _distance_metres(stops[first_stop_id], stops[second_stop_id])
+                if distance is not None and distance <= maximum_same_name_distance_metres:
+                    add_bidirectional(first_stop_id, second_stop_id, "normalized_name")
+
+    for row in _rows(source, "transfers.txt"):
+        first_stop_id = _namespaced(feed_id, row.get("from_stop_id", ""))
+        second_stop_id = _namespaced(feed_id, row.get("to_stop_id", ""))
+        explicit_seconds = _optional_int(row.get("min_transfer_time", ""))
+        if first_stop_id in stops and second_stop_id in stops:
+            if row.get("transfer_type", "") == "3":
+                edges.pop((first_stop_id, second_stop_id), None)
+                continue
+            add_directed(
+                first_stop_id,
+                second_stop_id,
+                "transfers.txt",
+                explicit_seconds,
+                replace=True,
+            )
+
+    connection.executemany(
+        """
+        INSERT INTO transfer_edges(
+            from_stop_id, to_stop_id, walk_seconds, distance_metres, source
+        ) VALUES (?, ?, ?, ?, ?)
+        """,
+        [
+            (from_stop_id, to_stop_id, *values)
+            for (from_stop_id, to_stop_id), values in sorted(edges.items())
+        ],
+    )
+
+
+def _connect_stop_group(
+    stop_ids: list[str],
+    source_name: str,
+    add_bidirectional: Callable[[str, str, str], None],
+) -> None:
+    for index, first_stop_id in enumerate(stop_ids):
+        for second_stop_id in stop_ids[index + 1 :]:
+            add_bidirectional(first_stop_id, second_stop_id, source_name)
+
+
+def _distance_metres(
+    first: dict[str, object],
+    second: dict[str, object],
+) -> float | None:
+    if any(
+        value is None
+        for value in (
+            first["latitude"],
+            first["longitude"],
+            second["latitude"],
+            second["longitude"],
+        )
+    ):
+        return None
+    latitude_1 = math.radians(float(first["latitude"]))
+    longitude_1 = math.radians(float(first["longitude"]))
+    latitude_2 = math.radians(float(second["latitude"]))
+    longitude_2 = math.radians(float(second["longitude"]))
+    latitude_delta = latitude_2 - latitude_1
+    longitude_delta = longitude_2 - longitude_1
+    haversine = (
+        math.sin(latitude_delta / 2) ** 2
+        + math.cos(latitude_1)
+        * math.cos(latitude_2)
+        * math.sin(longitude_delta / 2) ** 2
+    )
+    haversine = min(1.0, max(0.0, haversine))
+    return 6_371_000 * 2 * math.atan2(math.sqrt(haversine), math.sqrt(1 - haversine))
