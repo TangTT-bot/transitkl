@@ -7,6 +7,53 @@ import 'package:transitkl/domain/routing/routing_graph.dart';
 void main() {
   final departure = DateTime(2026, 11, 2, 8);
 
+  test(
+    'restricted stops permit staying aboard but not boarding or alighting',
+    () {
+      final planner = JourneyPlanner(
+        _graph(
+          trips: [
+            _trip('restricted', 'exact', [
+              _stop('A', 8 * 3600),
+              const ScheduledStopTime(
+                stopId: 'B',
+                arrivalSeconds: 8 * 3600 + 100,
+                departureSeconds: 8 * 3600 + 120,
+                pickupAllowed: false,
+                dropOffAllowed: false,
+              ),
+              _stop('D', 8 * 3600 + 300),
+            ]),
+          ],
+        ),
+      );
+      expect(
+        planner.plan(
+          originStopId: 'A',
+          destinationStopId: 'D',
+          departure: departure,
+        ),
+        isNotNull,
+      );
+      expect(
+        planner.plan(
+          originStopId: 'A',
+          destinationStopId: 'B',
+          departure: departure,
+        ),
+        isNull,
+      );
+      expect(
+        planner.plan(
+          originStopId: 'B',
+          destinationStopId: 'D',
+          departure: departure,
+        ),
+        isNull,
+      );
+    },
+  );
+
   test('Recommended accepts a short walk to avoid changing trains', () {
     final planner = JourneyPlanner(
       _graph(

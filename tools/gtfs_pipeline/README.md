@@ -14,12 +14,13 @@ python tools/gtfs_pipeline/run_pipeline.py download --help
 python tools/gtfs_pipeline/run_pipeline.py audit --help
 python tools/gtfs_pipeline/run_pipeline.py build --help
 python tools/gtfs_pipeline/run_pipeline.py export-graph --help
+python tools/gtfs_pipeline/run_pipeline.py merge-graphs --help
 ```
 
 The `feed-id` argument becomes the namespace for every imported identifier. For
 example, stop `S1` from feed `prasarana_rapid_rail` becomes
 `prasarana_rapid_rail:S1`. This prevents identifiers from different operators
-from colliding when databases are merged in a later milestone.
+from colliding when graph exports are merged.
 
 The generated schema is versioned in `feed_metadata` using `schema_version`.
 Only source feeds that pass the audit are built by default.
@@ -36,3 +37,10 @@ such as KTM Komuter.
 Transfers are derived from GTFS parent stations, same-name stops within 500
 metres, and directed `transfers.txt` records. Inferred walking time assumes 1.2
 metres per second and at least two minutes within a station.
+
+`merge-graphs --input <rapid.json> --input <ktmb.json> --config
+data/network-kl.json --output <merged.json>` applies explicit route selection
+and curated interchanges. The source exports must record zero audit errors.
+The output retains separate source checksums and service dates, rejects duplicate
+IDs and invalid references, and does not infer cross-operator links by proximity.
+KTM scheduled stop times include normal boarding/alighting permissions.

@@ -365,6 +365,8 @@ final class ScheduledStopTime {
     required this.stopId,
     required this.arrivalSeconds,
     required this.departureSeconds,
+    this.pickupAllowed = true,
+    this.dropOffAllowed = true,
   });
 
   factory ScheduledStopTime.fromJson(Map<String, Object?> json) {
@@ -372,12 +374,16 @@ final class ScheduledStopTime {
       stopId: _string(json, 'stopId'),
       arrivalSeconds: _integer(json, 'arrivalSeconds'),
       departureSeconds: _integer(json, 'departureSeconds'),
+      pickupAllowed: json['pickupAllowed'] as bool? ?? true,
+      dropOffAllowed: json['dropOffAllowed'] as bool? ?? true,
     );
   }
 
   final String stopId;
   final int arrivalSeconds;
   final int departureSeconds;
+  final bool pickupAllowed;
+  final bool dropOffAllowed;
 }
 
 final class RideEdge {

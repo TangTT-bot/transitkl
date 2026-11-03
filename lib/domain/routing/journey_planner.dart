@@ -70,6 +70,10 @@ final class JourneyPlanner {
     final frontiers = <_State, List<_Label>>{};
     final frequencyWindows = <String, List<FrequencyBoardingWindow>>{};
     final latest = departure.add(Duration(seconds: maximumJourneySeconds));
+    final queryDate = _dateOnly(departure);
+    final queryEpoch = departure.millisecondsSinceEpoch ~/ 1000;
+    final latestEpoch = latest.millisecondsSinceEpoch ~/ 1000;
+    final scheduledInstances = <String, List<_ScheduledInstance>>{};
     final queue = _MinHeap();
     var nextId = 0;
 
@@ -121,12 +125,13 @@ final class JourneyPlanner {
     while (queue.isNotEmpty) {
       final label = queue.removeFirst();
       if (!label.active) continue;
-      if (label.state.stopId == destinationStopId) {
+      if (label.state.stopId == destinationStopId && label.state.canAlight) {
         return _buildJourney(label, departure);
       }
 
       for (final edge
           in _transfersFrom[label.state.stopId] ?? const <TransferEdge>[]) {
+        if (!label.state.canAlight) continue;
         relax(
           state: _State(edge.toStopId, label.state.hasBoarded, null),
           elapsedSeconds: label.cost.elapsedSeconds + edge.walkSeconds,
@@ -146,11 +151,12 @@ final class JourneyPlanner {
         required int waitSeconds,
         required int rideSeconds,
         required bool continuesRun,
+        bool canAlight = true,
       }) {
         // A change of vehicle counts even if both trains use the same line.
         final isTransfer = label.state.hasBoarded && !continuesRun;
         relax(
-          state: _State(toStopId, true, runId),
+          state: _State(toStopId, true, runId, canAlight: canAlight),
           elapsedSeconds: label.cost.elapsedSeconds + waitSeconds + rideSeconds,
           transfers: label.cost.transfers + (isTransfer ? 1 : 0),
           walkingSeconds: label.cost.walkingSeconds,
@@ -174,6 +180,7 @@ final class JourneyPlanner {
       for (final edge in _ridesFrom[label.state.stopId] ?? const <RideEdge>[]) {
         final journeyId = 'frequency:${edge.serviceId}';
         final continuesRun = label.state.activeRunId == journeyId;
+        if (!continuesRun && !label.state.canAlight) continue;
         int? wait = continuesRun ? 0 : null;
         if (!continuesRun) {
           final windows = frequencyWindows.putIfAbsent(
@@ -205,43 +212,59 @@ final class JourneyPlanner {
         );
       }
 
-      final currentDate = _dateOnly(currentTime);
-      for (final segment
-          in _scheduledFrom[label.state.stopId] ??
-              const <_ScheduledSegment>[]) {
-        final calendar = graph.serviceCalendars[segment.trip.calendarId]!;
-        for (final dayOffset in const [-1, 0, 1]) {
-          final serviceDate = currentDate.add(Duration(days: dayOffset));
-          if (!calendar.runsOn(serviceDate)) continue;
-          final scheduledDeparture = serviceDate.add(
-            Duration(seconds: segment.from.departureSeconds),
-          );
-          final scheduledArrival = serviceDate.add(
-            Duration(seconds: segment.to.arrivalSeconds),
-          );
-          if (scheduledDeparture.isBefore(currentTime)) continue;
-          final prefix =
-              'scheduled:${segment.trip.id}:${_dateKey(serviceDate)}';
-          final continuesRun =
-              label.state.activeRunId == '$prefix:${segment.index}';
-          final wait = continuesRun
-              ? 0
-              : scheduledDeparture.difference(currentTime).inSeconds;
-          final ride = scheduledArrival
-              .difference(continuesRun ? currentTime : scheduledDeparture)
-              .inSeconds;
-          if (ride < 0) continue;
-          relaxRide(
-            toStopId: segment.to.stopId,
-            serviceId: segment.trip.serviceId,
-            runId: '$prefix:${segment.index + 1}',
-            vehicleJourneyId: prefix,
-            scheduledTripId: segment.trip.id,
-            waitSeconds: wait,
-            rideSeconds: ride,
-            continuesRun: continuesRun,
-          );
+      final instances = scheduledInstances.putIfAbsent(label.state.stopId, () {
+        final result = <_ScheduledInstance>[];
+        for (final segment
+            in _scheduledFrom[label.state.stopId] ??
+                const <_ScheduledSegment>[]) {
+          final calendar = graph.serviceCalendars[segment.trip.calendarId]!;
+          final lastDay = _dateOnly(latest).difference(queryDate).inDays;
+          for (var dayOffset = -1; dayOffset <= lastDay; dayOffset++) {
+            final serviceDate = queryDate.add(Duration(days: dayOffset));
+            if (!calendar.runsOn(serviceDate)) continue;
+            final midnight = serviceDate.millisecondsSinceEpoch ~/ 1000;
+            final scheduledDeparture = midnight + segment.from.departureSeconds;
+            final scheduledArrival = midnight + segment.to.arrivalSeconds;
+            if (scheduledDeparture < queryEpoch ||
+                scheduledArrival > latestEpoch) {
+              continue;
+            }
+            result.add(
+              _ScheduledInstance(
+                segment,
+                scheduledDeparture,
+                scheduledArrival,
+                'scheduled:${segment.trip.id}:${_dateKey(serviceDate)}',
+              ),
+            );
+          }
         }
+        return result;
+      });
+      final nowEpoch = queryEpoch + label.cost.elapsedSeconds;
+      for (final instance in instances) {
+        if (instance.departure < nowEpoch) continue;
+        final segment = instance.segment;
+        final continuesRun = label.state.activeRunId == instance.fromRunId;
+        if (!continuesRun &&
+            (!label.state.canAlight || !segment.from.pickupAllowed)) {
+          continue;
+        }
+        final wait = continuesRun ? 0 : instance.departure - nowEpoch;
+        final ride =
+            instance.arrival - (continuesRun ? nowEpoch : instance.departure);
+        if (ride < 0) continue;
+        relaxRide(
+          toStopId: segment.to.stopId,
+          serviceId: segment.trip.serviceId,
+          runId: instance.toRunId,
+          vehicleJourneyId: instance.prefix,
+          scheduledTripId: segment.trip.id,
+          waitSeconds: wait,
+          rideSeconds: ride,
+          continuesRun: continuesRun,
+          canAlight: segment.to.dropOffAllowed,
+        );
       }
     }
     return null;
@@ -380,19 +403,38 @@ final class _ScheduledSegment {
   ScheduledStopTime get to => trip.stopTimes[index + 1];
 }
 
+final class _ScheduledInstance {
+  _ScheduledInstance(this.segment, this.departure, this.arrival, this.prefix)
+    : fromRunId = '$prefix:${segment.index}',
+      toRunId = '$prefix:${segment.index + 1}';
+  final _ScheduledSegment segment;
+  final int departure;
+  final int arrival;
+  final String prefix;
+  final String fromRunId;
+  final String toRunId;
+}
+
 final class _State {
-  const _State(this.stopId, this.hasBoarded, this.activeRunId);
+  const _State(
+    this.stopId,
+    this.hasBoarded,
+    this.activeRunId, {
+    this.canAlight = true,
+  });
   final String stopId;
   final bool hasBoarded;
   final String? activeRunId;
+  final bool canAlight;
   @override
   bool operator ==(Object other) =>
       other is _State &&
       stopId == other.stopId &&
       hasBoarded == other.hasBoarded &&
-      activeRunId == other.activeRunId;
+      activeRunId == other.activeRunId &&
+      canAlight == other.canAlight;
   @override
-  int get hashCode => Object.hash(stopId, hasBoarded, activeRunId);
+  int get hashCode => Object.hash(stopId, hasBoarded, activeRunId, canAlight);
 }
 
 final class _Label {

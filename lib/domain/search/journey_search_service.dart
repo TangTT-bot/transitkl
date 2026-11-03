@@ -68,14 +68,45 @@ List<StationGroup> _buildStations(RoutingGraph graph) {
     (grouped[key] ??= []).add(stop);
   }
 
-  final stations = [
-    for (final entry in grouped.entries)
-      StationGroup(
-        id: entry.key,
-        name: _displayName(entry.value.first.name),
-        stopIds: List.unmodifiable(entry.value.map((stop) => stop.id)),
-      ),
-  ];
+  final connections = <String, Set<String>>{};
+  for (final edge in graph.transferEdges) {
+    (connections[edge.fromStopId] ??= {}).add(edge.toStopId);
+    (connections[edge.toStopId] ??= {}).add(edge.fromStopId);
+  }
+  final stations = <StationGroup>[];
+  for (final entry in grouped.entries) {
+    final remaining = {for (final stop in entry.value) stop.id};
+    final components = <List<String>>[];
+    while (remaining.isNotEmpty) {
+      final component = <String>[];
+      final pending = [remaining.first];
+      remaining.remove(pending.first);
+      while (pending.isNotEmpty) {
+        final stopId = pending.removeLast();
+        component.add(stopId);
+        for (final neighbor in connections[stopId] ?? const <String>{}) {
+          if (remaining.remove(neighbor)) pending.add(neighbor);
+        }
+      }
+      component.sort();
+      components.add(component);
+    }
+    for (final component in components) {
+      final separate = components.length > 1;
+      final operatorName = component.every((id) => id.startsWith('ktmb:'))
+          ? 'KTM Komuter'
+          : 'Rapid Rail';
+      stations.add(
+        StationGroup(
+          id: separate ? '${entry.key}::${component.first}' : entry.key,
+          name:
+              '${_displayName(graph.stops[component.first]!.name)}'
+              '${separate ? ' ($operatorName)' : ''}',
+          stopIds: List.unmodifiable(component),
+        ),
+      );
+    }
+  }
   stations.sort((first, second) => first.name.compareTo(second.name));
   return List.unmodifiable(stations);
 }

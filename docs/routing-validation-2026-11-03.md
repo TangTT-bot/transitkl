@@ -47,3 +47,13 @@ These are local smoke measurements, not Android/iOS performance guarantees.
 Run device benchmarks and user evaluation after multi-operator integration.
 The ten-minute transfer weight and double walking weight are starting values
 and must be evaluated with commuter feedback.
+
+## KTM integration follow-up
+
+After adding KTM, the default benchmark uses the merged asset and adds Batu
+Caves/KLCC and Gombak/Batu Caves. On the development host, 30 timed station
+searches after warm-up measured median 156.09 ms and p95 392.89 ms after caching
+scheduled instances (initial uncached run: median 824.84 ms, p95 1684.07 ms).
+This does not replace device performance evaluation. To repeat the older
+Rapid Rail-only smoke scenario, pass `assets/data/rapid-rail-kl-routing.json`
+to `tool/routing_benchmark.dart`.

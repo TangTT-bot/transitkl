@@ -4,12 +4,13 @@ Last updated: 3 November 2026
 
 ## Current position
 
-TransitKL has reached the first end-to-end application milestone. A validated
-official Rapid Rail feed now travels through the complete path from GTFS audit
-to a usable Flutter journey result:
+TransitKL now supports two rail operators in the usable Flutter application.
+Audited Rapid Rail and Klang Valley KTM Komuter feeds travel through the complete
+path from GTFS audit to a Recommended offline journey result:
 
 ```text
-Official GTFS -> audit -> SQLite build -> routing graph export
+Official GTFS -> audit -> per-feed SQLite -> routing graph exports
+              -> route selection + curated interchange merge
               -> bundled Flutter asset -> station search
               -> calendar-aware router -> journey result cards
 ```
@@ -27,19 +28,22 @@ updated; it is no longer the main daily implementation task.
 | 3. Rapid Rail data validation | Complete | Reviewed audit with zero errors and warnings |
 | 4. Transfer-aware routing engine | Implemented; evaluation remains | Multi-label modified Dijkstra with convenience-aware Recommended ranking |
 | 5. First usable Flutter vertical slice | Complete | Offline asset loading, station search and journey results |
-| 6. Multi-operator coverage | Next | KTM Komuter and selected Rapid Bus feeds are not integrated |
+| 6a. KTM Komuter integration | Implemented; field validation remains | Audited exact timetables, two Klang Valley routes, curated transfers and per-feed validity |
+| 6b. Selected Rapid Bus integration | Next | Bus feed selection, audit, merging and rail/bus links |
 | 7. Remaining MVP product features | Not started | Favourites, timetable view, settings and polished empty/error states |
 | 8. Evaluation and release preparation | Not started | Performance study, usability testing, final report evidence and release build |
 
-The project has completed five of eight planned technical milestones. This is
-not the same as saying the capstone is five-eighths of the effort: multi-feed
-integration, user evaluation, documentation and final testing can take a large
-part of the remaining time.
+The five foundation/application milestones and the KTM part of multi-operator
+integration are implemented. This is not a percentage estimate: Rapid Bus,
+product features, field validation, evaluation, and report evidence still require
+substantial work.
 
 ## What is working now
 
-- The app starts with no network connection and loads 187 Rapid Rail stops.
-- Duplicate platform IDs are grouped into one user-facing station.
+- The app starts offline with 244 operator stop IDs, 20 directional services,
+  164 exact KTM trips, five calendars, and 96 directed walking links.
+- Transfer-connected same-name platforms share a search entry. Disconnected
+  namesakes such as KTM Sentul and LRT Sentul remain distinct.
 - Origin and destination fields provide filtered station suggestions.
 - Users choose a departure date and time inside the feed validity range.
 - The real modified Dijkstra engine returns route, wait, ride, walk and
@@ -55,13 +59,29 @@ part of the remaining time.
   [routing-validation-2026-11-03.md](routing-validation-2026-11-03.md).
 - The screen displays total duration, arrival time, transfers and line colours.
 - Static-data limitations, validity and attribution are visible in the app.
+- Rapid Rail and KTM expiry dates are shown separately. The date picker does not
+  override each operator's own calendar validity.
+- Seventeen curated transfer pairs cover twelve interchange areas. Walking
+  durations are conservative estimates requiring field validation.
 - Automated tests cover the pipeline, graph asset, routing, station grouping
-  and a real Gombak-to-Kajang screen flow.
+  real KTM-only and cross-operator journeys, expiry, short-turn gaps, and a real
+  Gombak-to-Kajang screen flow.
+
+Latest verification: 24 Flutter tests and 17 Python tests passed; static
+analysis found no issues. The merged asset checksum matches the generated
+network graph. Desktop smoke results after scheduled-instance caching were
+median 156.09 ms and p95 392.89 ms over 30 station searches; phone performance
+still needs measurement.
 
 ## What is not implemented yet
 
-- KTM Komuter and Rapid Bus are not included in the bundled graph.
-- Cross-operator interchange mappings have not been curated.
+- Rapid Bus and feeder buses are not included yet. ETS, intercity, northern and
+  southern Komuter services outside the Klang Valley scope are excluded.
+- The current KTM timetable expires on **17 November 2026**. Refresh, audit,
+  rebuild, and merge before a later demonstration.
+- The supplied Komuter feed has short-turn trips and directional/time gaps.
+  Gombak to Seremban at 08:00 has no connection within six hours, while a 16:00
+  search finds one. The application follows the supplied schedule.
 - The production app currently loads the compact graph JSON asset. The SQLite
   database remains a preprocessing artifact; it can replace the JSON runtime
   source later through the existing repository boundary if the final proposal
@@ -77,15 +97,18 @@ part of the remaining time.
 
 ## Recommended next milestone
 
-Implement multi-operator data integration:
+First run the updated app and manually inspect these searches on a phone:
 
-1. Obtain a current KTM Komuter feed and one deliberately limited Rapid Bus
-   feed set.
-2. Run the audit for each new or refreshed feed.
-3. Add a graph merge step that preserves namespaced IDs and service calendars.
-4. Add curated cross-operator walking links where station names differ.
-5. Re-run routing tests for rail-to-rail, rail-to-bus and after-midnight cases.
-6. Publish the merged graph as the Flutter offline asset.
+1. Batu Caves to KL Sentral, 3 November 08:00 (KTM only).
+2. Batu Caves to KLCC, 3 November 08:00 (cross-operator).
+3. Gombak to Seremban, 3 November 16:00 (evening southern connection).
+4. Putra Heights to Pasar Seni, 3 November 08:00 (direct KJL regression).
+
+Then add a deliberately limited Rapid Bus or MRT feeder service set. Audit the
+new feed, extend the existing merge configuration, curate rail/bus walking
+links, verify scheduled connections and the six-hour search horizon, and bundle
+the resulting network. [ADR 0006](architecture/0006-ktm-komuter-integration.md)
+contains the implementation and coverage rationale.
 
 After that, implement favourites and a timetable screen, then perform
 performance and usability evaluation for the capstone report.

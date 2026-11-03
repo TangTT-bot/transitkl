@@ -83,6 +83,7 @@ def export_routing_graph(
             "feed": {
                 "id": metadata.get("feed_id", ""),
                 "sourceSha256": metadata.get("source_sha256", ""),
+                "auditErrorCount": int(metadata.get("audit_error_count", "-1")),
                 "serviceDateStart": metadata.get("service_date_start", ""),
                 "serviceDateEnd": metadata.get("service_date_end", ""),
             },
@@ -227,7 +228,7 @@ def _scheduled_trips(connection: sqlite3.Connection) -> list[dict[str, object]]:
         is_complete = True
         for row in connection.execute(
             """
-            SELECT stop_id, arrival_seconds, departure_seconds
+            SELECT stop_id, arrival_seconds, departure_seconds, pickup_type, drop_off_type
             FROM stop_times
             WHERE trip_id = ?
             ORDER BY stop_sequence
@@ -252,6 +253,8 @@ def _scheduled_trips(connection: sqlite3.Connection) -> list[dict[str, object]]:
                     "stopId": row["stop_id"],
                     "arrivalSeconds": arrival,
                     "departureSeconds": departure,
+                    "pickupAllowed": row["pickup_type"] in (None, 0),
+                    "dropOffAllowed": row["drop_off_type"] in (None, 0),
                 }
             )
         if not is_complete or len(stop_times) < 2:

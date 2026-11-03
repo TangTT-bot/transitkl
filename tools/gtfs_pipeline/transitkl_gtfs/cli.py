@@ -8,6 +8,7 @@ from .audit import AuditReport, audit_feed
 from .database import FeedValidationError, build_database
 from .download import download_feed
 from .routing_graph import export_routing_graph
+from .merge import merge_graphs
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -47,12 +48,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     export_parser.add_argument("--database", required=True, type=Path)
     export_parser.add_argument("--output", required=True, type=Path)
+    merge_parser = subparsers.add_parser("merge-graphs", help="Select routes and merge audited graph exports.")
+    merge_parser.add_argument("--input", required=True, action="append", type=Path)
+    merge_parser.add_argument("--config", required=True, type=Path)
+    merge_parser.add_argument("--output", required=True, type=Path)
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
+        if args.command == "merge-graphs":
+            payload = merge_graphs(args.input, args.config, args.output)
+            print(f"Merged {len(payload['feeds'])} feeds: {len(payload['stops'])} stops, "
+                  f"{len(payload['scheduledTrips'])} scheduled trips, "
+                  f"{len(payload['transferEdges'])} walking links.")
+            return 0
         if args.command == "download":
             output = download_feed(args.url, args.output, overwrite=args.overwrite)
             print(f"Downloaded GTFS feed to {output}")

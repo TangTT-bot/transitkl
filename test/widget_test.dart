@@ -21,6 +21,8 @@ void main() {
     expect(find.text('Plan your journey'), findsOneWidget);
     expect(find.textContaining('187'), findsNothing);
     expect(find.textContaining('valid until 31 Dec 2026'), findsOneWidget);
+    expect(find.textContaining('KTM Komuter'), findsWidgets);
+    expect(find.textContaining('17 Nov 2026'), findsOneWidget);
 
     await tester.enterText(
       find.byKey(const Key('origin-station-field')),

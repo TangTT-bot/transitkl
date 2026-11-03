@@ -1,8 +1,8 @@
 # TransitKL
 
 TransitKL is an offline-first Flutter journey planner for Klang Valley public
-transport. It combines static GTFS schedules from Rapid Rail, selected Rapid
-Bus services, and KTM Komuter in one mobile application.
+transport. It combines static GTFS schedules from Rapid Rail and Klang Valley
+KTM Komuter. Selected Rapid Bus services are the next coverage milestone.
 
 ## Project status
 
@@ -13,10 +13,10 @@ The project has completed its first usable offline journey-planning milestone:
 - Transfer-aware modified Dijkstra router implemented in pure Dart.
 - Frequency estimates and exact scheduled departures use GTFS service calendars.
 - Official Rapid Rail data builds into a working routing graph.
-- The Flutter app loads a bundled, validated Rapid Rail graph.
+- The Flutter app loads a validated merged Rapid Rail and KTM Komuter graph.
 - Users can search stations, choose a departure date/time, and view journey legs.
 - Every search returns a Recommended journey with no preference selector.
-- KTM Komuter and selected Rapid Bus integration are next.
+- KTM Komuter is integrated; selected Rapid Bus integration is next.
 
 The current app is an end-to-end vertical slice: official data passes through
 the audit/build pipeline, is bundled behind a repository interface, and is
@@ -176,12 +176,41 @@ Convenience and multi-criteria routing requirements are defined in
 [`docs/architecture/0005-convenience-aware-routing-objectives.md`](docs/architecture/0005-convenience-aware-routing-objectives.md).
 
 After an official feed refresh passes audit, rebuild and export it, then update
-the app asset:
+the merged app asset. See the KTM commands below; do not overwrite it with a
+single-operator graph.
+
+## KTM and merged network build
+
+The current KTM snapshot expires on **17 November 2026**. Refresh it before a
+later demonstration. Full KTMB data is audited, but only the two Klang Valley
+Komuter routes in `data/network-kl.json` are bundled. ETS and intercity are
+excluded. Some Komuter trips terminate early; a route name does not guarantee
+an all-day connection.
 
 ```powershell
-Copy-Item data/processed/rapid-rail-kl-routing.json `
-  assets/data/rapid-rail-kl-routing.json
+python tools/gtfs_pipeline/run_pipeline.py download `
+  --url "https://api.data.gov.my/gtfs-static/ktmb" `
+  --output data/downloads/ktmb-2026-11-03.zip
+python tools/gtfs_pipeline/run_pipeline.py build `
+  --input data/downloads/ktmb-2026-11-03.zip --feed-id ktmb `
+  --database data/processed/ktmb-2026-11-03.sqlite
+python tools/gtfs_pipeline/run_pipeline.py export-graph `
+  --database data/processed/ktmb-2026-11-03.sqlite `
+  --output data/processed/ktmb-2026-11-03-routing.json
+python tools/gtfs_pipeline/run_pipeline.py merge-graphs `
+  --input data/processed/rapid-rail-kl-routing.json `
+  --input data/processed/ktmb-2026-11-03-routing.json `
+  --config data/network-kl.json `
+  --output data/processed/transitkl-rail-routing.json
+Copy-Item data/processed/transitkl-rail-routing.json `
+  assets/data/transitkl-rail-routing.json
+dart run tool/route_demo.dart assets/data/transitkl-rail-routing.json `
+  "BATU CAVES" "KLCC" "2026-11-03" "08:00"
 ```
+
+Use the current exporter for both inputs; old exports without `auditErrorCount`
+must be regenerated. [ADR 0006](docs/architecture/0006-ktm-komuter-integration.md)
+documents the merge, interchange estimates, and timetable limitations.
 
 Do not replace the bundled asset with an unaudited feed. See
 [`docs/PROJECT_PROGRESS.md`](docs/PROJECT_PROGRESS.md) for the current milestone

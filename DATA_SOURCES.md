@@ -41,3 +41,15 @@ Downloaded feed ZIPs are deliberately excluded from version control because
 they change independently of the application. Audit reports and small synthetic
 test fixtures may be committed.
 
+## KTM integration snapshot (3 November 2026)
+
+The KTMB feed has nine routes. The application selects the Tanjung Malim–Port
+Klang and Batu Caves–Pulau Sebang/Tampin Komuter routes; other KTMB services are
+not bundled. The current feed is valid 18 August–17 November 2026, with weekday,
+weekend, and holiday exceptions. The reviewed audit is in
+`docs/data-audits/ktmb-2026-11-03.md`.
+
+`data/network-kl.json` records selection and curated interchange sources.
+Walking durations are implementation estimates, and distances are straight-line
+references. Per-feed checksums and validity are retained in the merged app asset.
+

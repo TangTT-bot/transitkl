@@ -11,7 +11,7 @@ abstract interface class RoutingGraphRepository {
 final class AssetRoutingGraphRepository implements RoutingGraphRepository {
   AssetRoutingGraphRepository({
     AssetBundle? assetBundle,
-    this.assetPath = 'assets/data/rapid-rail-kl-routing.json',
+    this.assetPath = 'assets/data/transitkl-rail-routing.json',
   }) : _assetBundle = assetBundle ?? rootBundle;
 
   final AssetBundle _assetBundle;
@@ -29,7 +29,11 @@ final class AssetRoutingGraphRepository implements RoutingGraphRepository {
 }
 
 final class TransitDataBundle {
-  const TransitDataBundle({required this.feed, required this.graph});
+  const TransitDataBundle({
+    required this.feed,
+    required this.graph,
+    this.sources = const [],
+  });
 
   factory TransitDataBundle.fromJson(Map<String, Object?> json) {
     final feed = json['feed'];
@@ -39,11 +43,18 @@ final class TransitDataBundle {
     return TransitDataBundle(
       feed: TransitFeedMetadata.fromJson(feed),
       graph: RoutingGraph.fromJson(json),
+      sources: (json['feeds'] as List<Object?>? ?? [feed])
+          .map(
+            (source) =>
+                TransitFeedMetadata.fromJson(source as Map<String, Object?>),
+          )
+          .toList(growable: false),
     );
   }
 
   final TransitFeedMetadata feed;
   final RoutingGraph graph;
+  final List<TransitFeedMetadata> sources;
 }
 
 final class TransitFeedMetadata {
@@ -52,6 +63,7 @@ final class TransitFeedMetadata {
     required this.sourceSha256,
     required this.serviceDateStart,
     required this.serviceDateEnd,
+    this.displayName = 'Transit data',
   });
 
   factory TransitFeedMetadata.fromJson(Map<String, Object?> json) {
@@ -60,6 +72,7 @@ final class TransitFeedMetadata {
       sourceSha256: _requiredString(json, 'sourceSha256'),
       serviceDateStart: _gtfsDate(json, 'serviceDateStart'),
       serviceDateEnd: _gtfsDate(json, 'serviceDateEnd'),
+      displayName: json['displayName'] as String? ?? 'Transit data',
     );
   }
 
@@ -67,6 +80,7 @@ final class TransitFeedMetadata {
   final String sourceSha256;
   final DateTime serviceDateStart;
   final DateTime serviceDateEnd;
+  final String displayName;
 }
 
 String _requiredString(Map<String, Object?> json, String key) {

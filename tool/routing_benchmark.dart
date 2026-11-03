@@ -7,16 +7,20 @@ import 'package:transitkl/domain/search/journey_search_service.dart';
 /// A repeatable desktop smoke benchmark, not a device performance claim.
 Future<void> main(List<String> arguments) async {
   final path = arguments.isEmpty
-      ? 'assets/data/rapid-rail-kl-routing.json'
+      ? 'assets/data/transitkl-rail-routing.json'
       : arguments.single;
   final decoded =
       jsonDecode(await File(path).readAsString()) as Map<String, Object?>;
   final search = JourneySearchService(RoutingGraph.fromJson(decoded));
-  const pairs = [
+  final pairs = [
     ('putra heights', 'pasar seni'),
     ('gombak', 'kajang'),
     ('titiwangsa', 'bukit bintang'),
     ('ampang', 'kwasa damansara'),
+    if (search.stations.any((station) => station.id == 'batu caves')) ...[
+      ('batu caves', 'klcc'),
+      ('gombak', 'batu caves'),
+    ],
   ];
   final departure = DateTime(2026, 11, 3, 8);
   final samples = <int>[];

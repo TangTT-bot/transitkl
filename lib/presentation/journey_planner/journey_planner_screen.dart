@@ -60,11 +60,11 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Rapid Rail routes work fully offline.',
+              'Rapid Rail and KTM Komuter, fully offline.',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 16),
-            _FeedStatusCard(feed: widget.data.feed),
+            _FeedStatusCard(feeds: widget.data.sources),
             const SizedBox(height: 20),
             _StationField(
               fieldKey: const Key('origin-station-field'),
@@ -212,16 +212,22 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              'This build contains static Rapid Rail GTFS data. Times are '
-              'estimates based on published headways, not live arrivals.',
+              'Rapid Rail uses estimated waits from published headways. '
+              'KTM Komuter uses exact scheduled departures. Walking allowances '
+              'are estimates. Live delays and cancellations are not included.',
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Some Komuter trips terminate early. Results follow the supplied timetable, including service gaps.',
             ),
             const SizedBox(height: 8),
             const Text('Source: data.gov.my • CC BY 4.0'),
             const SizedBox(height: 8),
-            Text(
-              'Valid ${_formatDate(widget.data.feed.serviceDateStart)} to '
-              '${_formatDate(widget.data.feed.serviceDateEnd)}.',
-            ),
+            for (final feed in widget.data.sources)
+              Text(
+                '${feed.displayName}: ${_formatDate(feed.serviceDateStart)} '
+                'to ${_formatDate(feed.serviceDateEnd)}.',
+              ),
           ],
         ),
       ),
@@ -347,9 +353,9 @@ class _StationField extends StatelessWidget {
 }
 
 class _FeedStatusCard extends StatelessWidget {
-  const _FeedStatusCard({required this.feed});
+  const _FeedStatusCard({required this.feeds});
 
-  final TransitFeedMetadata feed;
+  final List<TransitFeedMetadata> feeds;
 
   @override
   Widget build(BuildContext context) {
@@ -364,9 +370,16 @@ class _FeedStatusCard extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(
-                'Offline data • Rapid Rail • valid until '
-                '${_formatDate(feed.serviceDateEnd)}',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (final feed in feeds)
+                    Text(
+                      '${feed.displayName} • '
+                      '${DateUtils.dateOnly(DateTime.now()).isAfter(feed.serviceDateEnd) ? 'expired' : 'valid until'} '
+                      '${_formatDate(feed.serviceDateEnd)}',
+                    ),
+                ],
               ),
             ),
           ],
@@ -414,8 +427,17 @@ class _JourneyLegCard extends StatelessWidget {
         CircleAvatar(
           backgroundColor: color,
           foregroundColor: _readableTextColor(color),
-          child: Text(
-            service.shortName.isEmpty ? '$number' : service.shortName,
+          child: Padding(
+            padding: const EdgeInsets.all(3),
+            child: FittedBox(
+              child: Text(
+                service.id.startsWith('ktmb:')
+                    ? 'KTM'
+                    : service.shortName.isEmpty
+                    ? '$number'
+                    : service.shortName,
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 14),

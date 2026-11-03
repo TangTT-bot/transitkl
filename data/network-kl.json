@@ -1,0 +1,37 @@
+{
+  "id": "transitkl_rail",
+  "feeds": {
+    "prasarana_rapid_rail": {"displayName": "Rapid Rail"},
+    "ktmb": {
+      "displayName": "KTM Komuter",
+      "routeIds": ["ktmb:KA15_KD19", "ktmb:KC05_KB18"]
+    }
+  },
+  "walkingPolicy": "Conservative station traversal estimates, including access/egress between platforms. Distances are straight-line references, not measured walking paths. No automatic cross-operator proximity links.",
+  "stopNameOverrides": {
+    "prasarana_rapid_rail:KJ15": "KL SENTRAL",
+    "ktmb:19600": "BANDAR TASIK SELATAN",
+    "ktmb:19205": "MID VALLEY",
+    "ktmb:50300": "BATU KENTONMEN",
+    "ktmb:53400": "KAMPUNG DATO HARUN"
+  },
+  "transfers": [
+    {"fromStopId":"ktmb:19100","toStopId":"prasarana_rapid_rail:KJ15","walkSeconds":300,"sourceUrl":"https://www.mot.gov.my/en/land/infrastructure/current-rail-services"},
+    {"fromStopId":"ktmb:19100","toStopId":"prasarana_rapid_rail:MR1","walkSeconds":600,"sourceUrl":"https://www.muziumnegara.gov.my/index.php/en/getting-here"},
+    {"fromStopId":"ktmb:19100","toStopId":"prasarana_rapid_rail:KG15","walkSeconds":600,"sourceUrl":"https://www.muziumnegara.gov.my/index.php/en/getting-here"},
+    {"fromStopId":"ktmb:52700","toStopId":"prasarana_rapid_rail:KJ17","walkSeconds":300,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:53700","toStopId":"prasarana_rapid_rail:KJ28","walkSeconds":300,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:20400","toStopId":"prasarana_rapid_rail:KG35","walkSeconds":300,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:18500","toStopId":"prasarana_rapid_rail:PY04","walkSeconds":300,"sourceUrl":"https://www.mymrt.com.my/projects/putrajaya-line/stations/sungai-buloh/"},
+    {"fromStopId":"ktmb:18400","toStopId":"prasarana_rapid_rail:PY08","walkSeconds":360,"sourceUrl":"https://www.mymrt.com.my/projects/putrajaya-line/stations/sri-damansara-timur/"},
+    {"fromStopId":"ktmb:50400","toStopId":"prasarana_rapid_rail:PY13","walkSeconds":300,"sourceUrl":"https://www.mymrt.com.my/events/mrt-putrajaya-line-phase-one-opened-to-the-public/"},
+    {"fromStopId":"ktmb:19600","toStopId":"prasarana_rapid_rail:SP15","walkSeconds":300,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:18900","toStopId":"prasarana_rapid_rail:AG6","walkSeconds":420,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:18900","toStopId":"prasarana_rapid_rail:SP6","walkSeconds":420,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:18800","toStopId":"prasarana_rapid_rail:AG4","walkSeconds":420,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:18800","toStopId":"prasarana_rapid_rail:SP4","walkSeconds":420,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:19000","toStopId":"prasarana_rapid_rail:KJ14","walkSeconds":600,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:19000","toStopId":"prasarana_rapid_rail:KG16","walkSeconds":600,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"},
+    {"fromStopId":"ktmb:53600","toStopId":"prasarana_rapid_rail:BRT1","walkSeconds":360,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"}
+  ]
+}
