@@ -13,7 +13,12 @@ void main() {
 
       expect(journey, isNotNull);
       expect(journey!.totalTravelSeconds, 1890);
-      expect(journey.generalizedCostSeconds, 2490);
+      expect(journey.generalizedCostSeconds, 2610);
+      expect(journey.totalWalkingSeconds, 120);
+      expect(
+        journey.legs.fold<int>(0, (sum, leg) => sum + leg.durationSeconds),
+        1890,
+      );
       expect(journey.transferCount, 1);
       expect(journey.legs, hasLength(3));
 
@@ -70,12 +75,16 @@ void main() {
       expect((journey.legs.single as TransitLeg).serviceId, 'green:0');
     });
 
-    test('does not board a frequency service outside its operating window', () {
-      final journey = JourneyPlanner(_transferGraph()).plan(
-        originStopId: 'A',
-        destinationStopId: 'P1',
-        departure: DateTime(2026, 7, 28, 2),
-      );
+    test('does not wait for service beyond the search horizon', () {
+      final journey =
+          JourneyPlanner(
+            _transferGraph(),
+            maximumJourneySeconds: 3 * 3600,
+          ).plan(
+            originStopId: 'A',
+            destinationStopId: 'P1',
+            departure: DateTime(2026, 7, 28, 2),
+          );
 
       expect(journey, isNull);
     });

@@ -40,6 +40,7 @@ void main() {
 
     final button = find.byKey(const Key('find-journey-button'));
     expect(tester.widget<FilledButton>(button).onPressed, isNotNull);
+    await tester.ensureVisible(button);
     await tester.tap(button);
     await tester.pump();
 
@@ -47,5 +48,12 @@ void main() {
     expect(find.text('Recommended journey'), findsOneWidget);
     expect(find.textContaining('transfer'), findsWidgets);
     expect(find.textContaining('Kelana Jaya'), findsOneWidget);
+
+    expect(find.byKey(const Key('route-preference-field')), findsNothing);
+    expect(find.text('Travel preference'), findsNothing);
+    expect(find.text('Fastest'), findsNothing);
+    expect(find.text('Fewer transfers'), findsNothing);
+    expect(find.text('Least walking'), findsNothing);
+    expect(find.textContaining('Walking'), findsOneWidget);
   });
 }

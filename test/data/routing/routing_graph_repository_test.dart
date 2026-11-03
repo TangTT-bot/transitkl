@@ -31,13 +31,13 @@ void main() {
       origin: origin,
       destination: destination,
       departure: DateTime(2026, 11, 2, 8),
-    );
-
-    expect(journey, isNotNull);
-    expect(journey!.originStopId, 'prasarana_rapid_rail:KJ37');
+    )!;
+    expect(journey.originStopId, 'prasarana_rapid_rail:KJ37');
     expect(journey.destinationStopId, 'prasarana_rapid_rail:KJ14');
     expect(journey.transferCount, 0);
+    expect(journey.totalWalkingSeconds, 0);
     final transitLeg = journey.legs.whereType<TransitLeg>().single;
     expect(transitLeg.serviceId, 'prasarana_rapid_rail:KJ::direction:0');
+    expect(journey.totalTravelSeconds, 3625);
   });
 }

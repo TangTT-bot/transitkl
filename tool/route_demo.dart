@@ -41,7 +41,9 @@ Future<void> main(List<String> arguments) async {
           destinationStopId: destination.id,
           departure: departure,
         );
-        if (candidate != null && _isBetter(candidate, bestJourney)) {
+        if (candidate != null &&
+            (bestJourney == null ||
+                candidate.cost.compareTo(bestJourney.cost) < 0)) {
           bestJourney = candidate;
         }
       }
@@ -90,18 +92,14 @@ List<StopNode> _findStops(RoutingGraph graph, String query) {
       .toList(growable: false);
 }
 
-bool _isBetter(Journey candidate, Journey? current) {
-  if (current == null) return true;
-  if (candidate.generalizedCostSeconds != current.generalizedCostSeconds) {
-    return candidate.generalizedCostSeconds < current.generalizedCostSeconds;
-  }
-  return candidate.totalTravelSeconds < current.totalTravelSeconds;
-}
-
 void _printJourney(RoutingGraph graph, Journey journey) {
   final origin = graph.stops[journey.originStopId]!.name;
   final destination = graph.stops[journey.destinationStopId]!.name;
   stdout.writeln('$origin -> $destination');
+  stdout.writeln(
+    'Recommended journey; '
+    'walking: ${_formatDuration(journey.totalWalkingSeconds)}',
+  );
   stdout.writeln(
     'Depart ${_formatDateTime(journey.departure)}, '
     'arrive ${_formatDateTime(journey.arrival)} '

@@ -1,6 +1,6 @@
 # TransitKL project progress
 
-Last updated: 2 November 2026
+Last updated: 3 November 2026
 
 ## Current position
 
@@ -25,7 +25,7 @@ updated; it is no longer the main daily implementation task.
 | 1. Proposal, scope, repository and Flutter scaffold | Complete | Project structure and documented MVP |
 | 2. Reproducible GTFS audit and preprocessing | Complete | Python audit/build commands and automated tests |
 | 3. Rapid Rail data validation | Complete | Reviewed audit with zero errors and warnings |
-| 4. Transfer-aware routing engine | Complete | Frequency, exact schedule, calendar and transfer tests |
+| 4. Transfer-aware routing engine | Implemented; evaluation remains | Multi-label modified Dijkstra with convenience-aware Recommended ranking |
 | 5. First usable Flutter vertical slice | Complete | Offline asset loading, station search and journey results |
 | 6. Multi-operator coverage | Next | KTM Komuter and selected Rapid Bus feeds are not integrated |
 | 7. Remaining MVP product features | Not started | Favourites, timetable view, settings and polished empty/error states |
@@ -46,6 +46,13 @@ part of the remaining time.
   interchange details.
 - The default recommendation penalizes service changes so small time savings do
   not automatically beat a straightforward direct journey.
+- All searches use Recommended with no preference selector to keep the app simple.
+  Recommended counts walking twice and adds ten minutes per vehicle
+  change for ranking; displayed clock times remain actual estimates.
+- The router retains useful alternatives across time, changes, and walking, and
+  has regression tests against an independent exhaustive path search.
+- The algorithm validation and desktop smoke measurements are recorded in
+  [routing-validation-2026-11-03.md](routing-validation-2026-11-03.md).
 - The screen displays total duration, arrival time, transfers and line colours.
 - Static-data limitations, validity and attribution are visible in the app.
 - Automated tests cover the pipeline, graph asset, routing, station grouping
@@ -61,8 +68,9 @@ part of the remaining time.
   specifically requires runtime SQLite queries.
 - Favourites and preferences are not persisted.
 - There is no dedicated static timetable screen.
-- Selectable Fastest, Fewer transfers and Least walking profiles are not yet
-  exposed. Their multi-criteria rules are specified in ADR 0005.
+- The algorithm weights still need commuter feedback and evaluation; they are
+  configurable starting values. The app returns one Recommended result and does
+  not display a list of all Pareto alternatives.
 - Real-time arrivals, disruptions, fares and ticketing remain outside the MVP.
 - Accessibility testing, performance benchmarks and user evaluation are still
   required.

@@ -25,23 +25,13 @@ final class JourneySearchService {
           destinationStopId: destinationStopId,
           departure: departure,
         );
-        if (candidate != null && _isBetter(candidate, best)) {
+        if (candidate != null &&
+            (best == null || candidate.cost.compareTo(best.cost) < 0)) {
           best = candidate;
         }
       }
     }
     return best;
-  }
-
-  static bool _isBetter(Journey candidate, Journey? current) {
-    if (current == null) return true;
-    if (candidate.generalizedCostSeconds != current.generalizedCostSeconds) {
-      return candidate.generalizedCostSeconds < current.generalizedCostSeconds;
-    }
-    if (candidate.totalTravelSeconds != current.totalTravelSeconds) {
-      return candidate.totalTravelSeconds < current.totalTravelSeconds;
-    }
-    return candidate.transferCount < current.transferCount;
   }
 }
 

@@ -258,31 +258,54 @@ final class TransitService {
   final String? textColor;
   final List<HeadwayWindow> headways;
 
-  int? averageWaitSecondsAt(
-    DateTime departure,
+  /// Evaluate calendars once per query/service, then use integer comparisons
+  /// for each boarding relaxation in the routing loop.
+  List<FrequencyBoardingWindow> boardingWindowsBetween(
+    DateTime earliest,
+    DateTime latest,
     Map<String, ServiceCalendar> calendars,
   ) {
-    final seconds = _secondsSinceMidnight(departure);
-    final date = _dateOnly(departure);
-    final candidates = [
-      (date: date, seconds: seconds),
-      (
-        date: date.subtract(const Duration(days: 1)),
-        seconds: seconds + Duration.secondsPerDay,
-      ),
-    ];
-    final activeHeadways = [
-      for (final window in headways)
-        for (final candidate in candidates)
-          if (window.contains(candidate.seconds) &&
-              calendars[window.calendarId]!.runsOn(candidate.date))
-            window.headwaySeconds,
-    ];
-    if (activeHeadways.isEmpty) return null;
-    final shortestHeadway = activeHeadways.reduce(
-      (current, value) => value < current ? value : current,
-    );
-    return (shortestHeadway + 1) ~/ 2;
+    final date = _dateOnly(earliest);
+    final result = <FrequencyBoardingWindow>[];
+    final lastDay = _dateOnly(latest).difference(date).inDays;
+    for (var dayOffset = -1; dayOffset <= lastDay; dayOffset++) {
+      final serviceDate = date.add(Duration(days: dayOffset));
+      for (final window in headways) {
+        if (!calendars[window.calendarId]!.runsOn(serviceDate)) continue;
+        final start = serviceDate.add(Duration(seconds: window.startSeconds));
+        final end = serviceDate.add(Duration(seconds: window.endSeconds));
+        if (!earliest.isBefore(end) || start.isAfter(latest)) continue;
+        result.add(
+          FrequencyBoardingWindow(
+            startEpochSeconds: start.millisecondsSinceEpoch ~/ 1000,
+            endEpochSeconds: end.millisecondsSinceEpoch ~/ 1000,
+            expectedWaitSeconds: (window.headwaySeconds + 1) ~/ 2,
+          ),
+        );
+      }
+    }
+    return result;
+  }
+}
+
+final class FrequencyBoardingWindow {
+  const FrequencyBoardingWindow({
+    required this.startEpochSeconds,
+    required this.endEpochSeconds,
+    required this.expectedWaitSeconds,
+  });
+  final int startEpochSeconds;
+  final int endEpochSeconds;
+  final int expectedWaitSeconds;
+
+  /// Passengers may wait for a later, higher-frequency window. This produces
+  /// a FIFO boarding function, required for time-based Pareto dominance.
+  int? waitAt(int epochSeconds) {
+    final ready = epochSeconds < startEpochSeconds
+        ? startEpochSeconds
+        : epochSeconds;
+    final boarding = ready + expectedWaitSeconds;
+    return boarding < endEpochSeconds ? boarding - epochSeconds : null;
   }
 }
 
@@ -453,8 +476,3 @@ DateTime _dateOnly(DateTime value) =>
 
 int _dateKey(DateTime value) =>
     value.year * 10000 + value.month * 100 + value.day;
-
-int _secondsSinceMidnight(DateTime value) =>
-    value.hour * Duration.secondsPerHour +
-    value.minute * Duration.secondsPerMinute +
-    value.second;

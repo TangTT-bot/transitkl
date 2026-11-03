@@ -268,6 +268,9 @@ class JourneyResultView extends StatelessWidget {
                       Text(
                         '${journey.transferCount} transfer${journey.transferCount == 1 ? '' : 's'}',
                       ),
+                      Text(
+                        'Walking ${_formatDuration(journey.totalWalkingSeconds)}',
+                      ),
                     ],
                   ),
                 ),
@@ -428,7 +431,7 @@ class _JourneyLegCard extends StatelessWidget {
               Text(service.longName),
               const SizedBox(height: 4),
               Text(
-                '${transit.isScheduled ? 'Wait' : 'Average wait'} '
+                '${transit.isScheduled ? 'Wait' : 'Estimated wait'} '
                 '${_formatDuration(transit.waitSeconds)} • '
                 'Ride ${_formatDuration(transit.rideSeconds)} • '
                 '${transit.stopIds.length - 1} stops',

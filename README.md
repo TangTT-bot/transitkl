@@ -15,6 +15,7 @@ The project has completed its first usable offline journey-planning milestone:
 - Official Rapid Rail data builds into a working routing graph.
 - The Flutter app loads a bundled, validated Rapid Rail graph.
 - Users can search stations, choose a departure date/time, and view journey legs.
+- Every search returns a Recommended journey with no preference selector.
 - KTM Komuter and selected Rapid Bus integration are next.
 
 The current app is an end-to-end vertical slice: official data passes through
@@ -88,6 +89,11 @@ On the home screen, type a station name into both fields, select a suggestion,
 choose a date and time within the displayed feed range, then select **Find
 journey**. No internet connection is required.
 
+Recommended balances actual journey time with a ten-minute ranking penalty per
+vehicle change and additional reluctance to walk. This is the single search
+behaviour; no route mode selection is required. These scores never inflate
+the arrival time shown to the passenger.
+
 The application currently uses Flutter's default Android minimum SDK, API 24.
 The proposal's API 23 statement should be updated or explicitly configured and
 tested before final submission.
@@ -149,6 +155,13 @@ Run an end-to-end route calculation against the official feed:
 dart run tool/route_demo.dart `
   data/processed/rapid-rail-kl-routing.json `
   "GOMBAK" "KAJANG" "2026-11-02" "08:00"
+```
+
+The command uses the same Recommended ranking as the app. For a repeatable
+desktop routing smoke benchmark:
+
+```powershell
+dart run tool/routing_benchmark.dart
 ```
 
 The demo accepts an exact stop ID or a station name. The date must fall within

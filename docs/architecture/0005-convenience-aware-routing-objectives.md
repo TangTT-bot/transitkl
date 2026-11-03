@@ -2,9 +2,8 @@
 
 ## Status
 
-Accepted as the routing policy and acceptance criteria. The current default
-implements transfer aversion; walking weighting and selectable profiles are the
-next algorithm refinements.
+Implemented on 3 November 2026: multi-label modified Dijkstra, walking weighting,
+and one search behaviour: Recommended, with no user-selectable routing profiles.
 
 ## Context
 
@@ -25,7 +24,7 @@ TransitKL will treat routing as a multi-criteria problem. Every search label
 must distinguish at least:
 
 - actual elapsed seconds;
-- number of changes between services;
+- number of changes between vehicles;
 - walking seconds and distance; and
 - generalized inconvenience cost.
 
@@ -33,37 +32,57 @@ The default **Recommended** profile will optimize a generalized cost rather than
 raw arrival time:
 
 ```text
-recommended cost = actual elapsed time
-                 + transfer inconvenience
-                 + additional walking reluctance
+recommended cost (seconds) = elapsed seconds
+                           + 600 * vehicle changes
+                           + walking seconds
 ```
 
-The current transfer inconvenience is ten minutes per service change. It is a
+The current transfer inconvenience is ten minutes per vehicle change. It is a
 ranking penalty only and must never be added to the arrival time shown to the
-user. The next refinement will count walking more heavily than seated or
-in-vehicle time because commuters generally perceive walking through a station
-as less convenient.
+user. Walking already contributes once to elapsed time; the additional walking
+term makes it count twice in Recommended. These are configurable starting
+weights, not parameters validated by a commuter study.
 
-When generalized costs are equal or nearly equal, the deterministic tie-break
+When generalized costs are equal, the deterministic tie-break
 order is:
 
-1. fewer service changes;
+1. fewer vehicle changes;
 2. less walking;
 3. earlier actual arrival; and
 4. stable route/service identifiers.
 
-The application may later expose explicit profiles:
+All app and command-line searches use Recommended's balanced generalized cost.
+There is no Travel preference control. Fastest, Fewer transfers, and Least
+walking were removed after product review to keep the interface focused on one
+convenient recommendation. Time, transfers, and walking remain separate internal
+criteria. This is a product design decision; commuter preferences can vary.
 
-- **Fastest**: earliest actual arrival, then fewer changes and less walking;
-- **Recommended / straightforward**: balanced generalized cost;
-- **Fewer transfers**: changes are the primary criterion;
-- **Least walking**: walking is the primary criterion.
+The modified Dijkstra algorithm retains a Pareto frontier of labels for each
+`(stop, has boarded before, active vehicle run)` state. A label contains elapsed
+seconds, changes, walking seconds, and a reference to its own predecessor label.
+A candidate is discarded when an existing label is no worse on every criterion;
+equal labels are also discarded to stop zero-cost cycles. There is no arbitrary
+frontier-size cap that silently drops useful alternatives.
 
-Supporting all profiles correctly may require a multi-label modified Dijkstra
-algorithm. Instead of retaining one label per `(stop, active run)` state, the
-router retains a small Pareto frontier of non-dominated labels across elapsed
-time, transfers, and walking. A label is discarded only when another label is
-no worse on every criterion and better on at least one.
+The priority queue uses Recommended's lexicographic ordering. All
+increments are nonnegative. The first destination label removed from the queue
+is the selected result within the six-hour horizon and this graph's static
+timing model. A lower score at an intermediate station cannot erase an earlier
+arrival that has more changes: it may be needed to catch a scheduled connection.
+
+Walking clears the active run, so reboarding counts as changing vehicles.
+Different scheduled trip instances on the same line also count as a transfer;
+continuing on the same trip through a dwell does not.
+
+Frequency boarding allows waiting for a later operating window. The router
+takes the earliest expected boarding among applicable windows, including their
+half-headway estimate. This preserves FIFO: arriving earlier at a stop cannot
+force a later boarding than arriving later. That property makes elapsed-time
+dominance safe at changing headways. Calendar windows are cached once per
+query/service. Expected boarding is not allowed beyond a window's end.
+
+The engine returns one Recommended result. It does not yet expose the
+entire destination Pareto set as alternative journey cards.
 
 ## Required acceptance cases
 
@@ -78,6 +97,26 @@ no worse on every criterion and better on at least one.
 - The router must not introduce backtracking or repeated service changes merely
   to gain a small theoretical time saving.
 
+## Verification
+
+- Synthetic tests cover time/walking trade-offs, substantial savings, equal-score
+  tie-breaking, same-line vehicle changes, window-boundary FIFO, and cycles.
+- A connection test requires retaining an earlier/more-transfer label at a shared
+  state after a lower-score/later label has already been reached.
+- An independent exhaustive path enumerator checks Recommended on 25 small
+  directed acyclic networks.
+- The bundled-feed regression checks that Putra Heights to Pasar Seni stays on
+  KJL instead of changing through Masjid Jamek for a small theoretical saving.
+- A widget test searches directly, confirms a Recommended result, and verifies
+  that no preference selector or alternative routing modes appear.
+- `dart run tool/routing_benchmark.dart` runs a repeatable desktop smoke benchmark
+  on four station pairs. Device benchmarks remain part of evaluation.
+
+The Pareto treatment follows the established public-transit multi-criteria problem
+described in [Route Planning in Transportation Networks](https://www.microsoft.com/en-us/research/wp-content/uploads/2014/01/MSR-TR-2014-4.pdf).
+TransitKL retains its modified Dijkstra implementation; it does not implement the
+survey's other algorithms.
+
 ## Consequences
 
 - “Shortest path” in the report must be described as generalized shortest path,
@@ -86,5 +125,5 @@ no worse on every criterion and better on at least one.
   journeys and, where possible, user feedback.
 - Tests must include both synthetic trade-off networks and real Klang Valley
   regression cases.
-- Future UI work should explain the selected preference and allow comparison
-  without presenting an inconvenient route as universally “best.”
+- Future UI work should keep the single Recommended flow clear and explain the
+  journey's time, walking, and transfer details.

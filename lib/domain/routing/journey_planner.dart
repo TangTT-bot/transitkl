@@ -1,28 +1,20 @@
+import 'routing_cost.dart';
 import 'routing_graph.dart';
 
 final class JourneyPlanner {
-  /// Ranking penalty for changing services in the default Recommended profile.
-  /// It affects route choice, never the displayed arrival time.
   static const int recommendedTransferPenaltySeconds = 10 * 60;
 
   JourneyPlanner(
     this.graph, {
     this.transferPenaltySeconds = recommendedTransferPenaltySeconds,
+    this.additionalWalkingPenalty = 1,
     this.maximumJourneySeconds = 6 * Duration.secondsPerHour,
   }) {
-    if (transferPenaltySeconds < 0) {
-      throw ArgumentError.value(
-        transferPenaltySeconds,
-        'transferPenaltySeconds',
-        'Must not be negative',
-      );
+    if (transferPenaltySeconds < 0 || additionalWalkingPenalty < 0) {
+      throw ArgumentError('Routing penalties must not be negative.');
     }
     if (maximumJourneySeconds <= 0) {
-      throw ArgumentError.value(
-        maximumJourneySeconds,
-        'maximumJourneySeconds',
-        'Must be positive',
-      );
+      throw ArgumentError.value(maximumJourneySeconds, 'maximumJourneySeconds');
     }
     for (final edge in graph.rideEdges) {
       (_ridesFrom[edge.fromStopId] ??= []).add(edge);
@@ -36,10 +28,30 @@ final class JourneyPlanner {
         (_scheduledFrom[segment.from.stopId] ??= []).add(segment);
       }
     }
+    // Input record order must not change an otherwise tied recommendation.
+    for (final edges in _ridesFrom.values) {
+      edges.sort(
+        (a, b) => '${a.serviceId}:${a.toStopId}:${a.travelSeconds}'.compareTo(
+          '${b.serviceId}:${b.toStopId}:${b.travelSeconds}',
+        ),
+      );
+    }
+    for (final edges in _transfersFrom.values) {
+      edges.sort((a, b) => a.toStopId.compareTo(b.toStopId));
+    }
+    for (final segments in _scheduledFrom.values) {
+      segments.sort(
+        (a, b) =>
+            '${a.trip.id}:${a.index}'.compareTo('${b.trip.id}:${b.index}'),
+      );
+    }
   }
 
   final RoutingGraph graph;
   final int transferPenaltySeconds;
+
+  /// 1 means walking counts twice: once in elapsed time, once as inconvenience.
+  final int additionalWalkingPenalty;
   final int maximumJourneySeconds;
   final Map<String, List<RideEdge>> _ridesFrom = {};
   final Map<String, List<TransferEdge>> _transfersFrom = {};
@@ -50,267 +62,208 @@ final class JourneyPlanner {
     required String destinationStopId,
     required DateTime departure,
   }) {
-    if (!graph.stops.containsKey(originStopId)) {
-      throw ArgumentError.value(originStopId, 'originStopId', 'Unknown stop');
-    }
-    if (!graph.stops.containsKey(destinationStopId)) {
-      throw ArgumentError.value(
-        destinationStopId,
-        'destinationStopId',
-        'Unknown stop',
-      );
+    if (!graph.stops.containsKey(originStopId) ||
+        !graph.stops.containsKey(destinationStopId)) {
+      throw ArgumentError('Origin and destination must be known stops.');
     }
 
-    final origin = _State(originStopId, null, null);
-    final labels = <_State, _Label>{};
-    final previous = <_State, _Previous>{};
+    final frontiers = <_State, List<_Label>>{};
+    final frequencyWindows = <String, List<FrequencyBoardingWindow>>{};
+    final latest = departure.add(Duration(seconds: maximumJourneySeconds));
     final queue = _MinHeap();
-    final originLabel = const _Label(
-      generalizedCostSeconds: 0,
+    var nextId = 0;
+
+    void relax({
+      required _State state,
+      required int elapsedSeconds,
+      required int transfers,
+      required int walkingSeconds,
+      required _Label? parent,
+      required _PathSegment? segment,
+    }) {
+      if (elapsedSeconds > maximumJourneySeconds) return;
+      final cost = RoutingCost(
+        elapsedSeconds: elapsedSeconds,
+        transfers: transfers,
+        walkingSeconds: walkingSeconds,
+        generalizedSeconds:
+            elapsedSeconds +
+            transfers * transferPenaltySeconds +
+            walkingSeconds * additionalWalkingPenalty,
+      );
+      final frontier = frontiers.putIfAbsent(state, () => []);
+      if (frontier.any((label) => label.cost.dominatesOrEquals(cost))) return;
+      frontier.removeWhere((label) {
+        if (!cost.dominatesOrEquals(label.cost)) return false;
+        label.active = false;
+        return true;
+      });
+      final label = _Label(
+        id: nextId++,
+        state: state,
+        cost: cost,
+        parent: parent,
+        segment: segment,
+      );
+      frontier.add(label);
+      queue.add(label);
+    }
+
+    relax(
+      state: _State(originStopId, false, null),
       elapsedSeconds: 0,
-      transferCount: 0,
+      transfers: 0,
+      walkingSeconds: 0,
+      parent: null,
+      segment: null,
     );
-    labels[origin] = originLabel;
-    queue.add(_QueueEntry(origin, originLabel));
 
     while (queue.isNotEmpty) {
-      final entry = queue.removeFirst();
-      if (!identical(labels[entry.state], entry.label)) continue;
-      if (entry.state.stopId == destinationStopId) {
-        return _buildJourney(
-          origin: origin,
-          destination: entry.state,
-          destinationLabel: entry.label,
-          previous: previous,
-          departure: departure,
+      final label = queue.removeFirst();
+      if (!label.active) continue;
+      if (label.state.stopId == destinationStopId) {
+        return _buildJourney(label, departure);
+      }
+
+      for (final edge
+          in _transfersFrom[label.state.stopId] ?? const <TransferEdge>[]) {
+        relax(
+          state: _State(edge.toStopId, label.state.hasBoarded, null),
+          elapsedSeconds: label.cost.elapsedSeconds + edge.walkSeconds,
+          transfers: label.cost.transfers,
+          walkingSeconds: label.cost.walkingSeconds + edge.walkSeconds,
+          parent: label,
+          segment: _WalkSegment(edge),
         );
       }
 
-      _relaxTransfers(entry, labels, previous, queue);
-      _relaxFrequencyRides(entry, departure, labels, previous, queue);
-      _relaxScheduledRides(entry, departure, labels, previous, queue);
+      void relaxRide({
+        required String toStopId,
+        required String serviceId,
+        required String runId,
+        required String vehicleJourneyId,
+        required String? scheduledTripId,
+        required int waitSeconds,
+        required int rideSeconds,
+        required bool continuesRun,
+      }) {
+        // A change of vehicle counts even if both trains use the same line.
+        final isTransfer = label.state.hasBoarded && !continuesRun;
+        relax(
+          state: _State(toStopId, true, runId),
+          elapsedSeconds: label.cost.elapsedSeconds + waitSeconds + rideSeconds,
+          transfers: label.cost.transfers + (isTransfer ? 1 : 0),
+          walkingSeconds: label.cost.walkingSeconds,
+          parent: label,
+          segment: _RideSegment(
+            fromStopId: label.state.stopId,
+            toStopId: toStopId,
+            serviceId: serviceId,
+            vehicleJourneyId: vehicleJourneyId,
+            scheduledTripId: scheduledTripId,
+            waitSeconds: waitSeconds,
+            rideSeconds: rideSeconds,
+            isTransferBoarding: isTransfer,
+          ),
+        );
+      }
+
+      final currentTime = departure.add(
+        Duration(seconds: label.cost.elapsedSeconds),
+      );
+      for (final edge in _ridesFrom[label.state.stopId] ?? const <RideEdge>[]) {
+        final journeyId = 'frequency:${edge.serviceId}';
+        final continuesRun = label.state.activeRunId == journeyId;
+        int? wait = continuesRun ? 0 : null;
+        if (!continuesRun) {
+          final windows = frequencyWindows.putIfAbsent(
+            edge.serviceId,
+            () => graph.services[edge.serviceId]!.boardingWindowsBetween(
+              departure,
+              latest,
+              graph.serviceCalendars,
+            ),
+          );
+          final nowSeconds = currentTime.millisecondsSinceEpoch ~/ 1000;
+          for (final window in windows) {
+            final candidate = window.waitAt(nowSeconds);
+            if (candidate != null && (wait == null || candidate < wait)) {
+              wait = candidate;
+            }
+          }
+        }
+        if (wait == null) continue;
+        relaxRide(
+          toStopId: edge.toStopId,
+          serviceId: edge.serviceId,
+          runId: journeyId,
+          vehicleJourneyId: journeyId,
+          scheduledTripId: null,
+          waitSeconds: wait,
+          rideSeconds: edge.travelSeconds,
+          continuesRun: continuesRun,
+        );
+      }
+
+      final currentDate = _dateOnly(currentTime);
+      for (final segment
+          in _scheduledFrom[label.state.stopId] ??
+              const <_ScheduledSegment>[]) {
+        final calendar = graph.serviceCalendars[segment.trip.calendarId]!;
+        for (final dayOffset in const [-1, 0, 1]) {
+          final serviceDate = currentDate.add(Duration(days: dayOffset));
+          if (!calendar.runsOn(serviceDate)) continue;
+          final scheduledDeparture = serviceDate.add(
+            Duration(seconds: segment.from.departureSeconds),
+          );
+          final scheduledArrival = serviceDate.add(
+            Duration(seconds: segment.to.arrivalSeconds),
+          );
+          if (scheduledDeparture.isBefore(currentTime)) continue;
+          final prefix =
+              'scheduled:${segment.trip.id}:${_dateKey(serviceDate)}';
+          final continuesRun =
+              label.state.activeRunId == '$prefix:${segment.index}';
+          final wait = continuesRun
+              ? 0
+              : scheduledDeparture.difference(currentTime).inSeconds;
+          final ride = scheduledArrival
+              .difference(continuesRun ? currentTime : scheduledDeparture)
+              .inSeconds;
+          if (ride < 0) continue;
+          relaxRide(
+            toStopId: segment.to.stopId,
+            serviceId: segment.trip.serviceId,
+            runId: '$prefix:${segment.index + 1}',
+            vehicleJourneyId: prefix,
+            scheduledTripId: segment.trip.id,
+            waitSeconds: wait,
+            rideSeconds: ride,
+            continuesRun: continuesRun,
+          );
+        }
+      }
     }
     return null;
   }
 
-  void _relaxTransfers(
-    _QueueEntry entry,
-    Map<_State, _Label> labels,
-    Map<_State, _Previous> previous,
-    _MinHeap queue,
-  ) {
-    for (final edge
-        in _transfersFrom[entry.state.stopId] ?? const <TransferEdge>[]) {
-      final destination = _State(
-        edge.toStopId,
-        entry.state.lastServiceId,
-        null,
-      );
-      _relax(
-        destination: destination,
-        candidate: _Label(
-          generalizedCostSeconds:
-              entry.label.generalizedCostSeconds + edge.walkSeconds,
-          elapsedSeconds: entry.label.elapsedSeconds + edge.walkSeconds,
-          transferCount: entry.label.transferCount,
-        ),
-        priorState: entry.state,
-        segment: _WalkSegment(edge),
-        labels: labels,
-        previous: previous,
-        queue: queue,
-      );
-    }
-  }
-
-  void _relaxFrequencyRides(
-    _QueueEntry entry,
-    DateTime departure,
-    Map<_State, _Label> labels,
-    Map<_State, _Previous> previous,
-    _MinHeap queue,
-  ) {
-    for (final edge in _ridesFrom[entry.state.stopId] ?? const <RideEdge>[]) {
-      final journeyId = 'frequency:${edge.serviceId}';
-      final continuesService = entry.state.activeRunId == journeyId;
-      var waitSeconds = 0;
-      if (!continuesService) {
-        final currentTime = departure.add(
-          Duration(seconds: entry.label.elapsedSeconds),
-        );
-        final wait = graph.services[edge.serviceId]!.averageWaitSecondsAt(
-          currentTime,
-          graph.serviceCalendars,
-        );
-        if (wait == null) continue;
-        waitSeconds = wait;
-      }
-      _relaxRide(
-        entry: entry,
-        fromStopId: edge.fromStopId,
-        toStopId: edge.toStopId,
-        serviceId: edge.serviceId,
-        activeRunId: journeyId,
-        vehicleJourneyId: journeyId,
-        scheduledTripId: null,
-        waitSeconds: waitSeconds,
-        rideSeconds: edge.travelSeconds,
-        labels: labels,
-        previous: previous,
-        queue: queue,
-      );
-    }
-  }
-
-  void _relaxScheduledRides(
-    _QueueEntry entry,
-    DateTime departure,
-    Map<_State, _Label> labels,
-    Map<_State, _Previous> previous,
-    _MinHeap queue,
-  ) {
-    final currentTime = departure.add(
-      Duration(seconds: entry.label.elapsedSeconds),
-    );
-    final currentDate = _dateOnly(currentTime);
-    for (final segment
-        in _scheduledFrom[entry.state.stopId] ?? const <_ScheduledSegment>[]) {
-      final calendar = graph.serviceCalendars[segment.trip.calendarId]!;
-      for (final dayOffset in const [-1, 0, 1]) {
-        final serviceDate = currentDate.add(Duration(days: dayOffset));
-        if (!calendar.runsOn(serviceDate)) continue;
-
-        final scheduledDeparture = serviceDate.add(
-          Duration(seconds: segment.from.departureSeconds),
-        );
-        final scheduledArrival = serviceDate.add(
-          Duration(seconds: segment.to.arrivalSeconds),
-        );
-        final runPrefix =
-            'scheduled:${segment.trip.id}:${_dateKey(serviceDate)}';
-        final fromRunId = '$runPrefix:${segment.index}';
-        final toRunId = '$runPrefix:${segment.index + 1}';
-        final continuesRun = entry.state.activeRunId == fromRunId;
-        if (scheduledDeparture.isBefore(currentTime)) continue;
-
-        final waitSeconds = continuesRun
-            ? 0
-            : scheduledDeparture.difference(currentTime).inSeconds;
-        final rideSeconds = continuesRun
-            ? scheduledArrival.difference(currentTime).inSeconds
-            : scheduledArrival.difference(scheduledDeparture).inSeconds;
-        if (rideSeconds < 0) continue;
-
-        _relaxRide(
-          entry: entry,
-          fromStopId: segment.from.stopId,
-          toStopId: segment.to.stopId,
-          serviceId: segment.trip.serviceId,
-          activeRunId: toRunId,
-          vehicleJourneyId: runPrefix,
-          scheduledTripId: segment.trip.id,
-          waitSeconds: waitSeconds,
-          rideSeconds: rideSeconds,
-          labels: labels,
-          previous: previous,
-          queue: queue,
-        );
-      }
-    }
-  }
-
-  void _relaxRide({
-    required _QueueEntry entry,
-    required String fromStopId,
-    required String toStopId,
-    required String serviceId,
-    required String activeRunId,
-    required String vehicleJourneyId,
-    required String? scheduledTripId,
-    required int waitSeconds,
-    required int rideSeconds,
-    required Map<_State, _Label> labels,
-    required Map<_State, _Previous> previous,
-    required _MinHeap queue,
-  }) {
-    final changesService =
-        entry.state.lastServiceId != null &&
-        entry.state.lastServiceId != serviceId;
-    final penalty = changesService ? transferPenaltySeconds : 0;
-    _relax(
-      destination: _State(toStopId, serviceId, activeRunId),
-      candidate: _Label(
-        generalizedCostSeconds:
-            entry.label.generalizedCostSeconds +
-            waitSeconds +
-            rideSeconds +
-            penalty,
-        elapsedSeconds: entry.label.elapsedSeconds + waitSeconds + rideSeconds,
-        transferCount: entry.label.transferCount + (changesService ? 1 : 0),
-      ),
-      priorState: entry.state,
-      segment: _RideSegment(
-        fromStopId: fromStopId,
-        toStopId: toStopId,
-        serviceId: serviceId,
-        vehicleJourneyId: vehicleJourneyId,
-        scheduledTripId: scheduledTripId,
-        waitSeconds: waitSeconds,
-        rideSeconds: rideSeconds,
-        isTransferBoarding: changesService,
-      ),
-      labels: labels,
-      previous: previous,
-      queue: queue,
-    );
-  }
-
-  void _relax({
-    required _State destination,
-    required _Label candidate,
-    required _State priorState,
-    required _PathSegment segment,
-    required Map<_State, _Label> labels,
-    required Map<_State, _Previous> previous,
-    required _MinHeap queue,
-  }) {
-    if (candidate.elapsedSeconds > maximumJourneySeconds) return;
-    final existing = labels[destination];
-    if (existing != null && !_isBetter(candidate, existing)) return;
-    labels[destination] = candidate;
-    previous[destination] = _Previous(priorState, segment);
-    queue.add(_QueueEntry(destination, candidate));
-  }
-
-  Journey _buildJourney({
-    required _State origin,
-    required _State destination,
-    required _Label destinationLabel,
-    required Map<_State, _Previous> previous,
-    required DateTime departure,
-  }) {
-    final reversedSegments = <_PathSegment>[];
+  Journey _buildJourney(_Label destination, DateTime departure) {
+    final segments = <_PathSegment>[];
     var cursor = destination;
-    while (cursor != origin) {
-      final step = previous[cursor];
-      if (step == null) {
-        throw StateError('Routing predecessor chain is incomplete.');
-      }
-      reversedSegments.add(step.segment);
-      cursor = step.state;
+    while (cursor.parent != null) {
+      segments.add(cursor.segment!);
+      cursor = cursor.parent!;
     }
     final legs = <JourneyLeg>[];
     _TransitLegBuilder? transitBuilder;
-
     void flushTransit() {
-      final builder = transitBuilder;
-      if (builder != null) {
-        legs.add(builder.build());
+      if (transitBuilder != null) {
+        legs.add(transitBuilder!.build());
         transitBuilder = null;
       }
     }
 
-    for (final segment in reversedSegments.reversed) {
+    for (final segment in segments.reversed) {
       switch (segment) {
         case _RideSegment():
           if (transitBuilder?.vehicleJourneyId == segment.vehicleJourneyId &&
@@ -333,17 +286,14 @@ final class JourneyPlanner {
       }
     }
     flushTransit();
-
     return Journey(
-      originStopId: origin.stopId,
-      destinationStopId: destination.stopId,
+      originStopId: cursor.state.stopId,
+      destinationStopId: destination.state.stopId,
       departure: departure,
       arrival: departure.add(
-        Duration(seconds: destinationLabel.elapsedSeconds),
+        Duration(seconds: destination.cost.elapsedSeconds),
       ),
-      totalTravelSeconds: destinationLabel.elapsedSeconds,
-      generalizedCostSeconds: destinationLabel.generalizedCostSeconds,
-      transferCount: destinationLabel.transferCount,
+      cost: destination.cost,
       legs: legs,
     );
   }
@@ -355,9 +305,7 @@ final class Journey {
     required this.destinationStopId,
     required this.departure,
     required this.arrival,
-    required this.totalTravelSeconds,
-    required this.generalizedCostSeconds,
-    required this.transferCount,
+    required this.cost,
     required Iterable<JourneyLeg> legs,
   }) : legs = List.unmodifiable(legs);
 
@@ -365,15 +313,25 @@ final class Journey {
   final String destinationStopId;
   final DateTime departure;
   final DateTime arrival;
-  final int totalTravelSeconds;
-  final int generalizedCostSeconds;
-  final int transferCount;
+  final RoutingCost cost;
   final List<JourneyLeg> legs;
+
+  int get totalTravelSeconds => cost.elapsedSeconds;
+  int get generalizedCostSeconds => cost.generalizedSeconds;
+  int get transferCount => cost.transfers;
+  int get totalWalkingSeconds => cost.walkingSeconds;
+  int? get totalWalkingMetres {
+    var metres = 0;
+    for (final leg in legs.whereType<WalkingLeg>()) {
+      if (leg.distanceMetres == null) return null;
+      metres += leg.distanceMetres!;
+    }
+    return metres;
+  }
 }
 
 sealed class JourneyLeg {
   const JourneyLeg({required this.fromStopId, required this.toStopId});
-
   final String fromStopId;
   final String toStopId;
   int get durationSeconds;
@@ -390,16 +348,13 @@ final class TransitLeg extends JourneyLeg {
     required this.isTransferBoarding,
     required Iterable<String> stopIds,
   }) : stopIds = List.unmodifiable(stopIds);
-
   final String serviceId;
   final String? scheduledTripId;
   final int waitSeconds;
   final int rideSeconds;
   final bool isTransferBoarding;
   final List<String> stopIds;
-
   bool get isScheduled => scheduledTripId != null;
-
   @override
   int get durationSeconds => waitSeconds + rideSeconds;
 }
@@ -411,17 +366,14 @@ final class WalkingLeg extends JourneyLeg {
     required this.walkSeconds,
     this.distanceMetres,
   });
-
   final int walkSeconds;
   final int? distanceMetres;
-
   @override
   int get durationSeconds => walkSeconds;
 }
 
 final class _ScheduledSegment {
   const _ScheduledSegment(this.trip, this.index);
-
   final ScheduledTrip trip;
   final int index;
   ScheduledStopTime get from => trip.stopTimes[index];
@@ -429,43 +381,35 @@ final class _ScheduledSegment {
 }
 
 final class _State {
-  const _State(this.stopId, this.lastServiceId, this.activeRunId);
-
+  const _State(this.stopId, this.hasBoarded, this.activeRunId);
   final String stopId;
-  final String? lastServiceId;
+  final bool hasBoarded;
   final String? activeRunId;
-
   @override
   bool operator ==(Object other) =>
       other is _State &&
       stopId == other.stopId &&
-      lastServiceId == other.lastServiceId &&
+      hasBoarded == other.hasBoarded &&
       activeRunId == other.activeRunId;
-
   @override
-  int get hashCode => Object.hash(stopId, lastServiceId, activeRunId);
+  int get hashCode => Object.hash(stopId, hasBoarded, activeRunId);
 }
 
 final class _Label {
-  const _Label({
-    required this.generalizedCostSeconds,
-    required this.elapsedSeconds,
-    required this.transferCount,
+  _Label({
+    required this.id,
+    required this.state,
+    required this.cost,
+    required this.parent,
+    required this.segment,
   });
-
-  final int generalizedCostSeconds;
-  final int elapsedSeconds;
-  final int transferCount;
-}
-
-bool _isBetter(_Label candidate, _Label existing) {
-  if (candidate.generalizedCostSeconds != existing.generalizedCostSeconds) {
-    return candidate.generalizedCostSeconds < existing.generalizedCostSeconds;
-  }
-  if (candidate.elapsedSeconds != existing.elapsedSeconds) {
-    return candidate.elapsedSeconds < existing.elapsedSeconds;
-  }
-  return candidate.transferCount < existing.transferCount;
+  final int id;
+  final _State state;
+  final RoutingCost cost;
+  // Immutable parent-label references preserve each path after Pareto pruning.
+  final _Label? parent;
+  final _PathSegment? segment;
+  bool active = true;
 }
 
 sealed class _PathSegment {
@@ -483,7 +427,6 @@ final class _RideSegment extends _PathSegment {
     required this.rideSeconds,
     required this.isTransferBoarding,
   });
-
   final String fromStopId;
   final String toStopId;
   final String serviceId;
@@ -496,15 +439,7 @@ final class _RideSegment extends _PathSegment {
 
 final class _WalkSegment extends _PathSegment {
   const _WalkSegment(this.edge);
-
   final TransferEdge edge;
-}
-
-final class _Previous {
-  const _Previous(this.state, this.segment);
-
-  final _State state;
-  final _PathSegment segment;
 }
 
 final class _TransitLegBuilder {
@@ -518,7 +453,6 @@ final class _TransitLegBuilder {
       rideSeconds = first.rideSeconds,
       isTransferBoarding = first.isTransferBoarding,
       stopIds = [first.fromStopId, first.toStopId];
-
   final String vehicleJourneyId;
   final String serviceId;
   final String? scheduledTripId;
@@ -528,7 +462,6 @@ final class _TransitLegBuilder {
   int rideSeconds;
   final bool isTransferBoarding;
   final List<String> stopIds;
-
   void add(_RideSegment segment) {
     toStopId = segment.toStopId;
     rideSeconds += segment.rideSeconds;
@@ -547,19 +480,10 @@ final class _TransitLegBuilder {
   );
 }
 
-final class _QueueEntry {
-  const _QueueEntry(this.state, this.label);
-
-  final _State state;
-  final _Label label;
-}
-
 final class _MinHeap {
-  final List<_QueueEntry> _entries = [];
-
+  final List<_Label> _entries = [];
   bool get isNotEmpty => _entries.isNotEmpty;
-
-  void add(_QueueEntry entry) {
+  void add(_Label entry) {
     _entries.add(entry);
     var index = _entries.length - 1;
     while (index > 0) {
@@ -571,7 +495,7 @@ final class _MinHeap {
     _entries[index] = entry;
   }
 
-  _QueueEntry removeFirst() {
+  _Label removeFirst() {
     final result = _entries.first;
     final last = _entries.removeLast();
     if (_entries.isEmpty) return result;
@@ -593,29 +517,20 @@ final class _MinHeap {
     return result;
   }
 
-  static int _compare(_QueueEntry first, _QueueEntry second) {
-    var result = first.label.generalizedCostSeconds.compareTo(
-      second.label.generalizedCostSeconds,
-    );
-    if (result != 0) return result;
-    result = first.label.elapsedSeconds.compareTo(second.label.elapsedSeconds);
-    if (result != 0) return result;
-    result = first.label.transferCount.compareTo(second.label.transferCount);
+  int _compare(_Label first, _Label second) {
+    var result = first.cost.compareTo(second.cost);
     if (result != 0) return result;
     result = first.state.stopId.compareTo(second.state.stopId);
     if (result != 0) return result;
-    result = (first.state.lastServiceId ?? '').compareTo(
-      second.state.lastServiceId ?? '',
-    );
-    if (result != 0) return result;
-    return (first.state.activeRunId ?? '').compareTo(
+    result = (first.state.activeRunId ?? '').compareTo(
       second.state.activeRunId ?? '',
     );
+    if (result != 0) return result;
+    return first.id.compareTo(second.id);
   }
 }
 
 DateTime _dateOnly(DateTime value) =>
     DateTime(value.year, value.month, value.day);
-
 int _dateKey(DateTime value) =>
     value.year * 10000 + value.month * 100 + value.day;
