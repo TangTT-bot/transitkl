@@ -60,7 +60,7 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Rapid Rail and KTM Komuter, fully offline.',
+              'Rail, KTM Komuter and Sunway BRT, fully offline.',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 16),
@@ -212,7 +212,7 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              'Rapid Rail uses estimated waits from published headways. '
+              'Rapid Rail and Sunway BRT use estimated waits from published headways. '
               'KTM Komuter uses exact scheduled departures. Walking allowances '
               'are estimates. Live delays and cancellations are not included.',
             ),
@@ -328,7 +328,7 @@ class _StationField extends StatelessWidget {
         final query = value.text.trim().toLowerCase();
         if (query.isEmpty) return const Iterable<StationGroup>.empty();
         return stations
-            .where((station) => station.name.toLowerCase().contains(query))
+            .where((station) => station.matchesQuery(query))
             .take(12);
       },
       onSelected: onChanged,

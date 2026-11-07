@@ -1,8 +1,8 @@
 # TransitKL
 
 TransitKL is an offline-first Flutter journey planner for Klang Valley public
-transport. It combines static GTFS schedules from Rapid Rail and Klang Valley
-KTM Komuter. Selected Rapid Bus services are the next coverage milestone.
+transport. It combines static GTFS schedules from Rapid Rail, Klang Valley KTM
+Komuter and Sunway BRT. Selected regular Rapid Bus services are next.
 
 ## Project status
 
@@ -16,7 +16,8 @@ The project has completed its first usable offline journey-planning milestone:
 - The Flutter app loads a validated merged Rapid Rail and KTM Komuter graph.
 - Users can search stations, choose a departure date/time, and view journey legs.
 - Every search returns a Recommended journey with no preference selector.
-- KTM Komuter is integrated; selected Rapid Bus integration is next.
+- KTM Komuter and both Sunway BRT interchanges are integrated; selected regular
+  Rapid Bus integration is next.
 
 The current app is an end-to-end vertical slice: official data passes through
 the audit/build pipeline, is bundled behind a repository interface, and is
@@ -211,6 +212,22 @@ dart run tool/route_demo.dart assets/data/transitkl-rail-routing.json `
 Use the current exporter for both inputs; old exports without `auditErrorCount`
 must be regenerated. [ADR 0006](docs/architecture/0006-ktm-komuter-integration.md)
 documents the merge, interchange estimates, and timetable limitations.
+
+## Sunway BRT
+
+Sunway BRT is included once, from the existing Rapid Rail GTFS feed. Its seven
+stops connect to LRT at USJ 7 (three-minute walking allowance) and KTM at Setia
+Jaya (six-minute allowance). The two USJ 7 platforms share one station search
+entry; through journeys still include the walking transfer. These allowances are
+estimates requiring field validation.
+
+```powershell
+dart run tool/route_demo.dart assets/data/transitkl-rail-routing.json `
+  "PUTRA HEIGHTS" "SunU-Monash" "2026-11-07" "08:00"
+```
+
+See [ADR 0007](docs/architecture/0007-sunway-brt-interchanges.md) for the naming
+mismatch, interchange fix and regression coverage.
 
 Do not replace the bundled asset with an unaudited feed. See
 [`docs/PROJECT_PROGRESS.md`](docs/PROJECT_PROGRESS.md) for the current milestone

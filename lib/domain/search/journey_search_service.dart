@@ -46,6 +46,16 @@ final class StationGroup {
   final String name;
   final List<String> stopIds;
 
+  /// Ignore spacing and punctuation when matching station abbreviations, e.g.
+  /// USJ7/USJ 7 or SunU-Monash/SunU Monash.
+  bool matchesQuery(String query) {
+    String compact(String value) =>
+        value.toLowerCase().replaceAll(RegExp('[^a-z0-9]'), '');
+    final normalizedQuery = compact(query);
+    return normalizedQuery.isNotEmpty &&
+        compact(name).contains(normalizedQuery);
+  }
+
   @override
   bool operator ==(Object other) => other is StationGroup && id == other.id;
 

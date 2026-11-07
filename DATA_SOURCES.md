@@ -53,3 +53,12 @@ weekend, and holiday exceptions. The reviewed audit is in
 Walking durations are implementation estimates, and distances are straight-line
 references. Per-feed checksums and validity are retained in the merged app asset.
 
+## Sunway BRT coverage (7 November 2026)
+
+The Rapid Rail feed already supplies the Sunway BRT route, so no duplicate bus
+feed was added. Explicit walking links connect BRT to LRT at USJ 7 and to KTM
+at Setia Jaya. The BRT `USJ7` display name is normalized to `USJ 7` in the merge
+configuration while retaining the original ID and source name. Interchange
+information is supported by the
+[Monash University transport guide](https://www.monash.edu.my/about/maps-and-transport/bus-rapid-transit).
+

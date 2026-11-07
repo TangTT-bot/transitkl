@@ -22,6 +22,7 @@ void main() {
     expect(find.textContaining('187'), findsNothing);
     expect(find.textContaining('valid until 31 Dec 2026'), findsOneWidget);
     expect(find.textContaining('KTM Komuter'), findsWidgets);
+    expect(find.textContaining('Sunway BRT'), findsWidgets);
     expect(find.textContaining('17 Nov 2026'), findsOneWidget);
 
     await tester.enterText(
@@ -57,5 +58,51 @@ void main() {
     expect(find.text('Fewer transfers'), findsNothing);
     expect(find.text('Least walking'), findsNothing);
     expect(find.textContaining('Walking'), findsOneWidget);
+  });
+
+  testWidgets('shows a straightforward LRT to BRT journey through USJ 7', (
+    tester,
+  ) async {
+    final data = await tester.runAsync(AssetRoutingGraphRepository().load);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: JourneyPlannerScreen(
+          data: data!,
+          initialDeparture: DateTime(2026, 11, 7, 8),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.enterText(
+      find.byKey(const Key('origin-station-field')),
+      'USJ7',
+    );
+    await tester.pump();
+    expect(find.text('USJ 7'), findsOneWidget);
+    await tester.enterText(
+      find.byKey(const Key('origin-station-field')),
+      'Putra Heights',
+    );
+    await tester.pump();
+    await tester.tap(find.text('PUTRA Heights').last);
+    await tester.pump();
+    await tester.enterText(
+      find.byKey(const Key('destination-station-field')),
+      'Monash',
+    );
+    await tester.pump();
+    await tester.tap(find.text('Sunu-monash').last);
+    await tester.pump();
+    final button = find.byKey(const Key('find-journey-button'));
+    expect(tester.widget<FilledButton>(button).onPressed, isNotNull);
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pump();
+    expect(find.text('Recommended journey'), findsOneWidget);
+    expect(find.text('LRT Kelana Jaya Line'), findsOneWidget);
+    expect(find.text('BRT Sunway Line'), findsOneWidget);
+    expect(find.text('Transfer at USJ 7'), findsOneWidget);
+    expect(find.text('1 transfer'), findsOneWidget);
+    expect(find.byKey(const Key('route-preference-field')), findsNothing);
   });
 }

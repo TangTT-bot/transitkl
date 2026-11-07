@@ -1,11 +1,11 @@
 # TransitKL project progress
 
-Last updated: 3 November 2026
+Last updated: 7 November 2026
 
 ## Current position
 
-TransitKL now supports two rail operators in the usable Flutter application.
-Audited Rapid Rail and Klang Valley KTM Komuter feeds travel through the complete
+TransitKL supports rail, Klang Valley KTM Komuter, and Sunway BRT in the usable
+Flutter application. The two audited source feeds travel through the complete
 path from GTFS audit to a Recommended offline journey result:
 
 ```text
@@ -29,19 +29,20 @@ updated; it is no longer the main daily implementation task.
 | 4. Transfer-aware routing engine | Implemented; evaluation remains | Multi-label modified Dijkstra with convenience-aware Recommended ranking |
 | 5. First usable Flutter vertical slice | Complete | Offline asset loading, station search and journey results |
 | 6a. KTM Komuter integration | Implemented; field validation remains | Audited exact timetables, two Klang Valley routes, curated transfers and per-feed validity |
-| 6b. Selected Rapid Bus integration | Next | Bus feed selection, audit, merging and rail/bus links |
+| 6b. Sunway BRT connectivity | Implemented; walking validation remains | Seven stops and connections to LRT at USJ 7 and KTM at Setia Jaya |
+| 6c. Selected regular Rapid Bus integration | Next | Bus feed selection, audit, merging and rail/bus links |
 | 7. Remaining MVP product features | Not started | Favourites, timetable view, settings and polished empty/error states |
 | 8. Evaluation and release preparation | Not started | Performance study, usability testing, final report evidence and release build |
 
-The five foundation/application milestones and the KTM part of multi-operator
-integration are implemented. This is not a percentage estimate: Rapid Bus,
+The five foundation/application milestones, KTM and Sunway BRT integration
+are implemented. This is not a percentage estimate: regular Rapid Bus,
 product features, field validation, evaluation, and report evidence still require
 substantial work.
 
 ## What is working now
 
 - The app starts offline with 244 operator stop IDs, 20 directional services,
-  164 exact KTM trips, five calendars, and 96 directed walking links.
+  164 exact KTM trips, five calendars, and 98 directed walking links.
 - Transfer-connected same-name platforms share a search entry. Disconnected
   namesakes such as KTM Sentul and LRT Sentul remain distinct.
 - Origin and destination fields provide filtered station suggestions.
@@ -61,21 +62,25 @@ substantial work.
 - Static-data limitations, validity and attribution are visible in the app.
 - Rapid Rail and KTM expiry dates are shown separately. The date picker does not
   override each operator's own calendar validity.
-- Seventeen curated transfer pairs cover twelve interchange areas. Walking
+- Eighteen curated transfer pairs cover thirteen interchange areas. Walking
   durations are conservative estimates requiring field validation.
+- Sunway BRT connects to LRT at USJ 7 with three minutes walking, and to KTM at
+  Setia Jaya with six minutes walking, in both directions. BRT uses the existing
+  Rapid Rail source export and has not been duplicated as another feed.
 - Automated tests cover the pipeline, graph asset, routing, station grouping
   real KTM-only and cross-operator journeys, expiry, short-turn gaps, and a real
   Gombak-to-Kajang screen flow.
 
-Latest verification: 24 Flutter tests and 17 Python tests passed; static
+Latest verification: 31 Flutter tests and 17 Python tests passed; static
 analysis found no issues. The merged asset checksum matches the generated
-network graph. Desktop smoke results after scheduled-instance caching were
+network graph. The earlier KTM desktop smoke baseline after scheduled-instance caching was
 median 156.09 ms and p95 392.89 ms over 30 station searches; phone performance
 still needs measurement.
 
 ## What is not implemented yet
 
-- Rapid Bus and feeder buses are not included yet. ETS, intercity, northern and
+- Regular Rapid KL buses and MRT feeder buses are not included yet; Sunway BRT
+  is included. ETS, intercity, northern and
   southern Komuter services outside the Klang Valley scope are excluded.
 - The current KTM timetable expires on **17 November 2026**. Refresh, audit,
   rebuild, and merge before a later demonstration.
@@ -103,12 +108,16 @@ First run the updated app and manually inspect these searches on a phone:
 2. Batu Caves to KLCC, 3 November 08:00 (cross-operator).
 3. Gombak to Seremban, 3 November 16:00 (evening southern connection).
 4. Putra Heights to Pasar Seni, 3 November 08:00 (direct KJL regression).
+5. Putra Heights to SunU–Monash, 7 November 08:00 (LRT/BRT through USJ 7).
+6. Sunway Lagoon to Klang, 7 November 09:00 (BRT/KTM through Setia Jaya).
 
 Then add a deliberately limited Rapid Bus or MRT feeder service set. Audit the
 new feed, extend the existing merge configuration, curate rail/bus walking
 links, verify scheduled connections and the six-hour search horizon, and bundle
 the resulting network. [ADR 0006](architecture/0006-ktm-komuter-integration.md)
 contains the implementation and coverage rationale.
+The completed BRT connection and validation are recorded in
+[ADR 0007](architecture/0007-sunway-brt-interchanges.md).
 
 After that, implement favourites and a timetable screen, then perform
 performance and usability evaluation for the capstone report.

@@ -1,7 +1,7 @@
 {
   "id": "transitkl_rail",
   "feeds": {
-    "prasarana_rapid_rail": {"displayName": "Rapid Rail"},
+    "prasarana_rapid_rail": {"displayName": "Rapid Rail + Sunway BRT"},
     "ktmb": {
       "displayName": "KTM Komuter",
       "routeIds": ["ktmb:KA15_KD19", "ktmb:KC05_KB18"]
@@ -10,12 +10,14 @@
   "walkingPolicy": "Conservative station traversal estimates, including access/egress between platforms. Distances are straight-line references, not measured walking paths. No automatic cross-operator proximity links.",
   "stopNameOverrides": {
     "prasarana_rapid_rail:KJ15": "KL SENTRAL",
+    "prasarana_rapid_rail:BRT7": "USJ 7",
     "ktmb:19600": "BANDAR TASIK SELATAN",
     "ktmb:19205": "MID VALLEY",
     "ktmb:50300": "BATU KENTONMEN",
     "ktmb:53400": "KAMPUNG DATO HARUN"
   },
   "transfers": [
+    {"fromStopId":"prasarana_rapid_rail:KJ31","toStopId":"prasarana_rapid_rail:BRT7","walkSeconds":180,"bidirectional":true,"sourceUrl":"https://www.monash.edu.my/about/maps-and-transport/bus-rapid-transit"},
     {"fromStopId":"ktmb:19100","toStopId":"prasarana_rapid_rail:KJ15","walkSeconds":300,"sourceUrl":"https://www.mot.gov.my/en/land/infrastructure/current-rail-services"},
     {"fromStopId":"ktmb:19100","toStopId":"prasarana_rapid_rail:MR1","walkSeconds":600,"sourceUrl":"https://www.muziumnegara.gov.my/index.php/en/getting-here"},
     {"fromStopId":"ktmb:19100","toStopId":"prasarana_rapid_rail:KG15","walkSeconds":600,"sourceUrl":"https://www.muziumnegara.gov.my/index.php/en/getting-here"},

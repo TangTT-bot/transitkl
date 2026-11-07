@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "feed": {
     "id": "transitkl_rail",
-    "sourceSha256": "c4f14e51f16379caceb25d5bb330579f2bcfd5bb006e6d264e2edfcc6007fc0d",
+    "sourceSha256": "bdc6e3c62e8956dfb9c1ba38cb4e92ed22d460ea5261d205bb794a0f63454e9f",
     "serviceDateStart": "20190101",
     "serviceDateEnd": "20261231"
   },
@@ -25,7 +25,7 @@
       "auditErrorCount": 0,
       "serviceDateStart": "20190101",
       "serviceDateEnd": "20261231",
-      "displayName": "Rapid Rail",
+      "displayName": "Rapid Rail + Sunway BRT",
       "includedRouteIds": [
         "prasarana_rapid_rail:AG",
         "prasarana_rapid_rail:BRT",
@@ -612,10 +612,11 @@
     },
     {
       "id": "prasarana_rapid_rail:BRT7",
-      "name": "USJ7",
-      "normalizedName": "usj7",
+      "name": "USJ 7",
+      "normalizedName": "usj 7",
       "latitude": 3.0553,
-      "longitude": 101.5919
+      "longitude": 101.5919,
+      "sourceName": "USJ7"
     },
     {
       "id": "prasarana_rapid_rail:KG04",
@@ -26474,6 +26475,14 @@
       "sourceUrl": "https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"
     },
     {
+      "fromStopId": "prasarana_rapid_rail:BRT7",
+      "toStopId": "prasarana_rapid_rail:KJ31",
+      "walkSeconds": 180,
+      "distanceMetres": 50,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.monash.edu.my/about/maps-and-transport/bus-rapid-transit"
+    },
+    {
       "fromStopId": "prasarana_rapid_rail:KG04",
       "toStopId": "prasarana_rapid_rail:PY01",
       "walkSeconds": 120,
@@ -26591,6 +26600,14 @@
       "distanceMetres": 85,
       "source": "curated_interchange",
       "sourceUrl": "https://myrapid.com.my/wp-content/uploads/2025/10/Transit-Map_131025.pdf"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ31",
+      "toStopId": "prasarana_rapid_rail:BRT7",
+      "walkSeconds": 180,
+      "distanceMetres": 50,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.monash.edu.my/about/maps-and-transport/bus-rapid-transit"
     },
     {
       "fromStopId": "prasarana_rapid_rail:KJ37",
