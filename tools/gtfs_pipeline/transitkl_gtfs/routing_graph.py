@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import sqlite3
 from collections import defaultdict
@@ -14,6 +15,8 @@ def service_id(route_id: str, direction_id: int) -> str:
 def export_routing_graph(
     database_path: str | Path,
     output_path: str | Path,
+    *,
+    preserve_frequency_patterns: bool = False,
 ) -> dict[str, object]:
     database = Path(database_path).resolve()
     if not database.is_file():
@@ -140,6 +143,28 @@ def export_routing_graph(
                 )
             ],
         }
+        if preserve_frequency_patterns:
+            pattern_services, pattern_edges = _frequency_patterns(connection)
+            exact_ids = {trip["serviceId"] for trip in payload["scheduledTrips"]}
+            payload["services"] = [
+                {**service, "headways": []} for service in payload["services"]
+                if service["id"] in exact_ids
+            ] + pattern_services
+            payload["rideEdges"] = [
+                edge for edge in payload["rideEdges"] if edge["serviceId"] in exact_ids
+            ] + pattern_edges
+            payload["schemaVersion"] = 3
+            payload["feed"]["frequencyTimingModel"] = "ordered_source_profiles"
+        payload["feed"]["sourceRouteCount"] = connection.execute(
+            "SELECT COUNT(*) FROM routes"
+        ).fetchone()[0]
+        payload["feed"]["tripsWithoutStopTimes"] = [
+            row[0] for row in connection.execute(
+                "SELECT trip_id FROM trips WHERE NOT EXISTS "
+                "(SELECT 1 FROM stop_times WHERE stop_times.trip_id = trips.trip_id) "
+                "ORDER BY trip_id"
+            )
+        ]
     finally:
         connection.close()
 
@@ -151,6 +176,70 @@ def export_routing_graph(
         stream.write("\n")
     os.replace(temporary, output)
     return payload
+
+
+def _frequency_patterns(connection: sqlite3.Connection) -> tuple[list[dict], list[dict]]:
+    """Keep each ordered relative-time profile separate, including repeated stops.
+
+    Route/direction medians can splice branches or skip parts of a bus loop.
+    Frequency windows apply at the first stop; edge offsets shift them downstream.
+    Identical source profiles share one service without averaging their timings.
+    """
+    windows: dict[str, list[sqlite3.Row]] = defaultdict(list)
+    for row in connection.execute("SELECT * FROM frequencies ORDER BY trip_id, start_seconds"):
+        if row["exact_times"] not in (None, 0):
+            raise ValueError("Pattern export requires frequency exact_times=0; expand exact departures first")
+        windows[row["trip_id"]].append(row)
+    times: dict[str, list[sqlite3.Row]] = defaultdict(list)
+    for row in connection.execute("SELECT * FROM stop_times ORDER BY trip_id, stop_sequence"):
+        if row["trip_id"] in windows:
+            times[row["trip_id"]].append(row)
+    groups: dict[tuple, dict] = {}
+    for trip in connection.execute(
+        "SELECT trips.*, routes.route_short_name, routes.route_long_name, routes.route_type, "
+        "routes.route_color, routes.route_text_color FROM trips JOIN routes USING (route_id) "
+        "ORDER BY trip_id"
+    ):
+        rows = times[trip["trip_id"]]
+        if trip["trip_id"] not in windows or len(rows) < 2:
+            continue
+        if any(row["arrival_seconds"] is None or row["departure_seconds"] is None for row in rows):
+            raise ValueError(f"Frequency profile has incomplete times: {trip['trip_id']}")
+        origin = rows[0]["departure_seconds"]
+        profile = tuple((
+            row["stop_id"], row["arrival_seconds"] - origin,
+            row["departure_seconds"] - origin,
+            row["pickup_type"] in (None, 0), row["drop_off_type"] in (None, 0),
+        ) for row in rows)
+        direction = trip["direction_id"] if trip["direction_id"] is not None else -1
+        key = (trip["route_id"], direction, profile)
+        if key not in groups:
+            digest = hashlib.sha256(json.dumps(profile).encode()).hexdigest()[:16]
+            groups[key] = {"service": {
+                "id": f"{service_id(trip['route_id'], direction)}::pattern:{digest}",
+                "routeId": trip["route_id"], "directionId": direction,
+                "shortName": trip["route_short_name"], "longName": trip["route_long_name"],
+                "routeType": trip["route_type"], "color": trip["route_color"],
+                "textColor": trip["route_text_color"], "headways": [],
+            }, "windows": set()}
+        for window in windows[trip["trip_id"]]:
+            groups[key]["windows"].add((trip["service_id"], window["start_seconds"],
+                window["end_seconds"], window["headway_seconds"]))
+    services, edges = [], []
+    for (_, _, profile), group in sorted(groups.items()):
+        service = group["service"]
+        service["headways"] = [{"calendarId": calendar, "startSeconds": start,
+            "endSeconds": end, "headwaySeconds": headway}
+            for calendar, start, end, headway in sorted(group["windows"])]
+        services.append(service)
+        for index, (first, second) in enumerate(zip(profile, profile[1:])):
+            edges.append({
+                "fromStopId": first[0], "toStopId": second[0], "serviceId": service["id"],
+                "travelSeconds": second[1] - first[2], "sequence": index,
+                "departureOffsetSeconds": first[2], "dwellSeconds": first[2] - first[1],
+                "pickupAllowed": first[3], "dropOffAllowed": second[4],
+            })
+    return services, edges
 
 
 def _service_calendars(connection: sqlite3.Connection) -> list[dict[str, object]]:

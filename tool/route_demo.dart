@@ -33,21 +33,11 @@ Future<void> main(List<String> arguments) async {
     }
 
     final planner = JourneyPlanner(graph);
-    Journey? bestJourney;
-    for (final origin in origins) {
-      for (final destination in destinations) {
-        final candidate = planner.plan(
-          originStopId: origin.id,
-          destinationStopId: destination.id,
-          departure: departure,
-        );
-        if (candidate != null &&
-            (bestJourney == null ||
-                candidate.cost.compareTo(bestJourney.cost) < 0)) {
-          bestJourney = candidate;
-        }
-      }
-    }
+    final bestJourney = planner.planBetween(
+      originStopIds: origins.map((stop) => stop.id),
+      destinationStopIds: destinations.map((stop) => stop.id),
+      departure: departure,
+    );
 
     if (bestJourney == null) {
       stdout.writeln(

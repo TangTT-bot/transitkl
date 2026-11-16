@@ -255,6 +255,14 @@ def audit_feed(input_path: str | Path, feed_id: str) -> AuditReport:
             seen.add(key)
 
     _validate_foreign_keys(rows_by_file, add_issue)
+    timed_trip_ids = {row.get("trip_id") for row in rows_by_file.get("stop_times.txt", [])}
+    for row_number, trip in enumerate(rows_by_file.get("trips.txt", []), start=2):
+        if trip.get("trip_id") not in timed_trip_ids:
+            add_issue(AuditIssue(
+                "warning", "trip_without_stop_times",
+                f"trip_id {trip.get('trip_id')!r} has no stop sequence and cannot be routed.",
+                "trips.txt", row_number,
+            ))
     after_midnight_count = _validate_stop_times(rows_by_file, add_issue)
     after_midnight_count += _validate_frequencies(rows_by_file, add_issue)
     service_start, service_end = _service_date_range(rows_by_file)

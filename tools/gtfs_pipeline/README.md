@@ -44,3 +44,26 @@ and curated interchanges. The source exports must record zero audit errors.
 The output retains separate source checksums and service dates, rejects duplicate
 IDs and invalid references, and does not infer cross-operator links by proximity.
 KTM scheduled stop times include normal boarding/alighting permissions.
+
+## Bus variants and loops
+
+Use `export-graph --frequency-patterns` for the Rapid Bus feed. This writes graph
+schema 3 (SQLite remains schema 3), preserving each distinct ordered source
+stop/time/permission profile rather than combining route/direction edges.
+Identical profiles share deduplicated headway windows. Each edge carries its
+sequence position, departure offset from the first stop, dwell, pickup and
+drop-off permissions. The Dart planner supports graph schemas 2 and 3.
+This prevents silent branch-splicing and repeated-stop loop shortcuts.
+
+Per GTFS, frequency start/end times apply to the first stop. Downstream boarding
+windows shift by the source profile offset; continuing on board includes dwell.
+Frequency `exact_times=1` is rejected by this export mode rather than silently
+treated as a half-headway estimate. The current Rapid Bus frequency rows use 0.
+
+The auditor now warns about trips without stop sequences. They are never
+fabricated by export. `merge-graphs` supports `excludeRouteIds` (used to avoid
+duplicating BRT), per-feed `coverageNote`, and propagates schema 3 when needed.
+Merge all three configured feeds; a two-feed merge no longer matches the config.
+The per-feed `transferSources` allowlist prevents unreviewed same-name bus stop
+walking links from entering the app. The bus configuration permits only explicit
+GTFS parent-station or transfers.txt links; curated links are added separately.

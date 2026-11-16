@@ -17,21 +17,11 @@ final class JourneySearchService {
   }) {
     if (origin.id == destination.id) return null;
 
-    Journey? best;
-    for (final originStopId in origin.stopIds) {
-      for (final destinationStopId in destination.stopIds) {
-        final candidate = planner.plan(
-          originStopId: originStopId,
-          destinationStopId: destinationStopId,
-          departure: departure,
-        );
-        if (candidate != null &&
-            (best == null || candidate.cost.compareTo(best.cost) < 0)) {
-          best = candidate;
-        }
-      }
-    }
-    return best;
+    return planner.planBetween(
+      originStopIds: origin.stopIds,
+      destinationStopIds: destination.stopIds,
+      departure: departure,
+    );
   }
 }
 
@@ -49,11 +39,19 @@ final class StationGroup {
   /// Ignore spacing and punctuation when matching station abbreviations, e.g.
   /// USJ7/USJ 7 or SunU-Monash/SunU Monash.
   bool matchesQuery(String query) {
-    String compact(String value) =>
-        value.toLowerCase().replaceAll(RegExp('[^a-z0-9]'), '');
-    final normalizedQuery = compact(query);
+    final normalizedQuery = _compact(query);
     return normalizedQuery.isNotEmpty &&
-        compact(name).contains(normalizedQuery);
+        _compact(name).contains(normalizedQuery);
+  }
+
+  int queryRank(String query) {
+    final nameKey = _compact(name);
+    final queryKey = _compact(query);
+    return nameKey == queryKey
+        ? 0
+        : nameKey.startsWith(queryKey)
+        ? 1
+        : 2;
   }
 
   @override
@@ -61,6 +59,25 @@ final class StationGroup {
 
   @override
   int get hashCode => id.hashCode;
+}
+
+String _compact(String value) =>
+    value.toLowerCase().replaceAll(RegExp('[^a-z0-9]'), '');
+
+/// Exact stations must not disappear behind many bus stop substring matches.
+List<StationGroup> searchStations(
+  Iterable<StationGroup> stations,
+  String query, {
+  int limit = 12,
+}) {
+  final matches = stations
+      .where((station) => station.matchesQuery(query))
+      .toList();
+  matches.sort((a, b) {
+    final rank = a.queryRank(query).compareTo(b.queryRank(query));
+    return rank != 0 ? rank : a.name.compareTo(b.name);
+  });
+  return matches.take(limit).toList(growable: false);
 }
 
 List<StationGroup> _buildStations(RoutingGraph graph) {
@@ -103,15 +120,21 @@ List<StationGroup> _buildStations(RoutingGraph graph) {
     }
     for (final component in components) {
       final separate = components.length > 1;
-      final operatorName = component.every((id) => id.startsWith('ktmb:'))
-          ? 'KTM Komuter'
-          : 'Rapid Rail';
+      final operatorName = _operatorName(component);
+      final ambiguous =
+          separate &&
+          components
+                  .where(
+                    (candidate) => _operatorName(candidate) == operatorName,
+                  )
+                  .length >
+              1;
       stations.add(
         StationGroup(
           id: separate ? '${entry.key}::${component.first}' : entry.key,
           name:
               '${_displayName(graph.stops[component.first]!.name)}'
-              '${separate ? ' ($operatorName)' : ''}',
+              '${separate ? ' ($operatorName${ambiguous ? ' ${component.first.split(':').last}' : ''})' : ''}',
           stopIds: List.unmodifiable(component),
         ),
       );
@@ -120,6 +143,13 @@ List<StationGroup> _buildStations(RoutingGraph graph) {
   stations.sort((first, second) => first.name.compareTo(second.name));
   return List.unmodifiable(stations);
 }
+
+String _operatorName(List<String> ids) =>
+    ids.every((id) => id.startsWith('ktmb:'))
+    ? 'KTM Komuter'
+    : ids.every((id) => id.startsWith('prasarana_rapid_bus_kl:'))
+    ? 'Rapid Bus KL'
+    : 'Rapid Rail';
 
 String _displayName(String value) {
   return value

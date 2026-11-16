@@ -3,6 +3,21 @@ import 'package:transitkl/domain/routing/routing_graph.dart';
 import 'package:transitkl/domain/search/journey_search_service.dart';
 
 void main() {
+  test('exact station names outrank many bus stop substring matches', () {
+    final stations = [
+      for (var index = 0; index < 20; index++)
+        StationGroup(
+          id: 'bus$index',
+          name: 'SJ$index Bus USJ 7',
+          stopIds: ['$index'],
+        ),
+      const StationGroup(id: 'usj 7', name: 'USJ 7', stopIds: ['KJ31']),
+    ];
+    final matches = searchStations(stations, 'USJ7');
+    expect(matches, hasLength(12));
+    expect(matches.first.id, 'usj 7');
+    expect(searchStations(stations, ''), isEmpty);
+  });
   test('groups platform IDs and searches every station platform', () {
     final service = JourneySearchService(_graph());
     final central = service.stations.singleWhere(

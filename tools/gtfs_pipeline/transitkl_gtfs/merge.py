@@ -18,10 +18,12 @@ def merge_graphs(
         "rideEdges", "transferEdges",
     )}
     seen_feeds: set[str] = set()
+    schema_version = 2
     for path in input_paths:
         graph = json.loads(path.read_text(encoding="utf-8"))
-        if graph.get("schemaVersion") != 2:
+        if graph.get("schemaVersion") not in (2, 3):
             raise ValueError(f"Unsupported graph schema in {path}")
+        schema_version = max(schema_version, graph["schemaVersion"])
         feed_id = graph["feed"]["id"]
         if graph["feed"].get("auditErrorCount") != 0:
             raise ValueError(f"{feed_id} must be exported from a database with zero audit errors")
@@ -33,6 +35,10 @@ def merge_graphs(
         selection = config["feeds"][feed_id]
         available_routes = {service["routeId"] for service in graph["services"]}
         selected_routes = set(selection.get("routeIds", available_routes))
+        excluded_routes = set(selection.get("excludeRouteIds", []))
+        if not excluded_routes <= available_routes:
+            raise ValueError(f"Unknown excluded route for {feed_id}")
+        selected_routes -= excluded_routes
         if not selected_routes or not selected_routes <= available_routes:
             raise ValueError(f"Unknown or empty route selection for {feed_id}")
         services = [s for s in graph["services"] if s["routeId"] in selected_routes]
@@ -44,14 +50,18 @@ def merge_graphs(
         calendar_ids = {t["calendarId"] for t in trips}
         calendar_ids.update(w["calendarId"] for s in services for w in s["headways"])
         merged["feeds"].append({**graph["feed"], "displayName": selection["displayName"],
-                                "includedRouteIds": sorted(selected_routes)})
+                                "includedRouteIds": sorted(selected_routes),
+                                "excludedRouteIds": sorted(excluded_routes),
+                                "coverageNote": selection.get("coverageNote", "")})
         merged["stops"].extend(s for s in graph["stops"] if s["id"] in stop_ids)
         merged["services"].extend(services)
         merged["scheduledTrips"].extend(trips)
         merged["rideEdges"].extend(rides)
         merged["serviceCalendars"].extend(c for c in graph["serviceCalendars"] if c["id"] in calendar_ids)
+        allowed_transfer_sources = selection.get("transferSources")
         merged["transferEdges"].extend(e for e in graph["transferEdges"]
-            if e["fromStopId"] in stop_ids and e["toStopId"] in stop_ids)
+            if e["fromStopId"] in stop_ids and e["toStopId"] in stop_ids
+            and (allowed_transfer_sources is None or e.get("source") in allowed_transfer_sources))
 
     if seen_feeds != set(config["feeds"]):
         raise ValueError("Input feeds must exactly match the network configuration")
@@ -88,11 +98,11 @@ def merge_graphs(
     merged["transferEdges"] = sorted(transfers.values(), key=lambda e: (e["fromStopId"], e["toStopId"]))
     for key in ("stops", "services", "serviceCalendars", "scheduledTrips", "feeds"):
         merged[key].sort(key=lambda record: record["id"])
-    merged["rideEdges"].sort(key=lambda e: (e["fromStopId"], e["toStopId"], e["serviceId"]))
+    merged["rideEdges"].sort(key=lambda e: (e["fromStopId"], e["toStopId"], e["serviceId"], e.get("sequence", -1)))
     _validate_references(merged)
     digest = hashlib.sha256(json.dumps({"data": merged, "config": config}, sort_keys=True).encode()).hexdigest()
     payload = {
-        "schemaVersion": 2,
+        "schemaVersion": schema_version,
         "feed": {
             "id": config["id"], "sourceSha256": digest,
             # Union for the date picker; each operator keeps its own calendar.

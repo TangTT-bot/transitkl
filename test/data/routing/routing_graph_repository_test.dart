@@ -7,17 +7,17 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test(
-    'loads the audited Rapid Rail and Klang Valley Komuter network',
+    'loads the audited rail Komuter and published Rapid Bus network',
     () async {
       final data = await AssetRoutingGraphRepository().load();
 
       expect(data.feed.id, 'transitkl_rail');
-      expect(data.feed.serviceDateEnd, DateTime(2026, 12, 31));
-      expect(data.graph.stops, hasLength(244));
-      expect(data.graph.services, hasLength(20));
-      expect(data.graph.rideEdges, hasLength(505));
-      expect(data.graph.transferEdges, hasLength(98));
-      expect(data.graph.scheduledTrips, hasLength(164));
+      expect(data.feed.serviceDateEnd, DateTime(2027, 3, 31));
+      expect(data.graph.stops, hasLength(4343));
+      expect(data.graph.services, hasLength(443));
+      expect(data.graph.rideEdges, hasLength(18327));
+      expect(data.graph.transferEdges, hasLength(170));
+      expect(data.graph.scheduledTrips, hasLength(167));
       expect(
         data.sources.singleWhere((feed) => feed.id == 'ktmb').serviceDateEnd,
         DateTime(2026, 11, 17),

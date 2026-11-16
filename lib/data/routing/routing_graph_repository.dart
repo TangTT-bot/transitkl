@@ -64,6 +64,8 @@ final class TransitFeedMetadata {
     required this.serviceDateStart,
     required this.serviceDateEnd,
     this.displayName = 'Transit data',
+    this.coverageNote = '',
+    this.includedRouteCount,
   });
 
   factory TransitFeedMetadata.fromJson(Map<String, Object?> json) {
@@ -73,6 +75,8 @@ final class TransitFeedMetadata {
       serviceDateStart: _gtfsDate(json, 'serviceDateStart'),
       serviceDateEnd: _gtfsDate(json, 'serviceDateEnd'),
       displayName: json['displayName'] as String? ?? 'Transit data',
+      coverageNote: json['coverageNote'] as String? ?? '',
+      includedRouteCount: (json['includedRouteIds'] as List<Object?>?)?.length,
     );
   }
 
@@ -81,6 +85,8 @@ final class TransitFeedMetadata {
   final DateTime serviceDateStart;
   final DateTime serviceDateEnd;
   final String displayName;
+  final String coverageNote;
+  final int? includedRouteCount;
 }
 
 String _requiredString(Map<String, Object?> json, String key) {

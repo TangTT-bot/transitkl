@@ -48,6 +48,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     export_parser.add_argument("--database", required=True, type=Path)
     export_parser.add_argument("--output", required=True, type=Path)
+    export_parser.add_argument(
+        "--frequency-patterns", action="store_true",
+        help="Preserve frequency trip stop order and timing profiles (graph schema 3).",
+    )
     merge_parser = subparsers.add_parser("merge-graphs", help="Select routes and merge audited graph exports.")
     merge_parser.add_argument("--input", required=True, action="append", type=Path)
     merge_parser.add_argument("--config", required=True, type=Path)
@@ -88,7 +92,10 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         if args.command == "export-graph":
-            payload = export_routing_graph(args.database, args.output)
+            payload = export_routing_graph(
+                args.database, args.output,
+                preserve_frequency_patterns=args.frequency_patterns,
+            )
             print(
                 "Exported routing graph to "
                 f"{args.output.resolve()} "

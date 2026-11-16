@@ -2,7 +2,8 @@
 
 TransitKL is an offline-first Flutter journey planner for Klang Valley public
 transport. It combines static GTFS schedules from Rapid Rail, Klang Valley KTM
-Komuter and Sunway BRT. Selected regular Rapid Bus services are next.
+Komuter, Sunway BRT and the officially published Rapid Bus KL subset. This is
+not complete Klang Valley bus coverage; the separate MRT feeder feed is not bundled.
 
 ## Project status
 
@@ -16,8 +17,10 @@ The project has completed its first usable offline journey-planning milestone:
 - The Flutter app loads a validated merged Rapid Rail and KTM Komuter graph.
 - Users can search stations, choose a departure date/time, and view journey legs.
 - Every search returns a Recommended journey with no preference selector.
-- KTM Komuter and both Sunway BRT interchanges are integrated; selected regular
-  Rapid Bus integration is next.
+- KTM Komuter, both Sunway BRT interchanges and 138 published Rapid Bus routes
+  are integrated. Missing bus trip sequences are reported and excluded.
+- Bus variants, loops and downstream operating times are preserved, with
+  worker-isolate searches on mobile/desktop and exact-first autocomplete.
 
 The current app is an end-to-end vertical slice: official data passes through
 the audit/build pipeline, is bundled behind a repository interface, and is
@@ -201,6 +204,7 @@ python tools/gtfs_pipeline/run_pipeline.py export-graph `
 python tools/gtfs_pipeline/run_pipeline.py merge-graphs `
   --input data/processed/rapid-rail-kl-routing.json `
   --input data/processed/ktmb-2026-11-03-routing.json `
+  --input data/processed/rapid-bus-kl-2026-11-08-routing.json `
   --config data/network-kl.json `
   --output data/processed/transitkl-rail-routing.json
 Copy-Item data/processed/transitkl-rail-routing.json `
@@ -209,7 +213,8 @@ dart run tool/route_demo.dart assets/data/transitkl-rail-routing.json `
   "BATU CAVES" "KLCC" "2026-11-03" "08:00"
 ```
 
-Use the current exporter for both inputs; old exports without `auditErrorCount`
+First prepare the bus export with the commands below. Use the current exporter
+for all inputs; old exports without `auditErrorCount`
 must be regenerated. [ADR 0006](docs/architecture/0006-ktm-komuter-integration.md)
 documents the merge, interchange estimates, and timetable limitations.
 
@@ -228,6 +233,53 @@ dart run tool/route_demo.dart assets/data/transitkl-rail-routing.json `
 
 See [ADR 0007](docs/architecture/0007-sunway-brt-interchanges.md) for the naming
 mismatch, interchange fix and regression coverage.
+
+## Rapid Bus KL and partial coverage
+
+Only services supplied in the official `rapid-bus-kl` snapshot are used. The
+8 November snapshot has 139 route records. The duplicated BRT route `B1000`
+is excluded because Sunway BRT is already supplied by Rapid Rail, leaving
+138 bus routes. Three published trips lack stop sequences and cannot be routed.
+No missing routes, reverse directions or timetables are fabricated. This limitation
+is shown on the planner screen and in the data information sheet.
+
+```powershell
+python tools/gtfs_pipeline/run_pipeline.py download `
+  --url "https://api.data.gov.my/gtfs-static/prasarana?category=rapid-bus-kl" `
+  --output data/downloads/rapid-bus-kl-2026-11-08.zip
+python tools/gtfs_pipeline/run_pipeline.py build `
+  --input data/downloads/rapid-bus-kl-2026-11-08.zip `
+  --feed-id prasarana_rapid_bus_kl `
+  --database data/processed/rapid-bus-kl-2026-11-08.sqlite `
+  --markdown-report docs/data-audits/rapid-bus-kl-2026-11-08.md
+python tools/gtfs_pipeline/run_pipeline.py export-graph `
+  --database data/processed/rapid-bus-kl-2026-11-08.sqlite `
+  --frequency-patterns `
+  --output data/processed/rapid-bus-kl-2026-11-08-routing.json
+```
+
+Then run the three-input merge above. Bus frequency exports use graph schema 3
+to preserve each ordered source timing profile, including repeated stop visits,
+boarding restrictions, dwell and offsets from the first stop. The old asset filename
+is retained for compatibility but now contains the combined rail and bus network.
+The merge supports `excludeRouteIds` and keeps per-source coverage notes.
+
+There are 36 explicit bus/rail walking pairs in this first integration, including
+Gombak, Pasar Seni, KL Sentral, USJ 7, Titiwangsa and KTM Batu Tiga. These are
+named-station GTFS associations with estimated five/seven-minute traversal
+allowances, not verified pedestrian navigation. Not all interchanges are configured.
+Bus-to-bus transfers work at shared published stop IDs; no blanket proximity links
+or opposite-road crossings are invented.
+
+```powershell
+dart run tool/route_demo.dart assets/data/transitkl-rail-routing.json `
+  "prasarana_rapid_bus_kl:1001801" "prasarana_rapid_bus_kl:1000972" `
+  "2026-11-09" "08:00"
+```
+
+This checks a direct T200 journey from SL311 LRT Gombak to SL162 Hub UIA.
+See [ADR 0008](docs/architecture/0008-rapid-bus-published-coverage.md) for the
+coverage boundary, routing changes and required evaluation.
 
 Do not replace the bundled asset with an unaudited feed. See
 [`docs/PROJECT_PROGRESS.md`](docs/PROJECT_PROGRESS.md) for the current milestone

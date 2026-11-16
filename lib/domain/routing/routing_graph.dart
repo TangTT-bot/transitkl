@@ -20,7 +20,7 @@ final class RoutingGraph {
   }
 
   factory RoutingGraph.fromJson(Map<String, Object?> json) {
-    if (json['schemaVersion'] != 2) {
+    if (json['schemaVersion'] != 2 && json['schemaVersion'] != 3) {
       throw FormatException(
         'Unsupported routing graph schema: ${json['schemaVersion']}. '
         'Rebuild the graph with the current GTFS pipeline.',
@@ -114,8 +114,35 @@ final class RoutingGraph {
           'Ride edge references an unknown service: ${edge.serviceId}',
         );
       }
-      if (edge.travelSeconds < 0) {
-        throw FormatException('Ride edge travel time must not be negative.');
+      if (edge.travelSeconds < 0 ||
+          edge.departureOffsetSeconds < 0 ||
+          edge.dwellSeconds < 0 ||
+          (edge.sequence != null && edge.sequence! < 0)) {
+        throw FormatException(
+          'Ride edge timing and sequence must not be negative.',
+        );
+      }
+    }
+    final ordered = <String, List<RideEdge>>{};
+    for (final edge in rideEdges.where((edge) => edge.sequence != null)) {
+      (ordered[edge.serviceId] ??= []).add(edge);
+    }
+    for (final edges in ordered.values) {
+      edges.sort((a, b) => a.sequence!.compareTo(b.sequence!));
+      for (var index = 0; index < edges.length; index++) {
+        final edge = edges[index];
+        if (edge.sequence != index ||
+            (index == 0 && edge.departureOffsetSeconds != 0) ||
+            (index > 0 &&
+                (edges[index - 1].toStopId != edge.fromStopId ||
+                    edge.departureOffsetSeconds !=
+                        edges[index - 1].departureOffsetSeconds +
+                            edges[index - 1].travelSeconds +
+                            edge.dwellSeconds))) {
+          throw const FormatException(
+            'Frequency profile stop order or offsets are inconsistent.',
+          );
+        }
       }
     }
     for (final edge in transferEdges) {
@@ -263,17 +290,23 @@ final class TransitService {
   List<FrequencyBoardingWindow> boardingWindowsBetween(
     DateTime earliest,
     DateTime latest,
-    Map<String, ServiceCalendar> calendars,
-  ) {
-    final date = _dateOnly(earliest);
+    Map<String, ServiceCalendar> calendars, {
+    int departureOffsetSeconds = 0,
+  }) {
+    final offset = Duration(seconds: departureOffsetSeconds);
+    final date = _dateOnly(earliest.subtract(offset));
     final result = <FrequencyBoardingWindow>[];
-    final lastDay = _dateOnly(latest).difference(date).inDays;
+    final lastDay = _dateOnly(latest.subtract(offset)).difference(date).inDays;
     for (var dayOffset = -1; dayOffset <= lastDay; dayOffset++) {
       final serviceDate = date.add(Duration(days: dayOffset));
       for (final window in headways) {
         if (!calendars[window.calendarId]!.runsOn(serviceDate)) continue;
-        final start = serviceDate.add(Duration(seconds: window.startSeconds));
-        final end = serviceDate.add(Duration(seconds: window.endSeconds));
+        final start = serviceDate
+            .add(Duration(seconds: window.startSeconds))
+            .add(offset);
+        final end = serviceDate
+            .add(Duration(seconds: window.endSeconds))
+            .add(offset);
         if (!earliest.isBefore(end) || start.isAfter(latest)) continue;
         result.add(
           FrequencyBoardingWindow(
@@ -392,6 +425,11 @@ final class RideEdge {
     required this.toStopId,
     required this.serviceId,
     required this.travelSeconds,
+    this.sequence,
+    this.departureOffsetSeconds = 0,
+    this.dwellSeconds = 0,
+    this.pickupAllowed = true,
+    this.dropOffAllowed = true,
   });
 
   factory RideEdge.fromJson(Map<String, Object?> json) {
@@ -400,6 +438,15 @@ final class RideEdge {
       toStopId: _string(json, 'toStopId'),
       serviceId: _string(json, 'serviceId'),
       travelSeconds: _integer(json, 'travelSeconds'),
+      sequence: json['sequence'] == null ? null : _integer(json, 'sequence'),
+      departureOffsetSeconds: json['departureOffsetSeconds'] == null
+          ? 0
+          : _integer(json, 'departureOffsetSeconds'),
+      dwellSeconds: json['dwellSeconds'] == null
+          ? 0
+          : _integer(json, 'dwellSeconds'),
+      pickupAllowed: json['pickupAllowed'] as bool? ?? true,
+      dropOffAllowed: json['dropOffAllowed'] as bool? ?? true,
     );
   }
 
@@ -407,6 +454,13 @@ final class RideEdge {
   final String toStopId;
   final String serviceId;
   final int travelSeconds;
+
+  /// Position in an ordered bus timing profile; null retains legacy rail edges.
+  final int? sequence;
+  final int departureOffsetSeconds;
+  final int dwellSeconds;
+  final bool pickupAllowed;
+  final bool dropOffAllowed;
 }
 
 final class TransferEdge {

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:transitkl/data/routing/routing_graph_repository.dart';
+import 'package:transitkl/data/routing/journey_search_executor.dart';
+import 'package:transitkl/domain/routing/journey_planner.dart';
+import 'package:transitkl/domain/search/journey_search_service.dart';
 import 'package:transitkl/presentation/journey_planner/journey_planner_screen.dart';
 
 void main() {
@@ -12,6 +15,7 @@ void main() {
       MaterialApp(
         home: JourneyPlannerScreen(
           data: data!,
+          searchRunner: _testSearch,
           initialDeparture: DateTime(2026, 11, 2, 8),
         ),
       ),
@@ -42,6 +46,11 @@ void main() {
     await tester.pump();
 
     final button = find.byKey(const Key('find-journey-button'));
+    await tester.scrollUntilVisible(
+      button,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(tester.widget<FilledButton>(button).onPressed, isNotNull);
     await tester.ensureVisible(button);
     await tester.tap(button);
@@ -68,6 +77,7 @@ void main() {
       MaterialApp(
         home: JourneyPlannerScreen(
           data: data!,
+          searchRunner: _testSearch,
           initialDeparture: DateTime(2026, 11, 7, 8),
         ),
       ),
@@ -94,6 +104,11 @@ void main() {
     await tester.tap(find.text('Sunu-monash').last);
     await tester.pump();
     final button = find.byKey(const Key('find-journey-button'));
+    await tester.scrollUntilVisible(
+      button,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(tester.widget<FilledButton>(button).onPressed, isNotNull);
     await tester.ensureVisible(button);
     await tester.tap(button);
@@ -105,4 +120,57 @@ void main() {
     expect(find.text('1 transfer'), findsOneWidget);
     expect(find.byKey(const Key('route-preference-field')), findsNothing);
   });
+
+  testWidgets(
+    'published bus stop search shows T200 and the partial coverage notice',
+    (tester) async {
+      final data = await tester.runAsync(AssetRoutingGraphRepository().load);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JourneyPlannerScreen(
+            data: data!,
+            initialDeparture: DateTime(2026, 11, 8, 8),
+            searchRunner: _testSearch,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byKey(const Key('bus-coverage-notice')), findsOneWidget);
+      expect(find.textContaining('138 published routes'), findsOneWidget);
+      await tester.enterText(
+        find.byKey(const Key('origin-station-field')),
+        'SL311',
+      );
+      await tester.pump();
+      await tester.tap(find.text('SL311 LRT Gombak').last);
+      await tester.pump();
+      await tester.enterText(
+        find.byKey(const Key('destination-station-field')),
+        'SL162',
+      );
+      await tester.pump();
+      await tester.tap(find.text('SL162 HUB UIA').last);
+      await tester.pump();
+      final button = find.byKey(const Key('find-journey-button'));
+      await tester.scrollUntilVisible(
+        button,
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pumpAndSettle();
+      expect(find.text('Recommended journey'), findsOneWidget);
+      expect(find.text('T200'), findsOneWidget);
+      expect(find.text('0 transfers'), findsOneWidget);
+    },
+  );
 }
+
+// Keep real domain routing but avoid the worker isolate inside the fake widget clock.
+Future<Journey?> _testSearch(JourneySearchRequest request) async =>
+    JourneySearchService(request.graph).search(
+      origin: request.origin,
+      destination: request.destination,
+      departure: request.departure,
+    );

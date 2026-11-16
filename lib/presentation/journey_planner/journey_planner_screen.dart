@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../data/routing/routing_graph_repository.dart';
+import '../../data/routing/journey_search_executor.dart';
 import '../../domain/routing/journey_planner.dart';
 import '../../domain/routing/routing_graph.dart';
 import '../../domain/search/journey_search_service.dart';
@@ -9,11 +10,13 @@ class JourneyPlannerScreen extends StatefulWidget {
   const JourneyPlannerScreen({
     required this.data,
     this.initialDeparture,
+    this.searchRunner = runJourneySearch,
     super.key,
   });
 
   final TransitDataBundle data;
   final DateTime? initialDeparture;
+  final JourneySearchRunner searchRunner;
 
   @override
   State<JourneyPlannerScreen> createState() => _JourneyPlannerScreenState();
@@ -26,6 +29,9 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
   StationGroup? _destination;
   Journey? _journey;
   bool _searched = false;
+  bool _searching = false;
+  String? _searchError;
+  int _requestVersion = 0;
 
   @override
   void initState() {
@@ -60,11 +66,21 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              'Rail, KTM Komuter and Sunway BRT, fully offline.',
+              'Rail, KTM Komuter, Sunway BRT and published Rapid Bus routes, offline.',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 16),
             _FeedStatusCard(feeds: widget.data.sources),
+            if (widget.data.sources.any(
+              (feed) => feed.id == 'prasarana_rapid_bus_kl',
+            )) ...[
+              const SizedBox(height: 8),
+              const Text(
+                'Partial bus coverage: only officially published routes and usable trips. '
+                'Not all Klang Valley buses or rail/bus connections are included.',
+                key: Key('bus-coverage-notice'),
+              ),
+            ],
             const SizedBox(height: 20),
             _StationField(
               fieldKey: const Key('origin-station-field'),
@@ -112,17 +128,25 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
             const SizedBox(height: 16),
             FilledButton.icon(
               key: const Key('find-journey-button'),
-              onPressed: _origin != null && _destination != null
+              onPressed: !_searching && _origin != null && _destination != null
                   ? _findJourney
                   : null,
-              icon: const Icon(Icons.route),
-              label: const Padding(
+              icon: _searching
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.route),
+              label: Padding(
                 padding: EdgeInsets.symmetric(vertical: 12),
-                child: Text('Find journey'),
+                child: Text(_searching ? 'Finding journey...' : 'Find journey'),
               ),
             ),
             const SizedBox(height: 24),
-            if (_journey case final journey?)
+            if (_searchError != null)
+              Text(_searchError!, key: const Key('journey-search-error'))
+            else if (_journey case final journey?)
               JourneyResultView(graph: widget.data.graph, journey: journey)
             else if (_searched)
               const _NoJourneyCard(),
@@ -135,9 +159,12 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
   void _clearResult() {
     _journey = null;
     _searched = false;
+    _searchError = null;
+    _requestVersion++;
   }
 
-  void _findJourney() {
+  Future<void> _findJourney() async {
+    if (_searching) return;
     final origin = _origin!;
     final destination = _destination!;
     if (origin == destination) {
@@ -146,14 +173,36 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
       );
       return;
     }
+    final version = ++_requestVersion;
     setState(() {
-      _journey = _searchService.search(
-        origin: origin,
-        destination: destination,
-        departure: _departure,
-      );
-      _searched = true;
+      _searching = true;
+      _journey = null;
+      _searchError = null;
+      _searched = false;
     });
+    try {
+      final result = await widget.searchRunner(
+        JourneySearchRequest(
+          graph: widget.data.graph,
+          origin: origin,
+          destination: destination,
+          departure: _departure,
+        ),
+      );
+      if (!mounted || version != _requestVersion) return;
+      setState(() {
+        _journey = result;
+        _searched = true;
+      });
+    } on Object {
+      if (!mounted || version != _requestVersion) return;
+      setState(() {
+        _searchError =
+            'Journey search could not be completed. Please try again.';
+      });
+    } finally {
+      if (mounted) setState(() => _searching = false);
+    }
   }
 
   Future<void> _selectDate() async {
@@ -202,33 +251,42 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
       showDragHandle: true,
       builder: (context) => Padding(
         padding: const EdgeInsets.fromLTRB(24, 4, 24, 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Offline transit data',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Rapid Rail and Sunway BRT use estimated waits from published headways. '
-              'KTM Komuter uses exact scheduled departures. Walking allowances '
-              'are estimates. Live delays and cancellations are not included.',
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Some Komuter trips terminate early. Results follow the supplied timetable, including service gaps.',
-            ),
-            const SizedBox(height: 8),
-            const Text('Source: data.gov.my • CC BY 4.0'),
-            const SizedBox(height: 8),
-            for (final feed in widget.data.sources)
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text(
-                '${feed.displayName}: ${_formatDate(feed.serviceDateStart)} '
-                'to ${_formatDate(feed.serviceDateEnd)}.',
+                'Offline transit data',
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-          ],
+              const SizedBox(height: 12),
+              Text(
+                'Rapid Rail, Sunway BRT and frequency-based buses use estimated waits from published headways. '
+                'KTM Komuter uses exact scheduled departures. Walking allowances '
+                'are estimates. Live delays and cancellations are not included.',
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Some Komuter trips terminate early. Results follow the supplied timetable, including service gaps.',
+              ),
+              for (final feed in widget.data.sources.where(
+                (feed) => feed.coverageNote.isNotEmpty,
+              ))
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(feed.coverageNote),
+                ),
+              const SizedBox(height: 8),
+              const Text('Source: data.gov.my • CC BY 4.0'),
+              const SizedBox(height: 8),
+              for (final feed in widget.data.sources)
+                Text(
+                  '${feed.displayName}: ${_formatDate(feed.serviceDateStart)} '
+                  'to ${_formatDate(feed.serviceDateEnd)}.',
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -327,9 +385,7 @@ class _StationField extends StatelessWidget {
       optionsBuilder: (value) {
         final query = value.text.trim().toLowerCase();
         if (query.isEmpty) return const Iterable<StationGroup>.empty();
-        return stations
-            .where((station) => station.matchesQuery(query))
-            .take(12);
+        return searchStations(stations, query);
       },
       onSelected: onChanged,
       fieldViewBuilder: (context, controller, focusNode, onSubmitted) {
@@ -342,7 +398,7 @@ class _StationField extends StatelessWidget {
           onChanged: (_) => onChanged(null),
           decoration: InputDecoration(
             labelText: label,
-            hintText: 'Search station',
+            hintText: 'Search station or bus stop',
             prefixIcon: Icon(icon),
             border: const OutlineInputBorder(),
           ),
@@ -376,6 +432,7 @@ class _FeedStatusCard extends StatelessWidget {
                   for (final feed in feeds)
                     Text(
                       '${feed.displayName} • '
+                      '${feed.id == 'prasarana_rapid_bus_kl' ? '${feed.includedRouteCount} published routes • ' : ''}'
                       '${DateUtils.dateOnly(DateTime.now()).isAfter(feed.serviceDateEnd) ? 'expired' : 'valid until'} '
                       '${_formatDate(feed.serviceDateEnd)}',
                     ),
@@ -511,7 +568,8 @@ class _NoJourneyCard extends StatelessWidget {
             const Expanded(
               child: Text(
                 'No journey was found within six hours. Try another date, '
-                'time, or station.',
+                'time, or stop. Missing published data or an unconfigured walking '
+                'connection can also prevent a result.',
               ),
             ),
           ],

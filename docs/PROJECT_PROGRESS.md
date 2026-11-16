@@ -1,11 +1,12 @@
 # TransitKL project progress
 
-Last updated: 7 November 2026
+Last updated: 9 November 2026
 
 ## Current position
 
-TransitKL supports rail, Klang Valley KTM Komuter, and Sunway BRT in the usable
-Flutter application. The two audited source feeds travel through the complete
+TransitKL supports rail, Klang Valley KTM Komuter, Sunway BRT and 138 officially
+published Rapid Bus KL routes in the usable Flutter application. The three
+audited source feeds travel through the complete
 path from GTFS audit to a Recommended offline journey result:
 
 ```text
@@ -30,22 +31,24 @@ updated; it is no longer the main daily implementation task.
 | 5. First usable Flutter vertical slice | Complete | Offline asset loading, station search and journey results |
 | 6a. KTM Komuter integration | Implemented; field validation remains | Audited exact timetables, two Klang Valley routes, curated transfers and per-feed validity |
 | 6b. Sunway BRT connectivity | Implemented; walking validation remains | Seven stops and connections to LRT at USJ 7 and KTM at Setia Jaya |
-| 6c. Selected regular Rapid Bus integration | Next | Bus feed selection, audit, merging and rail/bus links |
+| 6c. Published Rapid Bus KL integration | Implemented; coverage and field limits remain | 138 source routes, ordered bus profiles, duplicate BRT excluded, 36 explicit bus/rail pairs and visible partial-coverage notice |
 | 7. Remaining MVP product features | Not started | Favourites, timetable view, settings and polished empty/error states |
 | 8. Evaluation and release preparation | Not started | Performance study, usability testing, final report evidence and release build |
 
-The five foundation/application milestones, KTM and Sunway BRT integration
-are implemented. This is not a percentage estimate: regular Rapid Bus,
-product features, field validation, evaluation, and report evidence still require
-substantial work.
+The five foundation/application milestones and KTM, BRT and published Rapid Bus
+integration are implemented. This is not a percentage estimate: product features,
+field validation, evaluation and report evidence still require substantial work.
+Full Klang Valley bus coverage is not claimed or available from this snapshot.
 
 ## What is working now
 
-- The app starts offline with 244 operator stop IDs, 20 directional services,
-  164 exact KTM trips, five calendars, and 98 directed walking links.
+- The app starts offline with 4,343 operator stop IDs, 443 directional/timing
+  services, 167 exact trips (164 KTM and three bus), seven calendars, 18,327
+  directed ride edges and 170 directed walking links. Service counts are not line counts.
 - Transfer-connected same-name platforms share a search entry. Disconnected
   namesakes such as KTM Sentul and LRT Sentul remain distinct.
-- Origin and destination fields provide filtered station suggestions.
+- Origin and destination fields search stations and bus stops. Exact station
+  matches rank first, before substring bus matches.
 - Users choose a departure date and time inside the feed validity range.
 - The real modified Dijkstra engine returns route, wait, ride, walk and
   interchange details.
@@ -60,28 +63,43 @@ substantial work.
   [routing-validation-2026-11-03.md](routing-validation-2026-11-03.md).
 - The screen displays total duration, arrival time, transfers and line colours.
 - Static-data limitations, validity and attribution are visible in the app.
-- Rapid Rail and KTM expiry dates are shown separately. The date picker does not
+- Rapid Rail, KTM and Rapid Bus expiry dates are shown separately. The date picker does not
   override each operator's own calendar validity.
-- Eighteen curated transfer pairs cover thirteen interchange areas. Walking
-  durations are conservative estimates requiring field validation.
+- The original 18 curated rail/BRT/KTM pairs are retained and 36 explicit bus/rail
+  pairs are added. Walking durations remain estimates requiring field validation;
+  the graph is not a measured pedestrian or accessibility network.
 - Sunway BRT connects to LRT at USJ 7 with three minutes walking, and to KTM at
   Setia Jaya with six minutes walking, in both directions. BRT uses the existing
   Rapid Rail source export and has not been duplicated as another feed.
 - Automated tests cover the pipeline, graph asset, routing, station grouping
   real KTM-only and cross-operator journeys, expiry, short-turn gaps, and a real
   Gombak-to-Kajang screen flow.
+- Bus routing preserves variants, loops, relative downstream windows, dwell and
+  pickup/drop-off restrictions. Three trips with no published stop sequence are
+  warned about and omitted, not replaced with invented service.
+- Mobile/desktop searches run in a worker isolate, with a busy indicator,
+  stale-result protection and retryable failure feedback. Station platforms use
+  one multi-source search; shared off-board Pareto frontiers reduce repeated work.
 
-Latest verification: 31 Flutter tests and 17 Python tests passed; static
-analysis found no issues. The merged asset checksum matches the generated
-network graph. The earlier KTM desktop smoke baseline after scheduled-instance caching was
-median 156.09 ms and p95 392.89 ms over 30 station searches; phone performance
-still needs measurement.
+Latest bus verification and performance measurements are recorded in
+[rapid-bus-validation-2026-11-09.md](rapid-bus-validation-2026-11-09.md).
+The final run passed 46 Flutter tests and 23 Python tests, with clean static
+analysis and a successful compiled Flutter bundle. The processed and packaged
+graph checksums match.
+The final eight-pair desktop smoke run measured median 877.34 ms and p95
+5292.84 ms over 40 searches. Some full-network searches remain multi-second;
+the worker keeps the mobile UI responsive, but phone profiling and optimization
+remain part of the next validation work.
+The earlier rail/KTM-only desktop baseline (156.09 ms median, 392.89 ms p95)
+is historical and must not be presented as current full-network performance.
+Phone performance still needs measurement.
 
 ## What is not implemented yet
 
-- Regular Rapid KL buses and MRT feeder buses are not included yet; Sunway BRT
-  is included. ETS, intercity, northern and
-  southern Komuter services outside the Klang Valley scope are excluded.
+- Complete Klang Valley bus coverage is not available. Only published, routable
+  data from `rapid-bus-kl` is included. The separate MRT feeder feed is not bundled,
+  and not every rail/bus walking connection is configured. ETS, intercity, northern
+  and southern Komuter services outside the Klang Valley scope are excluded.
 - The current KTM timetable expires on **17 November 2026**. Refresh, audit,
   rebuild, and merge before a later demonstration.
 - The supplied Komuter feed has short-turn trips and directional/time gaps.
@@ -110,14 +128,15 @@ First run the updated app and manually inspect these searches on a phone:
 4. Putra Heights to Pasar Seni, 3 November 08:00 (direct KJL regression).
 5. Putra Heights to SunU–Monash, 7 November 08:00 (LRT/BRT through USJ 7).
 6. Sunway Lagoon to Klang, 7 November 09:00 (BRT/KTM through Setia Jaya).
+7. SL311 LRT Gombak to SL162 Hub UIA, 9 November 08:00 (direct T200 bus).
+8. KLCC to SL162 Hub UIA and reverse, 9 November 08:00 (rail/bus via Gombak).
 
-Then add a deliberately limited Rapid Bus or MRT feeder service set. Audit the
-new feed, extend the existing merge configuration, curate rail/bus walking
-links, verify scheduled connections and the six-hour search horizon, and bundle
-the resulting network. [ADR 0006](architecture/0006-ktm-komuter-integration.md)
-contains the implementation and coverage rationale.
-The completed BRT connection and validation are recorded in
-[ADR 0007](architecture/0007-sunway-brt-interchanges.md).
+First refresh KTM before its expiry and measure the larger bus graph on the target
+phone in airplane mode. Validate the selected walking links and tune performance
+without discarding useful routing labels or weakening the convenience objective.
+The bus scope and implementation are recorded in
+[ADR 0008](architecture/0008-rapid-bus-published-coverage.md).
 
-After that, implement favourites and a timetable screen, then perform
-performance and usability evaluation for the capstone report.
+Next implement favourites and a timetable screen, followed by performance and
+usability evaluation for the capstone report. Additional MRT feeder coverage or
+walking links can be separate bounded extensions, not a claim of universal coverage.

@@ -21,6 +21,10 @@ Future<void> main(List<String> arguments) async {
       ('batu caves', 'klcc'),
       ('gombak', 'batu caves'),
     ],
+    if (search.stations.any((station) => station.id == 'sl162 hub uia')) ...[
+      ('sl311 lrt gombak', 'sl162 hub uia'),
+      ('klcc', 'sl162 hub uia'),
+    ],
   ];
   final departure = DateTime(2026, 11, 3, 8);
   final samples = <int>[];

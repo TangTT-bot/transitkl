@@ -31,9 +31,13 @@ final class JourneyPlanner {
     // Input record order must not change an otherwise tied recommendation.
     for (final edges in _ridesFrom.values) {
       edges.sort(
-        (a, b) => '${a.serviceId}:${a.toStopId}:${a.travelSeconds}'.compareTo(
-          '${b.serviceId}:${b.toStopId}:${b.travelSeconds}',
-        ),
+        (
+          a,
+          b,
+        ) => '${a.serviceId}:${a.sequence}:${a.toStopId}:${a.travelSeconds}'
+            .compareTo(
+              '${b.serviceId}:${b.sequence}:${b.toStopId}:${b.travelSeconds}',
+            ),
       );
     }
     for (final edges in _transfersFrom.values) {
@@ -61,9 +65,24 @@ final class JourneyPlanner {
     required String originStopId,
     required String destinationStopId,
     required DateTime departure,
+  }) => planBetween(
+    originStopIds: [originStopId],
+    destinationStopIds: [destinationStopId],
+    departure: departure,
+  );
+
+  /// One multi-source search replaces the Cartesian product of station platforms.
+  Journey? planBetween({
+    required Iterable<String> originStopIds,
+    required Iterable<String> destinationStopIds,
+    required DateTime departure,
   }) {
-    if (!graph.stops.containsKey(originStopId) ||
-        !graph.stops.containsKey(destinationStopId)) {
+    final origins = originStopIds.toSet().toList()..sort();
+    final destinations = destinationStopIds.toSet();
+    if (origins.isEmpty ||
+        destinations.isEmpty ||
+        origins.any((id) => !graph.stops.containsKey(id)) ||
+        destinations.any((id) => !graph.stops.containsKey(id))) {
       throw ArgumentError('Origin and destination must be known stops.');
     }
 
@@ -113,25 +132,40 @@ final class JourneyPlanner {
       queue.add(label);
     }
 
-    relax(
-      state: _State(originStopId, false, null),
-      elapsedSeconds: 0,
-      transfers: 0,
-      walkingSeconds: 0,
-      parent: null,
-      segment: null,
-    );
+    for (final origin in origins) {
+      relax(
+        state: _State(origin, false, null),
+        elapsedSeconds: 0,
+        transfers: 0,
+        walkingSeconds: 0,
+        parent: null,
+        segment: null,
+      );
+    }
 
     while (queue.isNotEmpty) {
       final label = queue.removeFirst();
       if (!label.active) continue;
-      if (label.state.stopId == destinationStopId && label.state.canAlight) {
+      if (destinations.contains(label.state.stopId) && label.state.canAlight) {
         return _buildJourney(label, departure);
+      }
+
+      final onBoard = label.state.activeRunId != null;
+      if (onBoard && label.state.canAlight) {
+        // Share a Pareto frontier after alighting, but keep useful through rides.
+        relax(
+          state: _State(label.state.stopId, true, null),
+          elapsedSeconds: label.cost.elapsedSeconds,
+          transfers: label.cost.transfers,
+          walkingSeconds: label.cost.walkingSeconds,
+          parent: label,
+          segment: null,
+        );
       }
 
       for (final edge
           in _transfersFrom[label.state.stopId] ?? const <TransferEdge>[]) {
-        if (!label.state.canAlight) continue;
+        if (onBoard || !label.state.canAlight) continue;
         relax(
           state: _State(edge.toStopId, label.state.hasBoarded, null),
           elapsedSeconds: label.cost.elapsedSeconds + edge.walkSeconds,
@@ -179,16 +213,25 @@ final class JourneyPlanner {
       );
       for (final edge in _ridesFrom[label.state.stopId] ?? const <RideEdge>[]) {
         final journeyId = 'frequency:${edge.serviceId}';
-        final continuesRun = label.state.activeRunId == journeyId;
-        if (!continuesRun && !label.state.canAlight) continue;
+        final fromRunId = edge.sequence == null
+            ? journeyId
+            : '$journeyId:position:${edge.sequence}';
+        final toRunId = edge.sequence == null
+            ? journeyId
+            : '$journeyId:position:${edge.sequence! + 1}';
+        final continuesRun = label.state.activeRunId == fromRunId;
+        if (!continuesRun && (onBoard || !edge.pickupAllowed)) {
+          continue;
+        }
         int? wait = continuesRun ? 0 : null;
         if (!continuesRun) {
           final windows = frequencyWindows.putIfAbsent(
-            edge.serviceId,
+            '${edge.serviceId}:${edge.departureOffsetSeconds}',
             () => graph.services[edge.serviceId]!.boardingWindowsBetween(
               departure,
               latest,
               graph.serviceCalendars,
+              departureOffsetSeconds: edge.departureOffsetSeconds,
             ),
           );
           final nowSeconds = currentTime.millisecondsSinceEpoch ~/ 1000;
@@ -203,12 +246,14 @@ final class JourneyPlanner {
         relaxRide(
           toStopId: edge.toStopId,
           serviceId: edge.serviceId,
-          runId: journeyId,
+          runId: toRunId,
           vehicleJourneyId: journeyId,
           scheduledTripId: null,
           waitSeconds: wait,
-          rideSeconds: edge.travelSeconds,
+          rideSeconds:
+              edge.travelSeconds + (continuesRun ? edge.dwellSeconds : 0),
           continuesRun: continuesRun,
+          canAlight: edge.dropOffAllowed,
         );
       }
 
@@ -246,8 +291,7 @@ final class JourneyPlanner {
         if (instance.departure < nowEpoch) continue;
         final segment = instance.segment;
         final continuesRun = label.state.activeRunId == instance.fromRunId;
-        if (!continuesRun &&
-            (!label.state.canAlight || !segment.from.pickupAllowed)) {
+        if (!continuesRun && (onBoard || !segment.from.pickupAllowed)) {
           continue;
         }
         final wait = continuesRun ? 0 : instance.departure - nowEpoch;
@@ -274,7 +318,7 @@ final class JourneyPlanner {
     final segments = <_PathSegment>[];
     var cursor = destination;
     while (cursor.parent != null) {
-      segments.add(cursor.segment!);
+      if (cursor.segment != null) segments.add(cursor.segment!);
       cursor = cursor.parent!;
     }
     final legs = <JourneyLeg>[];
@@ -290,7 +334,8 @@ final class JourneyPlanner {
       switch (segment) {
         case _RideSegment():
           if (transitBuilder?.vehicleJourneyId == segment.vehicleJourneyId &&
-              segment.waitSeconds == 0) {
+              segment.waitSeconds == 0 &&
+              !segment.isTransferBoarding) {
             transitBuilder!.add(segment);
           } else {
             flushTransit();
