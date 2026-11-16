@@ -1,6 +1,6 @@
 # TransitKL project progress
 
-Last updated: 9 November 2026
+Last updated: 16 November 2026
 
 ## Current position
 
@@ -32,7 +32,8 @@ updated; it is no longer the main daily implementation task.
 | 6a. KTM Komuter integration | Implemented; field validation remains | Audited exact timetables, two Klang Valley routes, curated transfers and per-feed validity |
 | 6b. Sunway BRT connectivity | Implemented; walking validation remains | Seven stops and connections to LRT at USJ 7 and KTM at Setia Jaya |
 | 6c. Published Rapid Bus KL integration | Implemented; coverage and field limits remain | 138 source routes, ordered bus profiles, duplicate BRT excluded, 36 explicit bus/rail pairs and visible partial-coverage notice |
-| 7. Remaining MVP product features | Not started | Favourites, timetable view, settings and polished empty/error states |
+| 7a. Offline favourites | Implemented | Save, reopen and remove station/stop favourites and directional journey pairs; stored independently of the graph |
+| 7b. Remaining MVP product features | Next | Timetable view, settings and further empty/error state polish |
 | 8. Evaluation and release preparation | Not started | Performance study, usability testing, final report evidence and release build |
 
 The five foundation/application milestones and KTM, BRT and published Rapid Bus
@@ -49,6 +50,9 @@ Full Klang Valley bus coverage is not claimed or available from this snapshot.
   namesakes such as KTM Sentul and LRT Sentul remain distinct.
 - Origin and destination fields search stations and bus stops. Exact station
   matches rank first, before substring bus matches.
+- Users can save stations and directional journey pairs on the device. Reopening
+  them fills the planner, and the next search uses the selected departure time
+  and current offline data. Stops are restored by ID, not by similar names.
 - Users choose a departure date and time inside the feed validity range.
 - The real modified Dijkstra engine returns route, wait, ride, walk and
   interchange details.
@@ -109,7 +113,7 @@ Phone performance still needs measurement.
   database remains a preprocessing artifact; it can replace the JSON runtime
   source later through the existing repository boundary if the final proposal
   specifically requires runtime SQLite queries.
-- Favourites and preferences are not persisted.
+- General app settings are not persisted; favourites have their own local store.
 - There is no dedicated static timetable screen.
 - The algorithm weights still need commuter feedback and evaluation; they are
   configurable starting values. The app returns one Recommended result and does
@@ -137,6 +141,6 @@ without discarding useful routing labels or weakening the convenience objective.
 The bus scope and implementation are recorded in
 [ADR 0008](architecture/0008-rapid-bus-published-coverage.md).
 
-Next implement favourites and a timetable screen, followed by performance and
+Next implement a timetable screen, followed by performance and
 usability evaluation for the capstone report. Additional MRT feeder coverage or
 walking links can be separate bounded extensions, not a claim of universal coverage.

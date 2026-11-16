@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'data/favourites/shared_preferences_favourites_repository.dart';
 import 'data/routing/routing_graph_repository.dart';
+import 'domain/favourites/favourites.dart';
 import 'presentation/journey_planner/journey_planner_screen.dart';
 
 void main() {
@@ -8,9 +10,10 @@ void main() {
 }
 
 class TransitKlApp extends StatelessWidget {
-  const TransitKlApp({super.key, this.repository});
+  const TransitKlApp({super.key, this.repository, this.favouritesRepository});
 
   final RoutingGraphRepository? repository;
+  final FavouritesRepository? favouritesRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +26,21 @@ class TransitKlApp extends StatelessWidget {
       ),
       home: _TransitDataLoader(
         repository: repository ?? AssetRoutingGraphRepository(),
+        favouritesRepository:
+            favouritesRepository ?? SharedPreferencesFavouritesRepository(),
       ),
     );
   }
 }
 
 class _TransitDataLoader extends StatefulWidget {
-  const _TransitDataLoader({required this.repository});
+  const _TransitDataLoader({
+    required this.repository,
+    required this.favouritesRepository,
+  });
 
   final RoutingGraphRepository repository;
+  final FavouritesRepository favouritesRepository;
 
   @override
   State<_TransitDataLoader> createState() => _TransitDataLoaderState();
@@ -52,7 +61,10 @@ class _TransitDataLoaderState extends State<_TransitDataLoader> {
       future: _loadFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return JourneyPlannerScreen(data: snapshot.requireData);
+          return JourneyPlannerScreen(
+            data: snapshot.requireData,
+            favouritesRepository: widget.favouritesRepository,
+          );
         }
         if (snapshot.hasError) {
           return Scaffold(

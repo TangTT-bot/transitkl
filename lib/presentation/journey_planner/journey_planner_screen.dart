@@ -1,22 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-import '../../data/routing/routing_graph_repository.dart';
 import '../../data/routing/journey_search_executor.dart';
+import '../../data/routing/routing_graph_repository.dart';
+import '../../domain/favourites/favourites.dart';
 import '../../domain/routing/journey_planner.dart';
 import '../../domain/routing/routing_graph.dart';
 import '../../domain/search/journey_search_service.dart';
+import '../favourites/favourites_controller.dart';
+import '../favourites/favourites_screen.dart';
 
 class JourneyPlannerScreen extends StatefulWidget {
   const JourneyPlannerScreen({
     required this.data,
     this.initialDeparture,
     this.searchRunner = runJourneySearch,
+    this.favouritesRepository,
     super.key,
   });
 
   final TransitDataBundle data;
   final DateTime? initialDeparture;
   final JourneySearchRunner searchRunner;
+  final FavouritesRepository? favouritesRepository;
 
   @override
   State<JourneyPlannerScreen> createState() => _JourneyPlannerScreenState();
@@ -24,6 +31,9 @@ class JourneyPlannerScreen extends StatefulWidget {
 
 class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
   late final JourneySearchService _searchService;
+  FavouritesController? _favourites;
+  int _originFieldVersion = 0;
+  int _destinationFieldVersion = 0;
   late DateTime _departure;
   StationGroup? _origin;
   StationGroup? _destination;
@@ -37,18 +47,44 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
   void initState() {
     super.initState();
     _searchService = JourneySearchService(widget.data.graph);
+    if (widget.favouritesRepository case final repository?) {
+      final controller = FavouritesController(
+        repository,
+        _searchService.stations,
+      );
+      _favourites = controller;
+      unawaited(controller.load());
+      controller.addListener(_refreshFavourites);
+    }
     _departure = _initialDeparture(
       widget.data.feed,
       widget.initialDeparture ?? DateTime.now(),
     );
   }
 
+  void _refreshFavourites() => setState(() {});
+
+  @override
+  void dispose() {
+    _favourites?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final favourites = _favourites;
+    final origin = _origin;
+    final destination = _destination;
     return Scaffold(
       appBar: AppBar(
         title: const Text('TransitKL'),
         actions: [
+          if (favourites != null)
+            IconButton(
+              tooltip: 'Favourites',
+              onPressed: () => _openFavourites(favourites),
+              icon: const Icon(Icons.star_outline),
+            ),
           IconButton(
             tooltip: 'About this data',
             onPressed: _showDataInformation,
@@ -83,10 +119,17 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
             ],
             const SizedBox(height: 20),
             _StationField(
+              key: ValueKey(('from', _originFieldVersion)),
               fieldKey: const Key('origin-station-field'),
               label: 'From',
               icon: Icons.trip_origin,
               stations: _searchService.stations,
+              selection: origin,
+              favouriteButton: _stationFavouriteButton(
+                favourites,
+                origin,
+                'From',
+              ),
               onChanged: (station) => setState(() {
                 _origin = station;
                 _clearResult();
@@ -94,10 +137,17 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
             ),
             const SizedBox(height: 12),
             _StationField(
+              key: ValueKey(('to', _destinationFieldVersion)),
               fieldKey: const Key('destination-station-field'),
               label: 'To',
               icon: Icons.location_on_outlined,
               stations: _searchService.stations,
+              selection: destination,
+              favouriteButton: _stationFavouriteButton(
+                favourites,
+                destination,
+                'To',
+              ),
               onChanged: (station) => setState(() {
                 _destination = station;
                 _clearResult();
@@ -143,6 +193,30 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
                 child: Text(_searching ? 'Finding journey...' : 'Find journey'),
               ),
             ),
+            if (favourites != null &&
+                origin != null &&
+                destination != null &&
+                origin != destination)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: favourites.canEdit
+                      ? () => _saveFavourite(
+                          favourites.toggleJourney(origin, destination),
+                        )
+                      : null,
+                  icon: Icon(
+                    favourites.hasJourney(origin, destination)
+                        ? Icons.star
+                        : Icons.star_outline,
+                  ),
+                  label: Text(
+                    favourites.hasJourney(origin, destination)
+                        ? 'Remove saved journey'
+                        : 'Save journey',
+                  ),
+                ),
+              ),
             const SizedBox(height: 24),
             if (_searchError != null)
               Text(_searchError!, key: const Key('journey-search-error'))
@@ -154,6 +228,52 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
         ),
       ),
     );
+  }
+
+  Widget? _stationFavouriteButton(
+    FavouritesController? favourites,
+    StationGroup? station,
+    String field,
+  ) {
+    if (favourites == null || station == null) return null;
+    final saved = favourites.hasStation(station);
+    return IconButton(
+      tooltip: saved
+          ? 'Remove $field stop from favourites'
+          : 'Save $field stop',
+      icon: Icon(saved ? Icons.star : Icons.star_outline),
+      onPressed: favourites.canEdit
+          ? () => _saveFavourite(favourites.toggleStation(station))
+          : null,
+    );
+  }
+
+  Future<void> _saveFavourite(Future<bool> result) async {
+    if (await result || !mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Could not update favourites. Try again.')),
+    );
+  }
+
+  Future<void> _openFavourites(FavouritesController favourites) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    final selection = await Navigator.of(context).push<FavouriteSelection>(
+      MaterialPageRoute(
+        builder: (context) => FavouritesScreen(controller: favourites),
+      ),
+    );
+    if (!mounted || selection == null) return;
+    setState(() {
+      if (selection.origin case final origin?) {
+        _origin = origin;
+        _originFieldVersion++;
+      }
+      if (selection.destination case final destination?) {
+        _destination = destination;
+        _destinationFieldVersion++;
+      }
+      _clearResult();
+    });
   }
 
   void _clearResult() {
@@ -440,11 +560,14 @@ class _ScheduledWaitNotice extends StatelessWidget {
 
 class _StationField extends StatelessWidget {
   const _StationField({
+    super.key,
     required this.fieldKey,
     required this.label,
     required this.icon,
     required this.stations,
     required this.onChanged,
+    this.selection,
+    this.favouriteButton,
   });
 
   final Key fieldKey;
@@ -452,10 +575,13 @@ class _StationField extends StatelessWidget {
   final IconData icon;
   final List<StationGroup> stations;
   final ValueChanged<StationGroup?> onChanged;
+  final StationGroup? selection;
+  final Widget? favouriteButton;
 
   @override
   Widget build(BuildContext context) {
     return Autocomplete<StationGroup>(
+      initialValue: TextEditingValue(text: selection?.displayLabel ?? ''),
       displayStringForOption: (station) => station.displayLabel,
       optionsBuilder: (value) {
         final query = value.text.trim().toLowerCase();
@@ -475,6 +601,7 @@ class _StationField extends StatelessWidget {
             labelText: label,
             hintText: 'Search station or bus stop',
             prefixIcon: Icon(icon),
+            suffixIcon: favouriteButton,
             border: const OutlineInputBorder(),
           ),
         );

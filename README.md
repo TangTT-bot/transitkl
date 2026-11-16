@@ -24,6 +24,8 @@ The project has completed its first usable offline journey-planning milestone:
 - From and To suggestions label LRT, MRT, Monorail, Sunway BRT, KTM Komuter and
   Rapid Bus by the services that use each stop. Shared station groups show all
   their modes. A bus stop named after a station is still a separate stop.
+- Favourite stations and directed journey pairs are saved locally and can
+  refill the planner without internet access.
 
 The current app is an end-to-end vertical slice: official data passes through
 the audit/build pipeline, is bundled behind a repository interface, and is
@@ -54,9 +56,9 @@ Generated SQLite database and compact routing graph
         |
         v
 Bundled graph -> Flutter repository -> routing engine -> application screens
-        |
-        v
-Separate writable user database for favourites and preferences
+                                                              |
+                                                              v
+                                      Separate device-local favourites storage
 ```
 
 Downloaded feeds and generated databases are not committed. The small feed in
@@ -100,6 +102,20 @@ Recommended balances actual journey time with a ten-minute ranking penalty per
 vehicle change and additional reluctance to walk. This is the single search
 behaviour; no route mode selection is required. These scores never inflate
 the arrival time shown to the passenger.
+
+### Favourites
+
+After picking a station or bus stop, tap the star beside it to save the stop.
+Select both From and To, then tap **Save journey** to save that direction.
+Open **Favourites** from the star in the app bar. Use a saved station as
+From or To, or tap a saved journey to fill both fields. Check the departure
+time and tap **Find journey** to get a new Recommended result. Favourites can
+also be removed from the list.
+
+The app stores namespaced stop IDs in local preferences, separate from the
+bundled transit graph. It does not save journey results, timetable times or
+upload favourites. Saved stops that no longer resolve in an updated network
+remain visible as unavailable and can still be removed.
 
 The application currently uses Flutter's default Android minimum SDK, API 24.
 The proposal's API 23 statement should be updated or explicitly configured and
