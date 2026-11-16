@@ -21,6 +21,9 @@ The project has completed its first usable offline journey-planning milestone:
   are integrated. Missing bus trip sequences are reported and excluded.
 - Bus variants, loops and downstream operating times are preserved, with
   worker-isolate searches on mobile/desktop and exact-first autocomplete.
+- From and To suggestions label LRT, MRT, Monorail, Sunway BRT, KTM Komuter and
+  Rapid Bus by the services that use each stop. Shared station groups show all
+  their modes. A bus stop named after a station is still a separate stop.
 
 The current app is an end-to-end vertical slice: official data passes through
 the audit/build pipeline, is bundled behind a repository interface, and is

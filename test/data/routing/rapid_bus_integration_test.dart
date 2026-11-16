@@ -41,7 +41,10 @@ void main() {
     final busStops = search.stations
         .where((s) => s.stopIds.every((id) => id.startsWith(busPrefix)))
         .toList();
-    expect(busStops.map((s) => s.name).toSet(), hasLength(busStops.length));
+    expect(
+      busStops.map((s) => s.displayLabel).toSet(),
+      hasLength(busStops.length),
+    );
     final services = data.graph.services.values.where(
       (s) => s.id.startsWith(busPrefix),
     );

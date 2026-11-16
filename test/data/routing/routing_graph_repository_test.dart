@@ -32,6 +32,53 @@ void main() {
     },
   );
 
+  test(
+    'every named stop has a mode and nearby Klang stops stay distinct',
+    () async {
+      final data = await AssetRoutingGraphRepository().load();
+      final stations = JourneySearchService(data.graph).stations;
+      expect(stations.every((station) => station.modes.isNotEmpty), isTrue);
+
+      final station = searchStations(stations, 'Klang').first;
+      final busStop = searchStations(stations, 'BD28 KTM Klang').single;
+      expect(station.displayLabel, 'KLANG (KTM Komuter)');
+      expect(busStop.displayLabel, 'BD28 KTM KLANG (Rapid Bus)');
+      expect(station.stopIds, ['ktmb:54700']);
+      expect(busStop.stopIds, ['prasarana_rapid_bus_kl:1006000']);
+      expect(searchStations(stations, station.displayLabel).single, station);
+      expect(searchStations(stations, busStop.displayLabel).single, busStop);
+
+      final interchange = searchStations(stations, 'USJ7').first;
+      expect(interchange.displayLabel, 'USJ 7 (LRT + Sunway BRT)');
+      expect(
+        interchange.stopIds,
+        unorderedEquals([
+          'prasarana_rapid_rail:KJ31',
+          'prasarana_rapid_rail:BRT7',
+        ]),
+      );
+    },
+  );
+
+  test('labels Rapid Rail stops by their actual rail modes', () async {
+    final data = await AssetRoutingGraphRepository().load();
+    final stations = JourneySearchService(data.graph).stations;
+    String label(String id) =>
+        stations.singleWhere((station) => station.id == id).displayLabel;
+
+    expect(label('gombak'), 'Gombak (LRT)');
+    expect(label('stadium kajang'), 'Stadium Kajang (MRT)');
+    expect(label('medan tuanku'), 'MEDAN Tuanku (Monorail)');
+    expect(label('titiwangsa'), 'Titiwangsa (LRT + MRT + Monorail)');
+    expect(label('pasar seni'), 'PASAR SENI (LRT + MRT)');
+    expect(
+      stations.where(
+        (station) => station.modes.contains(StationMode.rapidRail),
+      ),
+      isEmpty,
+    );
+  });
+
   test('KTM direct, cross-operator and expired-feed routing', () async {
     final data = await AssetRoutingGraphRepository().load();
     final search = JourneySearchService(data.graph);
@@ -84,7 +131,10 @@ void main() {
         .where((s) => s.id.startsWith('sentul::'))
         .toList();
     expect(sentul, hasLength(2));
-    expect(sentul.map((s) => s.name).toSet().length, 2);
+    expect(
+      sentul.map((s) => s.displayLabel),
+      unorderedEquals(['Sentul (KTM Komuter)', 'Sentul (LRT)']),
+    );
   });
 
   test('prefers direct KJL from Putra Heights to Pasar Seni', () async {

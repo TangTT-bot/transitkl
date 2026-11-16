@@ -34,7 +34,7 @@ void main() {
       'Gombak',
     );
     await tester.pump();
-    await tester.tap(find.text('Gombak').last);
+    await tester.tap(find.text('Gombak (LRT)'));
     await tester.pump();
 
     await tester.enterText(
@@ -42,7 +42,7 @@ void main() {
       'Kajang',
     );
     await tester.pump();
-    await tester.tap(find.text('Kajang').last);
+    await tester.tap(find.text('Kajang (MRT + KTM Komuter)'));
     await tester.pump();
 
     final button = find.byKey(const Key('find-journey-button'));
@@ -88,20 +88,20 @@ void main() {
       'USJ7',
     );
     await tester.pump();
-    expect(find.text('USJ 7'), findsOneWidget);
+    expect(find.text('USJ 7 (LRT + Sunway BRT)'), findsOneWidget);
     await tester.enterText(
       find.byKey(const Key('origin-station-field')),
       'Putra Heights',
     );
     await tester.pump();
-    await tester.tap(find.text('PUTRA Heights').last);
+    await tester.tap(find.text('PUTRA Heights (LRT)'));
     await tester.pump();
     await tester.enterText(
       find.byKey(const Key('destination-station-field')),
       'Monash',
     );
     await tester.pump();
-    await tester.tap(find.text('Sunu-monash').last);
+    await tester.tap(find.text('Sunu-monash (Sunway BRT)'));
     await tester.pump();
     final button = find.byKey(const Key('find-journey-button'));
     await tester.scrollUntilVisible(
@@ -142,14 +142,14 @@ void main() {
         'SL311',
       );
       await tester.pump();
-      await tester.tap(find.text('SL311 LRT Gombak').last);
+      await tester.tap(find.text('SL311 LRT Gombak (Rapid Bus)'));
       await tester.pump();
       await tester.enterText(
         find.byKey(const Key('destination-station-field')),
         'SL162',
       );
       await tester.pump();
-      await tester.tap(find.text('SL162 HUB UIA').last);
+      await tester.tap(find.text('SL162 HUB UIA (Rapid Bus)'));
       await tester.pump();
       final button = find.byKey(const Key('find-journey-button'));
       await tester.scrollUntilVisible(
@@ -163,6 +163,40 @@ void main() {
       expect(find.text('Recommended journey'), findsOneWidget);
       expect(find.text('T200'), findsOneWidget);
       expect(find.text('0 transfers'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'labels the Klang train station and BD28 bus stop in both fields',
+    (tester) async {
+      final data = await tester.runAsync(AssetRoutingGraphRepository().load);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JourneyPlannerScreen(
+            data: data!,
+            initialDeparture: DateTime(2026, 11, 16, 13),
+            searchRunner: _testSearch,
+          ),
+        ),
+      );
+      final from = find.byKey(const Key('origin-station-field'));
+      final to = find.byKey(const Key('destination-station-field'));
+      const trainLabel = 'KLANG (KTM Komuter)';
+      const busLabel = 'BD28 KTM KLANG (Rapid Bus)';
+
+      await tester.enterText(from, 'Klang');
+      await tester.pump();
+      expect(find.text(trainLabel), findsOneWidget);
+      await tester.tap(find.text(trainLabel));
+      await tester.pump();
+      expect(tester.widget<TextField>(from).controller!.text, trainLabel);
+
+      await tester.enterText(to, 'BD28 KTM Klang');
+      await tester.pump();
+      expect(find.text(busLabel), findsOneWidget);
+      await tester.tap(find.text(busLabel));
+      await tester.pump();
+      expect(tester.widget<TextField>(to).controller!.text, busLabel);
     },
   );
 }

@@ -456,7 +456,7 @@ class _StationField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Autocomplete<StationGroup>(
-      displayStringForOption: (station) => station.name,
+      displayStringForOption: (station) => station.displayLabel,
       optionsBuilder: (value) {
         final query = value.text.trim().toLowerCase();
         if (query.isEmpty) return const Iterable<StationGroup>.empty();
