@@ -305,6 +305,7 @@ class JourneyResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final timedLegs = journey.timedLegs.toList();
     return Column(
       key: const Key('journey-result'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -314,6 +315,19 @@ class JourneyResultView extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 10),
+        for (final timing in timedLegs)
+          if (timing.leg case TransitLeg(
+            isScheduled: true,
+            waitSeconds: >= Duration.secondsPerHour,
+          ))
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _ScheduledWaitNotice(
+                graph: graph,
+                timing: timing,
+                journeyDate: journey.departure,
+              ),
+            ),
         Card(
           color: Theme.of(context).colorScheme.primaryContainer,
           child: Padding(
@@ -321,14 +335,22 @@ class JourneyResultView extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
+                  flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text('Total from ${_formatTime(journey.departure)}'),
                       Text(
                         _formatDuration(journey.totalTravelSeconds),
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 2),
+                      Text(
+                        'Waiting (included): ${_formatDuration(journey.totalWaitingSeconds)}',
+                      ),
+                      Text(
+                        'Riding + walking: ${_formatDuration(journey.totalMovingSeconds)}',
+                      ),
                       Text(
                         '${journey.transferCount} transfer${journey.transferCount == 1 ? '' : 's'}',
                       ),
@@ -338,27 +360,80 @@ class JourneyResultView extends StatelessWidget {
                     ],
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const Text('Arrive'),
-                    Text(
-                      _formatTime(journey.arrival),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ],
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Text('Arrive'),
+                      Text(
+                        _formatJourneyTime(journey.arrival, journey.departure),
+                        textAlign: TextAlign.end,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
         ),
         const SizedBox(height: 8),
-        for (final (index, leg) in journey.legs.indexed)
+        for (final (index, timing) in timedLegs.indexed)
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: _JourneyLegCard(graph: graph, leg: leg, number: index + 1),
+            child: _JourneyLegCard(
+              graph: graph,
+              timing: timing,
+              number: index + 1,
+              journeyDate: journey.departure,
+            ),
           ),
       ],
+    );
+  }
+}
+
+class _ScheduledWaitNotice extends StatelessWidget {
+  const _ScheduledWaitNotice({
+    required this.graph,
+    required this.timing,
+    required this.journeyDate,
+  });
+
+  final RoutingGraph graph;
+  final JourneyLegTiming timing;
+  final DateTime journeyDate;
+
+  @override
+  Widget build(BuildContext context) {
+    final leg = timing.leg as TransitLeg;
+    final service = graph.services[leg.serviceId]!;
+    final mode = service.id.startsWith('ktmb:')
+        ? 'KTM Komuter'
+        : service.shortName;
+    final boarding = _formatJourneyTime(timing.boardsAt!, journeyDate);
+    final stop = _stopName(graph, leg.fromStopId);
+    final colors = Theme.of(context).colorScheme;
+    return Card(
+      color: colors.tertiaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Long scheduled wait',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Text(
+              'The ${mode.isEmpty ? 'service' : mode} departure in this journey is scheduled for $boarding at $stop.',
+            ),
+            Text('Wait at this stop: ${_formatDuration(leg.waitSeconds)}.'),
+            const Text('Try a later start time to reduce the wait.'),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -449,22 +524,24 @@ class _FeedStatusCard extends StatelessWidget {
 class _JourneyLegCard extends StatelessWidget {
   const _JourneyLegCard({
     required this.graph,
-    required this.leg,
+    required this.timing,
     required this.number,
+    required this.journeyDate,
   });
 
   final RoutingGraph graph;
-  final JourneyLeg leg;
+  final JourneyLegTiming timing;
   final int number;
+  final DateTime journeyDate;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(14),
-        child: switch (leg) {
-          TransitLeg() => _transitContent(context, leg as TransitLeg),
-          WalkingLeg() => _walkingContent(context, leg as WalkingLeg),
+        child: switch (timing.leg) {
+          final TransitLeg leg => _transitContent(context, leg),
+          final WalkingLeg leg => _walkingContent(context, leg),
         },
       ),
     );
@@ -509,6 +586,10 @@ class _JourneyLegCard extends StatelessWidget {
               const SizedBox(height: 4),
               Text(service.longName),
               const SizedBox(height: 4),
+              if (transit.isScheduled)
+                Text(
+                  'Scheduled boarding: ${_formatJourneyTime(timing.boardsAt!, journeyDate)}',
+                ),
               Text(
                 '${transit.isScheduled ? 'Wait' : 'Estimated wait'} '
                 '${_formatDuration(transit.waitSeconds)} • '
@@ -628,6 +709,11 @@ String _formatDate(DateTime value) {
 String _formatTime(DateTime value) =>
     '${value.hour.toString().padLeft(2, '0')}:'
     '${value.minute.toString().padLeft(2, '0')}';
+
+String _formatJourneyTime(DateTime value, DateTime journeyDate) =>
+    DateUtils.isSameDay(value, journeyDate)
+    ? _formatTime(value)
+    : '${_formatTime(value)} on ${_formatDate(value)}';
 
 String _formatDuration(int seconds) {
   if (seconds == 0) return '0 min';

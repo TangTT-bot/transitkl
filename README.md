@@ -191,6 +191,16 @@ Komuter routes in `data/network-kl.json` are bundled. ETS and intercity are
 excluded. Some Komuter trips terminate early; a route name does not guarantee
 an all-day connection.
 
+The result separates total time from the selected start, waiting, and
+riding plus walking. Each scheduled leg shows its boarding time. A scheduled
+wait of an hour or more gets a notice above the result summary, including the
+boarding stop and time. For SunMed to Klang at 13:00 on 16 November, the offline
+snapshot shows KTM boarding at Setia Jaya at 17:55, about 4 hr 43 min of total
+waiting and 45 min of riding/walking. At 17:25, the same snapshot finds the same
+train in 1 hr 3 min including waits. The wait still counts toward ETA and
+Recommended ranking. See [data sources](DATA_SOURCES.md) for the official notice
+and the one-minute arrival difference.
+
 ```powershell
 python tools/gtfs_pipeline/run_pipeline.py download `
   --url "https://api.data.gov.my/gtfs-static/ktmb" `

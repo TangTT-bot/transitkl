@@ -91,13 +91,18 @@ void _printJourney(RoutingGraph graph, Journey journey) {
     'walking: ${_formatDuration(journey.totalWalkingSeconds)}',
   );
   stdout.writeln(
-    'Depart ${_formatDateTime(journey.departure)}, '
+    'Start ${_formatDateTime(journey.departure)}, '
     'arrive ${_formatDateTime(journey.arrival)} '
-    '(${_formatDuration(journey.totalTravelSeconds)}, '
+    '(${_formatDuration(journey.totalTravelSeconds)} including waits, '
     '${journey.transferCount} transfer(s))',
   );
+  stdout.writeln(
+    'Waiting: ${_formatDuration(journey.totalWaitingSeconds)}; '
+    'riding + walking: ${_formatDuration(journey.totalMovingSeconds)}',
+  );
 
-  for (final (index, leg) in journey.legs.indexed) {
+  for (final (index, timing) in journey.timedLegs.indexed) {
+    final leg = timing.leg;
     final from = graph.stops[leg.fromStopId]!.name;
     final to = graph.stops[leg.toStopId]!.name;
     switch (leg) {
@@ -110,6 +115,11 @@ void _printJourney(RoutingGraph graph, Journey journey) {
           '${_formatDuration(leg.waitSeconds)} '
           '${leg.isScheduled ? 'scheduled wait' : 'average wait'})',
         );
+        if (leg.isScheduled) {
+          stdout.writeln(
+            '   Scheduled boarding: ${_formatDateTime(timing.boardsAt!)}',
+          );
+        }
       case WalkingLeg():
         final distance = leg.distanceMetres == null
             ? ''
@@ -164,8 +174,9 @@ String _formatDateTime(DateTime value) {
 }
 
 String _formatDuration(int seconds) {
-  final hours = seconds ~/ 3600;
-  final minutes = (seconds % 3600 + 59) ~/ 60;
+  final roundedMinutes = (seconds + 59) ~/ 60;
+  final hours = roundedMinutes ~/ 60;
+  final minutes = roundedMinutes % 60;
   if (hours == 0) return '$minutes min';
   return '$hours h $minutes min';
 }

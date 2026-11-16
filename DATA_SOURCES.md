@@ -49,6 +49,19 @@ not bundled. The current feed is valid 18 August–17 November 2026, with weekda
 weekend, and holiday exceptions. The reviewed audit is in
 `docs/data-audits/ktmb-2026-11-03.md`.
 
+### Setia Jaya to Klang timetable check (16 November 2026)
+
+KTMB's [one-day Port Klang Line timetable](https://www.ktmb.com.my/assets/pdf/2026/28%20-%20TM-PK-TM_SPK-PK%20DNLINE_WEEKDAY_PROJEK%20RIDT%20SH100A%26SH101B.pdf)
+shows a gap after 09:25 at Setia Jaya toward Klang. The next through train
+leaves Setia Jaya at 17:55 and reaches Klang at 18:29. This is not a blanket
+10:00–17:00 KTM closure: times depend on the station, direction and date.
+
+The bundled GTFS reports 17:55 to 18:28 for this train. An audited public
+GTFS download from 16 November extends nominal validity to 30 November but
+still gives the same 18:28 arrival for this check. The app does not import or
+assume one-day PDF changes as recurring service. The bundled asset remains
+unchanged by the wait-display improvement; check KTMB for day-specific notices.
+
 `data/network-kl.json` records selection and curated interchange sources.
 Walking durations are implementation estimates, and distances are straight-line
 references. Per-feed checksums and validity are retained in the merged app asset.

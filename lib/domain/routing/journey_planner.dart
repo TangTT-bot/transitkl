@@ -388,6 +388,26 @@ final class Journey {
   int get generalizedCostSeconds => cost.generalizedSeconds;
   int get transferCount => cost.transfers;
   int get totalWalkingSeconds => cost.walkingSeconds;
+
+  int get totalWaitingSeconds => legs.whereType<TransitLeg>().fold(
+    0,
+    (total, leg) => total + leg.waitSeconds,
+  );
+
+  /// Time riding and walking, excluding all boarding waits.
+  int get totalMovingSeconds => totalTravelSeconds - totalWaitingSeconds;
+
+  /// The time at each boarding stop is derived from the planned journey, not
+  /// from the original search time alone. Include earlier rides and walks.
+  Iterable<JourneyLegTiming> get timedLegs sync* {
+    var start = departure;
+    for (final leg in legs) {
+      final timing = JourneyLegTiming(leg: leg, startsAt: start);
+      yield timing;
+      start = timing.endsAt;
+    }
+  }
+
   int? get totalWalkingMetres {
     var metres = 0;
     for (final leg in legs.whereType<WalkingLeg>()) {
@@ -396,6 +416,22 @@ final class Journey {
     }
     return metres;
   }
+}
+
+final class JourneyLegTiming {
+  const JourneyLegTiming({required this.leg, required this.startsAt});
+
+  final JourneyLeg leg;
+  final DateTime startsAt;
+
+  DateTime? get boardsAt => switch (leg) {
+    TransitLeg(:final waitSeconds) => startsAt.add(
+      Duration(seconds: waitSeconds),
+    ),
+    WalkingLeg() => null,
+  };
+
+  DateTime get endsAt => startsAt.add(Duration(seconds: leg.durationSeconds));
 }
 
 sealed class JourneyLeg {
