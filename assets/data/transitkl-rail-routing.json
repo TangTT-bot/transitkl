@@ -2,7 +2,7 @@
   "schemaVersion": 3,
   "feed": {
     "id": "transitkl_rail",
-    "sourceSha256": "3f041bd448c353efc23ff72c9c3dfbabafcbaca483c62f969ce55542cc75666f",
+    "sourceSha256": "65357bcffe7ad6fe3f1883356f22f95e0641d7a98cf3e77050ee38eb61b15be8",
     "serviceDateStart": "20190101",
     "serviceDateEnd": "20270331"
   },
@@ -269815,6 +269815,14 @@
     },
     {
       "fromStopId": "prasarana_rapid_rail:AG5",
+      "toStopId": "prasarana_rapid_rail:MR9",
+      "walkSeconds": 660,
+      "distanceMetres": 570,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.jwp.gov.my/storage/article/Kuala-Lumpur-Map-%26-Guide_small.pdf"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG5",
       "toStopId": "prasarana_rapid_rail:SP5",
       "walkSeconds": 120,
       "distanceMetres": 0,
@@ -269848,6 +269856,14 @@
       "walkSeconds": 120,
       "distanceMetres": 0,
       "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:AG8",
+      "toStopId": "prasarana_rapid_rail:KG17",
+      "walkSeconds": 240,
+      "distanceMetres": 231,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.mymrt.com.my/wp-content/uploads/2022/06/MRT-Corp-Vending-Mahine-Space-Information-Kit-July-2022.pdf"
     },
     {
       "fromStopId": "prasarana_rapid_rail:AG8",
@@ -269933,6 +269949,22 @@
       "sourceUrl": "https://www.muziumnegara.gov.my/index.php/en/getting-here"
     },
     {
+      "fromStopId": "prasarana_rapid_rail:KG15",
+      "toStopId": "prasarana_rapid_rail:KJ15",
+      "walkSeconds": 600,
+      "distanceMetres": 344,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.muziumnegara.gov.my/en/how-get-national-museum"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG15",
+      "toStopId": "prasarana_rapid_rail:MR1",
+      "walkSeconds": 600,
+      "distanceMetres": 499,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.muziumnegara.gov.my/en/how-get-national-museum"
+    },
+    {
       "fromStopId": "prasarana_rapid_rail:KG16",
       "toStopId": "ktmb:19000",
       "walkSeconds": 600,
@@ -269946,6 +269978,22 @@
       "walkSeconds": 120,
       "distanceMetres": 33,
       "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG17",
+      "toStopId": "prasarana_rapid_rail:AG8",
+      "walkSeconds": 240,
+      "distanceMetres": 231,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.mymrt.com.my/wp-content/uploads/2022/06/MRT-Corp-Vending-Mahine-Space-Information-Kit-July-2022.pdf"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KG17",
+      "toStopId": "prasarana_rapid_rail:SP8",
+      "walkSeconds": 240,
+      "distanceMetres": 231,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.mymrt.com.my/wp-content/uploads/2022/06/MRT-Corp-Vending-Mahine-Space-Information-Kit-July-2022.pdf"
     },
     {
       "fromStopId": "prasarana_rapid_rail:KG18A",
@@ -269991,6 +270039,14 @@
       "distanceMetres": 79,
       "source": "curated_interchange",
       "sourceUrl": "https://api.data.gov.my/gtfs-static/prasarana?category=rapid-bus-kl"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ12",
+      "toStopId": "prasarana_rapid_rail:MR8",
+      "walkSeconds": 420,
+      "distanceMetres": 325,
+      "source": "curated_interchange",
+      "sourceUrl": "https://myrapid.com.my/wp-content/uploads/2024/04/RAPID-RAIL-HOLDING-STATEMENT-GANGGUAN-BEKALAN-KUASA-JEJAS-KEKERAPAN-PERKHIDMATAN-LRT-LALUAN-KELANA-JAYA.pdf"
     },
     {
       "fromStopId": "prasarana_rapid_rail:KJ13",
@@ -270126,6 +270182,22 @@
       "sourceUrl": "https://api.data.gov.my/gtfs-static/prasarana?category=rapid-bus-kl"
     },
     {
+      "fromStopId": "prasarana_rapid_rail:KJ15",
+      "toStopId": "prasarana_rapid_rail:KG15",
+      "walkSeconds": 600,
+      "distanceMetres": 344,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.muziumnegara.gov.my/en/how-get-national-museum"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ15",
+      "toStopId": "prasarana_rapid_rail:MR1",
+      "walkSeconds": 600,
+      "distanceMetres": 246,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.jwp.gov.my/storage/article/Kuala-Lumpur-Map-%26-Guide_small.pdf"
+    },
+    {
       "fromStopId": "prasarana_rapid_rail:KJ16",
       "toStopId": "prasarana_rapid_bus_kl:1001787",
       "walkSeconds": 300,
@@ -270188,6 +270260,14 @@
       "distanceMetres": 35,
       "source": "curated_interchange",
       "sourceUrl": "https://api.data.gov.my/gtfs-static/prasarana?category=rapid-bus-kl"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:KJ27",
+      "toStopId": "prasarana_rapid_rail:SA7",
+      "walkSeconds": 480,
+      "distanceMetres": 231,
+      "source": "curated_interchange",
+      "sourceUrl": "https://myrapid.com.my/wp-content/uploads/2025/01/KENYATAAN-MEDIA-PRASARANA-KOMITED-DALAM-TRANSFORMASI-PENGANGKUTAN-AWAM-TINGKAT-MUTU-PERKHIDMATAN-DAN-SASAR-LONJAKAN-PENUMPANG-.pdf"
     },
     {
       "fromStopId": "prasarana_rapid_rail:KJ28",
@@ -270284,6 +270364,22 @@
       "sourceUrl": "https://www.muziumnegara.gov.my/index.php/en/getting-here"
     },
     {
+      "fromStopId": "prasarana_rapid_rail:MR1",
+      "toStopId": "prasarana_rapid_rail:KG15",
+      "walkSeconds": 600,
+      "distanceMetres": 499,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.muziumnegara.gov.my/en/how-get-national-museum"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR1",
+      "toStopId": "prasarana_rapid_rail:KJ15",
+      "walkSeconds": 600,
+      "distanceMetres": 246,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.jwp.gov.my/storage/article/Kuala-Lumpur-Map-%26-Guide_small.pdf"
+    },
+    {
       "fromStopId": "prasarana_rapid_rail:MR11",
       "toStopId": "prasarana_rapid_rail:AG3",
       "walkSeconds": 120,
@@ -270324,6 +270420,30 @@
       "walkSeconds": 120,
       "distanceMetres": 81,
       "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR8",
+      "toStopId": "prasarana_rapid_rail:KJ12",
+      "walkSeconds": 420,
+      "distanceMetres": 325,
+      "source": "curated_interchange",
+      "sourceUrl": "https://myrapid.com.my/wp-content/uploads/2024/04/RAPID-RAIL-HOLDING-STATEMENT-GANGGUAN-BEKALAN-KUASA-JEJAS-KEKERAPAN-PERKHIDMATAN-LRT-LALUAN-KELANA-JAYA.pdf"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR9",
+      "toStopId": "prasarana_rapid_rail:AG5",
+      "walkSeconds": 660,
+      "distanceMetres": 570,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.jwp.gov.my/storage/article/Kuala-Lumpur-Map-%26-Guide_small.pdf"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:MR9",
+      "toStopId": "prasarana_rapid_rail:SP5",
+      "walkSeconds": 660,
+      "distanceMetres": 570,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.jwp.gov.my/storage/article/Kuala-Lumpur-Map-%26-Guide_small.pdf"
     },
     {
       "fromStopId": "prasarana_rapid_rail:PY01",
@@ -270436,6 +270556,14 @@
       "source": "normalized_name"
     },
     {
+      "fromStopId": "prasarana_rapid_rail:SA7",
+      "toStopId": "prasarana_rapid_rail:KJ27",
+      "walkSeconds": 480,
+      "distanceMetres": 231,
+      "source": "curated_interchange",
+      "sourceUrl": "https://myrapid.com.my/wp-content/uploads/2025/01/KENYATAAN-MEDIA-PRASARANA-KOMITED-DALAM-TRANSFORMASI-PENGANGKUTAN-AWAM-TINGKAT-MUTU-PERKHIDMATAN-DAN-SASAR-LONJAKAN-PENUMPANG-.pdf"
+    },
+    {
       "fromStopId": "prasarana_rapid_rail:SP1",
       "toStopId": "prasarana_rapid_rail:AG1",
       "walkSeconds": 120,
@@ -270536,6 +270664,14 @@
       "source": "normalized_name"
     },
     {
+      "fromStopId": "prasarana_rapid_rail:SP5",
+      "toStopId": "prasarana_rapid_rail:MR9",
+      "walkSeconds": 660,
+      "distanceMetres": 570,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.jwp.gov.my/storage/article/Kuala-Lumpur-Map-%26-Guide_small.pdf"
+    },
+    {
       "fromStopId": "prasarana_rapid_rail:SP6",
       "toStopId": "ktmb:18900",
       "walkSeconds": 420,
@@ -270570,6 +270706,14 @@
       "walkSeconds": 120,
       "distanceMetres": 0,
       "source": "normalized_name"
+    },
+    {
+      "fromStopId": "prasarana_rapid_rail:SP8",
+      "toStopId": "prasarana_rapid_rail:KG17",
+      "walkSeconds": 240,
+      "distanceMetres": 231,
+      "source": "curated_interchange",
+      "sourceUrl": "https://www.mymrt.com.my/wp-content/uploads/2022/06/MRT-Corp-Vending-Mahine-Space-Information-Kit-July-2022.pdf"
     },
     {
       "fromStopId": "prasarana_rapid_rail:SP9",

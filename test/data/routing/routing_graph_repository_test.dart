@@ -16,7 +16,7 @@ void main() {
       expect(data.graph.stops, hasLength(4343));
       expect(data.graph.services, hasLength(443));
       expect(data.graph.rideEdges, hasLength(18327));
-      expect(data.graph.transferEdges, hasLength(170));
+      expect(data.graph.transferEdges, hasLength(188));
       expect(data.graph.scheduledTrips, hasLength(167));
       expect(
         data.sources.singleWhere((feed) => feed.id == 'ktmb').serviceDateEnd,

@@ -32,6 +32,7 @@ updated; it is no longer the main daily implementation task.
 | 6a. KTM Komuter integration | Implemented; field validation remains | Audited exact timetables, two Klang Valley routes, curated transfers and per-feed validity |
 | 6b. Sunway BRT connectivity | Implemented; walking validation remains | Seven stops and connections to LRT at USJ 7 and KTM at Setia Jaya |
 | 6c. Published Rapid Bus KL integration | Implemented; coverage and field limits remain | 138 source routes, ordered bus profiles, duplicate BRT excluded, 36 explicit bus/rail pairs and visible partial-coverage notice |
+| 6d. Rail and BRT interchange audit | Implemented for 29 mapped station areas | Glenmarie and four other areas corrected; directed links checked against the bundled app asset |
 | 7a. Offline favourites | Implemented | Save, reopen and remove station/stop favourites and directional journey pairs; stored independently of the graph |
 | 7b. Remaining MVP product features | Next | Timetable view, settings and further empty/error state polish |
 | 8. Evaluation and release preparation | Not started | Performance study, usability testing, final report evidence and release build |
@@ -45,7 +46,9 @@ Full Klang Valley bus coverage is not claimed or available from this snapshot.
 
 - The app starts offline with 4,343 operator stop IDs, 443 directional/timing
   services, 167 exact trips (164 KTM and three bus), seven calendars, 18,327
-  directed ride edges and 170 directed walking links. Service counts are not line counts.
+  directed ride edges and 188 directed walking links. Service counts are not line counts.
+  See the [rail and BRT interchange audit](data-audits/rail-interchanges-2026-11-16.md)
+  for the added links and field-validation limits.
 - Transfer-connected same-name platforms share a search entry. Disconnected
   namesakes such as KTM Sentul and LRT Sentul remain distinct.
 - Origin and destination fields search stations and bus stops. Exact station

@@ -23,6 +23,15 @@
     "ktmb:53400": "KAMPUNG DATO HARUN"
   },
   "transfers": [
+    {"fromStopId":"prasarana_rapid_rail:KJ27","toStopId":"prasarana_rapid_rail:SA7","walkSeconds":480,"bidirectional":true,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2025/01/KENYATAAN-MEDIA-PRASARANA-KOMITED-DALAM-TRANSFORMASI-PENGANGKUTAN-AWAM-TINGKAT-MUTU-PERKHIDMATAN-DAN-SASAR-LONJAKAN-PENUMPANG-.pdf"},
+    {"fromStopId":"prasarana_rapid_rail:KG17","toStopId":"prasarana_rapid_rail:AG8","walkSeconds":240,"sourceUrl":"https://www.mymrt.com.my/wp-content/uploads/2022/06/MRT-Corp-Vending-Mahine-Space-Information-Kit-July-2022.pdf"},
+    {"fromStopId":"prasarana_rapid_rail:KG17","toStopId":"prasarana_rapid_rail:SP8","walkSeconds":240,"sourceUrl":"https://www.mymrt.com.my/wp-content/uploads/2022/06/MRT-Corp-Vending-Mahine-Space-Information-Kit-July-2022.pdf"},
+    {"fromStopId":"prasarana_rapid_rail:KJ12","toStopId":"prasarana_rapid_rail:MR8","walkSeconds":420,"sourceUrl":"https://myrapid.com.my/wp-content/uploads/2024/04/RAPID-RAIL-HOLDING-STATEMENT-GANGGUAN-BEKALAN-KUASA-JEJAS-KEKERAPAN-PERKHIDMATAN-LRT-LALUAN-KELANA-JAYA.pdf"},
+    {"fromStopId":"prasarana_rapid_rail:AG5","toStopId":"prasarana_rapid_rail:MR9","walkSeconds":660,"sourceUrl":"https://www.jwp.gov.my/storage/article/Kuala-Lumpur-Map-%26-Guide_small.pdf"},
+    {"fromStopId":"prasarana_rapid_rail:SP5","toStopId":"prasarana_rapid_rail:MR9","walkSeconds":660,"sourceUrl":"https://www.jwp.gov.my/storage/article/Kuala-Lumpur-Map-%26-Guide_small.pdf"},
+    {"fromStopId":"prasarana_rapid_rail:KJ15","toStopId":"prasarana_rapid_rail:KG15","walkSeconds":600,"sourceUrl":"https://www.muziumnegara.gov.my/en/how-get-national-museum"},
+    {"fromStopId":"prasarana_rapid_rail:MR1","toStopId":"prasarana_rapid_rail:KG15","walkSeconds":600,"sourceUrl":"https://www.muziumnegara.gov.my/en/how-get-national-museum"},
+    {"fromStopId":"prasarana_rapid_rail:KJ15","toStopId":"prasarana_rapid_rail:MR1","walkSeconds":600,"sourceUrl":"https://www.jwp.gov.my/storage/article/Kuala-Lumpur-Map-%26-Guide_small.pdf"},
     {"fromStopId":"prasarana_rapid_rail:KJ1","toStopId":"prasarana_rapid_bus_kl:1001801","walkSeconds":300,"sourceUrl":"https://api.data.gov.my/gtfs-static/prasarana?category=rapid-bus-kl"},
     {"fromStopId":"prasarana_rapid_rail:KJ2","toStopId":"prasarana_rapid_bus_kl:1001831","walkSeconds":300,"sourceUrl":"https://api.data.gov.my/gtfs-static/prasarana?category=rapid-bus-kl"},
     {"fromStopId":"prasarana_rapid_rail:KJ3","toStopId":"prasarana_rapid_bus_kl:1001834","walkSeconds":300,"sourceUrl":"https://api.data.gov.my/gtfs-static/prasarana?category=rapid-bus-kl"},

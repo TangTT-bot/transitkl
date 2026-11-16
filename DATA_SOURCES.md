@@ -104,3 +104,11 @@ Cross-mode walking links are an explicit limited list in `data/network-kl.json`.
 Named GTFS stops and coordinate sanity checks support these associations, but
 walking durations and pedestrian accessibility still need field validation.
 
+## Rail and Sunway BRT interchange audit (16 November 2026)
+
+The [interchange audit](docs/data-audits/rail-interchanges-2026-11-16.md)
+compares 29 published station areas against the bundled graph. Nine two-way
+links were added across five areas, including Glenmarie. These use the existing
+curated-link configuration; the source feeds and their timetables were not
+refreshed. Walk durations remain estimates.
+
