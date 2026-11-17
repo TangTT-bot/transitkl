@@ -1,6 +1,6 @@
 # TransitKL project progress
 
-Last updated: 16 November 2026
+Last updated: 17 November 2026
 
 ## Current position
 
@@ -34,7 +34,8 @@ updated; it is no longer the main daily implementation task.
 | 6c. Published Rapid Bus KL integration | Implemented; coverage and field limits remain | 138 source routes, ordered bus profiles, duplicate BRT excluded, 36 explicit bus/rail pairs and visible partial-coverage notice |
 | 6d. Rail and BRT interchange audit | Implemented for 29 mapped station areas | Glenmarie and four other areas corrected; directed links checked against the bundled app asset |
 | 7a. Offline favourites | Implemented | Save, reopen and remove station/stop favourites and directional journey pairs; stored independently of the graph |
-| 7b. Remaining MVP product features | Next | Timetable view, settings and further empty/error state polish |
+| 7b. Offline station timetables | Implemented | Station/date lookup, exact scheduled departures, clearly labelled frequency windows and per-feed expiry |
+| 7c. Remaining MVP product features | Next | Settings and further empty/error state polish |
 | 8. Evaluation and release preparation | Not started | Performance study, usability testing, final report evidence and release build |
 
 The five foundation/application milestones and KTM, BRT and published Rapid Bus
@@ -56,6 +57,11 @@ Full Klang Valley bus coverage is not claimed or available from this snapshot.
 - Users can save stations and directional journey pairs on the device. Reopening
   them fills the planner, and the next search uses the selected departure time
   and current offline data. Stops are restored by ID, not by similar names.
+- The timetable screen uses the same station search and service calendars as
+  the planner. It separates exact departures from estimated frequency windows
+  and can fill the planner’s From field without changing its departure time.
+  KTM departures are grouped by travel direction from ordered trip stops;
+  short-turn trains retain their actual last stop next to the time.
 - Users choose a departure date and time inside the feed validity range.
 - The real modified Dijkstra engine returns route, wait, ride, walk and
   interchange details.
@@ -117,7 +123,6 @@ Phone performance still needs measurement.
   source later through the existing repository boundary if the final proposal
   specifically requires runtime SQLite queries.
 - General app settings are not persisted; favourites have their own local store.
-- There is no dedicated static timetable screen.
 - The algorithm weights still need commuter feedback and evaluation; they are
   configurable starting values. The app returns one Recommended result and does
   not display a list of all Pareto alternatives.
@@ -138,12 +143,12 @@ First run the updated app and manually inspect these searches on a phone:
 7. SL311 LRT Gombak to SL162 Hub UIA, 9 November 08:00 (direct T200 bus).
 8. KLCC to SL162 Hub UIA and reverse, 9 November 08:00 (rail/bus via Gombak).
 
-First refresh KTM before its expiry and measure the larger bus graph on the target
+Refresh the KTM snapshot before testing later dates, and measure the larger bus graph on the target
 phone in airplane mode. Validate the selected walking links and tune performance
 without discarding useful routing labels or weakening the convenience objective.
 The bus scope and implementation are recorded in
 [ADR 0008](architecture/0008-rapid-bus-published-coverage.md).
 
-Next implement a timetable screen, followed by performance and
-usability evaluation for the capstone report. Additional MRT feeder coverage or
+Next polish settings and evaluate performance and usability for the capstone
+report. Additional MRT feeder coverage or
 walking links can be separate bounded extensions, not a claim of universal coverage.

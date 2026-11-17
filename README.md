@@ -117,6 +117,25 @@ bundled transit graph. It does not save journey results, timetable times or
 upload favourites. Saved stops that no longer resolve in an updated network
 remain visible as unavailable and can still be removed.
 
+### Timetables
+
+Tap the clock icon in the planner’s app bar, choose a station or bus stop,
+and select a date. **Scheduled departures** shows published clock times
+grouped by line and direction. KTM trips that end before the line terminus
+show **Ends at** next to the time instead of opening another group.
+**Service frequency** shows
+approximate intervals instead of invented departure times. Rapid Rail and
+Sunway BRT windows describe the line, not the first or last train at a
+particular station. Bus profiles with stop offsets show estimated windows at
+the selected stop.
+
+The timetable uses the same offline graph and calendars as journey planning.
+Times are in Malaysia time, including after-midnight service carried over from
+the previous service day. The selected operator’s data validity is shown
+separately from other operators. Live changes are not included. Tap **Use as
+From** to return to the planner with this stop selected; it does not change the
+planner’s date or start a search.
+
 The application currently uses Flutter's default Android minimum SDK, API 24.
 The proposal's API 23 statement should be updated or explicitly configured and
 tested before final submission.

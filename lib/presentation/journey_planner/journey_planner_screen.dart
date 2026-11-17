@@ -10,6 +10,8 @@ import '../../domain/routing/routing_graph.dart';
 import '../../domain/search/journey_search_service.dart';
 import '../favourites/favourites_controller.dart';
 import '../favourites/favourites_screen.dart';
+import '../shared/station_search_field.dart';
+import '../timetable/timetable_screen.dart';
 
 class JourneyPlannerScreen extends StatefulWidget {
   const JourneyPlannerScreen({
@@ -79,6 +81,11 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
       appBar: AppBar(
         title: const Text('TransitKL'),
         actions: [
+          IconButton(
+            tooltip: 'Timetables',
+            onPressed: _openTimetable,
+            icon: const Icon(Icons.schedule),
+          ),
           if (favourites != null)
             IconButton(
               tooltip: 'Favourites',
@@ -118,32 +125,28 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
               ),
             ],
             const SizedBox(height: 20),
-            _StationField(
+            StationSearchField(
               key: ValueKey(('from', _originFieldVersion)),
               fieldKey: const Key('origin-station-field'),
               label: 'From',
               icon: Icons.trip_origin,
               stations: _searchService.stations,
               selection: origin,
-              favouriteButton: _stationFavouriteButton(
-                favourites,
-                origin,
-                'From',
-              ),
+              suffixIcon: _stationFavouriteButton(favourites, origin, 'From'),
               onChanged: (station) => setState(() {
                 _origin = station;
                 _clearResult();
               }),
             ),
             const SizedBox(height: 12),
-            _StationField(
+            StationSearchField(
               key: ValueKey(('to', _destinationFieldVersion)),
               fieldKey: const Key('destination-station-field'),
               label: 'To',
               icon: Icons.location_on_outlined,
               stations: _searchService.stations,
               selection: destination,
-              favouriteButton: _stationFavouriteButton(
+              suffixIcon: _stationFavouriteButton(
                 favourites,
                 destination,
                 'To',
@@ -253,6 +256,26 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Could not update favourites. Try again.')),
     );
+  }
+
+  Future<void> _openTimetable() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    final station = await Navigator.of(context).push<StationGroup>(
+      MaterialPageRoute(
+        builder: (context) => TimetableScreen(
+          data: widget.data,
+          stations: _searchService.stations,
+          initialDate: _departure,
+          initialStation: _origin,
+        ),
+      ),
+    );
+    if (!mounted || station == null) return;
+    setState(() {
+      _origin = station;
+      _originFieldVersion++;
+      _clearResult();
+    });
   }
 
   Future<void> _openFavourites(FavouritesController favourites) async {
@@ -554,58 +577,6 @@ class _ScheduledWaitNotice extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _StationField extends StatelessWidget {
-  const _StationField({
-    super.key,
-    required this.fieldKey,
-    required this.label,
-    required this.icon,
-    required this.stations,
-    required this.onChanged,
-    this.selection,
-    this.favouriteButton,
-  });
-
-  final Key fieldKey;
-  final String label;
-  final IconData icon;
-  final List<StationGroup> stations;
-  final ValueChanged<StationGroup?> onChanged;
-  final StationGroup? selection;
-  final Widget? favouriteButton;
-
-  @override
-  Widget build(BuildContext context) {
-    return Autocomplete<StationGroup>(
-      initialValue: TextEditingValue(text: selection?.displayLabel ?? ''),
-      displayStringForOption: (station) => station.displayLabel,
-      optionsBuilder: (value) {
-        final query = value.text.trim().toLowerCase();
-        if (query.isEmpty) return const Iterable<StationGroup>.empty();
-        return searchStations(stations, query);
-      },
-      onSelected: onChanged,
-      fieldViewBuilder: (context, controller, focusNode, onSubmitted) {
-        return TextField(
-          key: fieldKey,
-          controller: controller,
-          focusNode: focusNode,
-          textInputAction: TextInputAction.search,
-          onSubmitted: (_) => onSubmitted(),
-          onChanged: (_) => onChanged(null),
-          decoration: InputDecoration(
-            labelText: label,
-            hintText: 'Search station or bus stop',
-            prefixIcon: Icon(icon),
-            suffixIcon: favouriteButton,
-            border: const OutlineInputBorder(),
-          ),
-        );
-      },
     );
   }
 }
