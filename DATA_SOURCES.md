@@ -41,13 +41,13 @@ Downloaded feed ZIPs are deliberately excluded from version control because
 they change independently of the application. Audit reports and small synthetic
 test fixtures may be committed.
 
-## KTM integration snapshot (3 November 2026)
+## KTM integration snapshot (18 November 2026)
 
 The KTMB feed has nine routes. The application selects the Tanjung Malim–Port
 Klang and Batu Caves–Pulau Sebang/Tampin Komuter routes; other KTMB services are
-not bundled. The current feed is valid 18 August–17 November 2026, with weekday,
-weekend, and holiday exceptions. The reviewed audit is in
-`docs/data-audits/ktmb-2026-11-03.md`.
+not bundled. The current feed is valid 18 August–2 December 2026, with weekday,
+weekend, and holiday exceptions. See the [18 November refresh audit](docs/data-audits/ktmb-2026-11-18.md)
+and the [previous snapshot audit](docs/data-audits/ktmb-2026-11-03.md).
 
 ### Setia Jaya to Klang timetable check (16 November 2026)
 
@@ -56,11 +56,9 @@ shows a gap after 09:25 at Setia Jaya toward Klang. The next through train
 leaves Setia Jaya at 17:55 and reaches Klang at 18:29. This is not a blanket
 10:00–17:00 KTM closure: times depend on the station, direction and date.
 
-The bundled GTFS reports 17:55 to 18:28 for this train. An audited public
-GTFS download from 16 November extends nominal validity to 30 November but
-still gives the same 18:28 arrival for this check. The app does not import or
-assume one-day PDF changes as recurring service. The bundled asset remains
-unchanged by the wait-display improvement; check KTMB for day-specific notices.
+The bundled 18 November GTFS snapshot still reports 17:55 to 18:28 for this
+weekday train. The app does not import or assume one-day PDF changes as
+recurring service. Check KTMB for date-specific notices.
 
 `data/network-kl.json` records selection and curated interchange sources.
 Walking durations are implementation estimates, and distances are straight-line

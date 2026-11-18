@@ -228,8 +228,8 @@ single-operator graph.
 
 ## KTM and merged network build
 
-The current KTM snapshot expires on **17 November 2026**. Refresh it before a
-later demonstration. Full KTMB data is audited, but only the two Klang Valley
+The KTM snapshot downloaded on 18 November is valid through **2 December 2026**.
+Refresh it before a demonstration after that date. Full KTMB data is audited, but only the two Klang Valley
 Komuter routes in `data/network-kl.json` are bundled. ETS and intercity are
 excluded. Some Komuter trips terminate early; a route name does not guarantee
 an all-day connection.
@@ -247,23 +247,26 @@ and the one-minute arrival difference.
 ```powershell
 python tools/gtfs_pipeline/run_pipeline.py download `
   --url "https://api.data.gov.my/gtfs-static/ktmb" `
-  --output data/downloads/ktmb-2026-11-03.zip
+  --output data/downloads/ktmb-2026-11-18.zip
+python tools/gtfs_pipeline/run_pipeline.py audit `
+  --input data/downloads/ktmb-2026-11-18.zip --feed-id ktmb `
+  --markdown-report data/processed/ktmb-2026-11-18-audit.md
 python tools/gtfs_pipeline/run_pipeline.py build `
-  --input data/downloads/ktmb-2026-11-03.zip --feed-id ktmb `
-  --database data/processed/ktmb-2026-11-03.sqlite
+  --input data/downloads/ktmb-2026-11-18.zip --feed-id ktmb `
+  --database data/processed/ktmb-2026-11-18.sqlite
 python tools/gtfs_pipeline/run_pipeline.py export-graph `
-  --database data/processed/ktmb-2026-11-03.sqlite `
-  --output data/processed/ktmb-2026-11-03-routing.json
+  --database data/processed/ktmb-2026-11-18.sqlite `
+  --output data/processed/ktmb-2026-11-18-routing.json
 python tools/gtfs_pipeline/run_pipeline.py merge-graphs `
   --input data/processed/rapid-rail-kl-routing.json `
-  --input data/processed/ktmb-2026-11-03-routing.json `
+  --input data/processed/ktmb-2026-11-18-routing.json `
   --input data/processed/rapid-bus-kl-2026-11-08-routing.json `
   --config data/network-kl.json `
   --output data/processed/transitkl-rail-routing.json
 Copy-Item data/processed/transitkl-rail-routing.json `
   assets/data/transitkl-rail-routing.json
 dart run tool/route_demo.dart assets/data/transitkl-rail-routing.json `
-  "BATU CAVES" "KLCC" "2026-11-03" "08:00"
+  "BATU CAVES" "KLCC" "2026-11-18" "08:00"
 ```
 
 First prepare the bus export with the commands below. Use the current exporter

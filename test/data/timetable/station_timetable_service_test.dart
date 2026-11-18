@@ -14,7 +14,7 @@ void main() {
   });
 
   test('Setia Jaya groups every KTM departure by actual travel direction', () {
-    final timetable = service.forStops(['ktmb:53600'], DateTime(2026, 11, 16));
+    final timetable = service.forStops(['ktmb:53600'], DateTime(2026, 11, 18));
     final toPortKlang = timetable.departures.where(
       (row) => row.service.direction == 'Toward Pelabuhan Klang',
     );
@@ -45,7 +45,12 @@ void main() {
       'KL Sentral',
     );
 
-    final expired = service.forStops(['ktmb:53600'], DateTime(2026, 11, 18));
+    final end = data.sources
+        .singleWhere((feed) => feed.id == 'ktmb')
+        .serviceDateEnd;
+    final expired = service.forStops([
+      'ktmb:53600',
+    ], DateTime(end.year, end.month, end.day + 1));
     expect(expired.departures, isEmpty);
     expect(expired.frequencies, isEmpty);
   });

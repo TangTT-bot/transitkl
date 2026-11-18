@@ -101,7 +101,9 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(date);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('18'));
+    await tester.tap(find.byTooltip('Next month'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('3'));
     await tester.pump();
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();

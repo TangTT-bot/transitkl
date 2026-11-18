@@ -46,7 +46,7 @@ Full Klang Valley bus coverage is not claimed or available from this snapshot.
 ## What is working now
 
 - The app starts offline with 4,343 operator stop IDs, 443 directional/timing
-  services, 167 exact trips (164 KTM and three bus), seven calendars, 18,327
+  services, 168 exact trips (165 KTM and three bus), seven calendars, 18,327
   directed ride edges and 188 directed walking links. Service counts are not line counts.
   See the [rail and BRT interchange audit](data-audits/rail-interchanges-2026-11-16.md)
   for the added links and field-validation limits.
@@ -113,8 +113,8 @@ Phone performance still needs measurement.
   data from `rapid-bus-kl` is included. The separate MRT feeder feed is not bundled,
   and not every rail/bus walking connection is configured. ETS, intercity, northern
   and southern Komuter services outside the Klang Valley scope are excluded.
-- The current KTM timetable expires on **17 November 2026**. Refresh, audit,
-  rebuild, and merge before a later demonstration.
+- The [18 November KTM refresh](data-audits/ktmb-2026-11-18.md) is valid through
+  **2 December 2026**. Audit and rebuild again before testing beyond that date.
 - The supplied Komuter feed has short-turn trips and directional/time gaps.
   Gombak to Seremban at 08:00 has no connection within six hours, while a 16:00
   search finds one. The application follows the supplied schedule.
@@ -133,8 +133,8 @@ Phone performance still needs measurement.
 
 First run the updated app and manually inspect these searches on a phone:
 
-1. Batu Caves to KL Sentral, 3 November 08:00 (KTM only).
-2. Batu Caves to KLCC, 3 November 08:00 (cross-operator).
+1. Batu Caves to KL Sentral, 18 November 08:00 (KTM only).
+2. Batu Caves to KLCC, 18 November 08:00 (cross-operator; now covered after refresh).
 3. Gombak to Seremban, 3 November 16:00 (evening southern connection).
 4. Putra Heights to Pasar Seni, 3 November 08:00 (direct KJL regression).
 5. Putra Heights to SunU–Monash, 7 November 08:00 (LRT/BRT through USJ 7).
@@ -142,7 +142,7 @@ First run the updated app and manually inspect these searches on a phone:
 7. SL311 LRT Gombak to SL162 Hub UIA, 9 November 08:00 (direct T200 bus).
 8. KLCC to SL162 Hub UIA and reverse, 9 November 08:00 (rail/bus via Gombak).
 
-Refresh the KTM snapshot before testing later dates, and measure the larger bus graph on the target
+Measure the larger bus graph on the target
 phone in airplane mode. Validate the selected walking links and tune performance
 without discarding useful routing labels or weakening the convenience objective.
 The bus scope and implementation are recorded in

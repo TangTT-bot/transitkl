@@ -29,7 +29,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Offline data'), findsOneWidget);
     expect(find.text('KTM Komuter'), findsOneWidget);
-    expect(find.textContaining('November 17, 2026'), findsOneWidget);
+    expect(find.textContaining('December 2, 2026'), findsOneWidget);
     expect(find.textContaining('138 published routes'), findsOneWidget);
     await tester.pageBack();
     await tester.pumpAndSettle();

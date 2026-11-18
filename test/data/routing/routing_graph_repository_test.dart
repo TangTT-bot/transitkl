@@ -17,10 +17,10 @@ void main() {
       expect(data.graph.services, hasLength(443));
       expect(data.graph.rideEdges, hasLength(18327));
       expect(data.graph.transferEdges, hasLength(188));
-      expect(data.graph.scheduledTrips, hasLength(167));
+      expect(data.graph.scheduledTrips, hasLength(168));
       expect(
         data.sources.singleWhere((feed) => feed.id == 'ktmb').serviceDateEnd,
-        DateTime(2026, 11, 17),
+        DateTime(2026, 12, 2),
       );
       expect(
         data.graph.services.values
@@ -125,8 +125,18 @@ void main() {
     );
     expect(route('gombak', 'seremban', departure), isNull);
     expect(route('gombak', 'seremban', DateTime(2026, 11, 3, 16)), isNotNull);
-    expect(route('batu caves', 'klcc', DateTime(2026, 11, 18, 8)), isNull);
-    expect(route('gombak', 'kajang', DateTime(2026, 11, 18, 8)), isNotNull);
+    expect(route('batu caves', 'klcc', DateTime(2026, 11, 18, 8)), isNotNull);
+    final expires = data.sources
+        .singleWhere((feed) => feed.id == 'ktmb')
+        .serviceDateEnd;
+    final afterExpiry = DateTime(
+      expires.year,
+      expires.month,
+      expires.day + 1,
+      8,
+    );
+    expect(route('batu caves', 'klcc', afterExpiry), isNull);
+    expect(route('gombak', 'kajang', afterExpiry), isNotNull);
     final sentul = search.stations
         .where((s) => s.id.startsWith('sentul::'))
         .toList();

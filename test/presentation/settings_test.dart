@@ -10,6 +10,9 @@ void main() {
     tester,
   ) async {
     final data = await tester.runAsync(AssetRoutingGraphRepository().load);
+    final end = data!.sources
+        .singleWhere((feed) => feed.id == 'ktmb')
+        .serviceDateEnd;
     await tester.binding.setSurfaceSize(const Size(320, 640));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
@@ -21,8 +24,8 @@ void main() {
           child: child!,
         ),
         home: JourneyPlannerScreen(
-          data: data!,
-          initialDeparture: DateTime(2026, 11, 18, 8),
+          data: data,
+          initialDeparture: DateTime(end.year, end.month, end.day + 1, 8),
         ),
       ),
     );
