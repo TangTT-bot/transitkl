@@ -24,10 +24,15 @@ void main() {
 
     expect(find.text('Plan your journey'), findsOneWidget);
     expect(find.textContaining('187'), findsNothing);
-    expect(find.textContaining('valid until 31 Dec 2026'), findsOneWidget);
-    expect(find.textContaining('KTM Komuter'), findsWidgets);
-    expect(find.textContaining('Sunway BRT'), findsWidgets);
-    expect(find.textContaining('17 Nov 2026'), findsOneWidget);
+    expect(find.text('Offline data'), findsNothing);
+    await tester.tap(find.byTooltip('Settings'));
+    await tester.pumpAndSettle();
+    expect(find.text('Offline data'), findsOneWidget);
+    expect(find.text('KTM Komuter'), findsOneWidget);
+    expect(find.textContaining('November 17, 2026'), findsOneWidget);
+    expect(find.textContaining('138 published routes'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
 
     await tester.enterText(
       find.byKey(const Key('origin-station-field')),
@@ -67,6 +72,25 @@ void main() {
     expect(find.text('Fewer transfers'), findsNothing);
     expect(find.text('Least walking'), findsNothing);
     expect(find.textContaining('Walking'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('timetables-tab')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('journey-result')), findsNothing);
+    await tester.tap(find.byKey(const Key('plan-tab')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('journey-result')), findsOneWidget);
+    final swap = find.byTooltip('Swap From and To');
+    await tester.ensureVisible(swap);
+    await tester.tap(swap);
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('journey-result')), findsNothing);
+    expect(
+      tester
+          .widget<TextField>(find.byKey(const Key('origin-station-field')))
+          .controller!
+          .text,
+      'Kajang (MRT + KTM Komuter)',
+    );
   });
 
   testWidgets('shows a straightforward LRT to BRT journey through USJ 7', (
@@ -136,7 +160,6 @@ void main() {
       );
       await tester.pump();
       expect(find.byKey(const Key('bus-coverage-notice')), findsOneWidget);
-      expect(find.textContaining('138 published routes'), findsOneWidget);
       await tester.enterText(
         find.byKey(const Key('origin-station-field')),
         'SL311',

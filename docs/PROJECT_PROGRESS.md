@@ -1,6 +1,6 @@
 # TransitKL project progress
 
-Last updated: 17 November 2026
+Last updated: 18 November 2026
 
 ## Current position
 
@@ -35,7 +35,7 @@ updated; it is no longer the main daily implementation task.
 | 6d. Rail and BRT interchange audit | Implemented for 29 mapped station areas | Glenmarie and four other areas corrected; directed links checked against the bundled app asset |
 | 7a. Offline favourites | Implemented | Save, reopen and remove station/stop favourites and directional journey pairs; stored independently of the graph |
 | 7b. Offline station timetables | Implemented | Station/date lookup, exact scheduled departures, clearly labelled frequency windows and per-feed expiry |
-| 7c. Remaining MVP product features | Next | Settings and further empty/error state polish |
+| 7c. Navigation and usability polish | Implemented; phone review remains | Stateful Plan / Timetables / Saved tabs, local appearance settings, route swap and clearer results |
 | 8. Evaluation and release preparation | Not started | Performance study, usability testing, final report evidence and release build |
 
 The five foundation/application milestones and KTM, BRT and published Rapid Bus
@@ -122,7 +122,6 @@ Phone performance still needs measurement.
   database remains a preprocessing artifact; it can replace the JSON runtime
   source later through the existing repository boundary if the final proposal
   specifically requires runtime SQLite queries.
-- General app settings are not persisted; favourites have their own local store.
 - The algorithm weights still need commuter feedback and evaluation; they are
   configurable starting values. The app returns one Recommended result and does
   not display a list of all Pareto alternatives.
@@ -149,6 +148,6 @@ without discarding useful routing labels or weakening the convenience objective.
 The bus scope and implementation are recorded in
 [ADR 0008](architecture/0008-rapid-bus-published-coverage.md).
 
-Next polish settings and evaluate performance and usability for the capstone
-report. Additional MRT feeder coverage or
+Next validate the updated UI on a phone and evaluate performance and usability
+for the capstone report. Additional MRT feeder coverage or
 walking links can be separate bounded extensions, not a claim of universal coverage.

@@ -94,9 +94,14 @@ flutter test
 flutter run
 ```
 
-On the home screen, type a station name into both fields, select a suggestion,
-choose a date and time within the displayed feed range, then select **Find
-journey**. No internet connection is required.
+Open **Plan**, type a station name into each field and select a suggestion.
+Choose a departure date and time, then select **Find journey**. Use the swap
+button to reverse the endpoints. No internet connection is required.
+
+The bottom bar switches between **Plan**, **Timetables** and **Saved** without
+clearing your form or search result. The gear opens **Settings** for System,
+Light or Dark appearance, bundled data validity and attribution. Appearance
+is stored on the device and does not require an account.
 
 Recommended balances actual journey time with a ten-minute ranking penalty per
 vehicle change and additional reluctance to walk. This is the single search
@@ -107,10 +112,10 @@ the arrival time shown to the passenger.
 
 After picking a station or bus stop, tap the star beside it to save the stop.
 Select both From and To, then tap **Save journey** to save that direction.
-Open **Favourites** from the star in the app bar. Use a saved station as
-From or To, or tap a saved journey to fill both fields. Check the departure
+Open **Saved** from the bottom bar. Use a saved station as From or To, open
+its timetable from its menu, or tap a saved journey to fill both fields. Check the departure
 time and tap **Find journey** to get a new Recommended result. Favourites can
-also be removed from the list.
+also be removed from the list, with **Undo** available after removal.
 
 The app stores namespaced stop IDs in local preferences, separate from the
 bundled transit graph. It does not save journey results, timetable times or
@@ -119,7 +124,7 @@ remain visible as unavailable and can still be removed.
 
 ### Timetables
 
-Tap the clock icon in the planner’s app bar, choose a station or bus stop,
+Open **Timetables** from the bottom bar, choose a station or bus stop,
 and select a date. **Scheduled departures** shows published clock times
 grouped by line and direction. KTM trips that end before the line terminus
 show **Ends at** next to the time instead of opening another group.

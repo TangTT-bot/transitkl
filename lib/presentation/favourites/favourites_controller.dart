@@ -97,6 +97,44 @@ final class FavouritesController extends ChangeNotifier {
     );
   }
 
+  Future<bool> restoreStation(SavedStation station) async {
+    if (!canEdit) return false;
+    final snapshot = _snapshot!;
+    if (snapshot.stations.any((saved) => _sameStop(saved, station))) {
+      return true;
+    }
+    return _save(
+      FavouritesSnapshot(
+        stations: [...snapshot.stations, station],
+        journeys: snapshot.journeys,
+      ),
+    );
+  }
+
+  Future<bool> restoreJourney(SavedJourney journey) async {
+    if (!canEdit) return false;
+    final snapshot = _snapshot!;
+    if (snapshot.journeys.any(
+      (saved) =>
+          _sameStop(saved.origin, journey.origin) &&
+          _sameStop(saved.destination, journey.destination),
+    )) {
+      return true;
+    }
+    return _save(
+      FavouritesSnapshot(
+        stations: snapshot.stations,
+        journeys: [...snapshot.journeys, journey],
+      ),
+    );
+  }
+
+  bool _sameStop(SavedStation a, SavedStation b) {
+    final resolved = resolve(a);
+    return (resolved != null && resolved == resolve(b)) ||
+        setEquals(a.stopIds.toSet(), b.stopIds.toSet());
+  }
+
   Future<bool> _save(FavouritesSnapshot updated) async {
     _busy = true;
     notifyListeners();

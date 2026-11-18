@@ -68,7 +68,18 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pumpWidget(app(nextDate));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Favourites'));
+      await tester.tap(find.byKey(const Key('saved-tab')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Use saved station'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('View timetable'));
+      await tester.pumpAndSettle();
+      final timetableStation = find.byKey(const Key('timetable-station-field'));
+      expect(
+        tester.widget<TextField>(timetableStation).controller!.text,
+        'KLANG (KTM Komuter)',
+      );
+      await tester.tap(find.byKey(const Key('saved-tab')));
       await tester.pumpAndSettle();
       await tester.tap(find.byTooltip('Use saved station'));
       await tester.pumpAndSettle();
@@ -81,7 +92,7 @@ void main() {
         'KLANG (KTM Komuter)',
       );
       expect(tester.widget<TextField>(from).controller!.text, isEmpty);
-      await tester.tap(find.byTooltip('Favourites'));
+      await tester.tap(find.byKey(const Key('saved-tab')));
       await tester.pumpAndSettle();
       await tester.tap(find.textContaining('Tap to fill From and To'));
       await tester.pumpAndSettle();
@@ -98,7 +109,7 @@ void main() {
       expect(searches.single.origin.stopIds, ['ktmb:54700']);
       expect(searches.single.departure, nextDate);
 
-      await tester.tap(find.byTooltip('Favourites'));
+      await tester.tap(find.byKey(const Key('saved-tab')));
       await tester.pumpAndSettle();
       await tester.tap(find.byTooltip('Remove saved journey'));
       await tester.pumpAndSettle();
@@ -125,7 +136,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Favourites'));
+    await tester.tap(find.byKey(const Key('saved-tab')));
     await tester.pumpAndSettle();
     expect(find.text('Old stop'), findsOneWidget);
     expect(find.text('Unavailable in this network'), findsOneWidget);
@@ -133,6 +144,9 @@ void main() {
     await tester.tap(find.byTooltip('Remove saved station'));
     await tester.pumpAndSettle();
     expect(store.favourites.stations, isEmpty);
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+    expect(store.favourites.stations.single.label, 'Old stop');
   });
 }
 

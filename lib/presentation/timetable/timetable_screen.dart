@@ -10,6 +10,7 @@ class TimetableScreen extends StatefulWidget {
     required this.data,
     required this.stations,
     required this.initialDate,
+    required this.onUseAsFrom,
     this.initialStation,
     super.key,
   });
@@ -18,6 +19,7 @@ class TimetableScreen extends StatefulWidget {
   final List<StationGroup> stations;
   final DateTime initialDate;
   final StationGroup? initialStation;
+  final ValueChanged<StationGroup> onUseAsFrom;
 
   @override
   State<TimetableScreen> createState() => _TimetableScreenState();
@@ -77,124 +79,119 @@ class _TimetableScreenState extends State<TimetableScreen> {
       timetable?.frequencies ?? [],
       (row) => row.service,
     );
-    return Scaffold(
-      appBar: AppBar(title: const Text('Timetables')),
-      body: SafeArea(
-        child: ListView(
-          key: const Key('timetable-list'),
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-          children: [
+    return ListView(
+      key: const Key('timetable-list'),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+      children: [
+        const Text(
+          'Offline schedules · Malaysia time (MYT)\n'
+          'Live delays, cancellations and special service changes are not included.',
+        ),
+        const SizedBox(height: 16),
+        StationSearchField(
+          fieldKey: const Key('timetable-station-field'),
+          label: 'Station or stop',
+          icon: Icons.place_outlined,
+          stations: widget.stations,
+          selection: station,
+          onChanged: (value) => setState(() {
+            _station = value;
+            _readTimetable();
+          }),
+        ),
+        const SizedBox(height: 8),
+        OutlinedButton.icon(
+          key: const Key('timetable-date-button'),
+          onPressed: _chooseDate,
+          icon: const Icon(Icons.calendar_today_outlined),
+          label: Text(localizations.formatFullDate(_date)),
+        ),
+        const SizedBox(height: 12),
+        if (station == null)
+          const Text('Choose a station or bus stop from the suggestions.')
+        else ...[
+          for (final feed in feeds) ...[
+            Text(
+              '${feed.displayName} · '
+              '${_date.isAfter(feed.serviceDateEnd) ? 'bundled timetable expired' : 'bundled timetable valid'} '
+              'through ${localizations.formatMediumDate(feed.serviceDateEnd)}',
+            ),
+            if (_date.isBefore(feed.serviceDateStart))
+              Text(
+                'Selected date is before the bundled timetable starts '
+                '(${localizations.formatMediumDate(feed.serviceDateStart)}).',
+              ),
+          ],
+          if (operators!.contains('prasarana_rapid_bus_kl'))
+            const Text('Only bus routes in the bundled feed are shown.'),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => widget.onUseAsFrom(station),
+              icon: const Icon(Icons.trip_origin),
+              label: const Text('Use as From'),
+            ),
+          ),
+          if (departures.isEmpty && frequencies.isEmpty)
             const Text(
-              'Offline schedules · Malaysia time (MYT)\n'
-              'Live delays, cancellations and special service changes are not included.',
+              'No departures or frequency windows in the bundled data for this date.',
             ),
-            const SizedBox(height: 16),
-            StationSearchField(
-              fieldKey: const Key('timetable-station-field'),
-              label: 'Station or stop',
-              icon: Icons.place_outlined,
-              stations: widget.stations,
-              selection: station,
-              onChanged: (value) => setState(() {
-                _station = value;
-                _readTimetable();
-              }),
+          if (departures.isNotEmpty) ...[
+            const _SectionTitle(
+              title: 'Scheduled departures',
+              description:
+                  'Times are listed by direction. Check where shorter trips end.',
             ),
-            const SizedBox(height: 8),
-            OutlinedButton.icon(
-              key: const Key('timetable-date-button'),
-              onPressed: _chooseDate,
-              icon: const Icon(Icons.calendar_today_outlined),
-              label: Text(localizations.formatFullDate(_date)),
-            ),
-            const SizedBox(height: 12),
-            if (station == null)
-              const Text('Choose a station or bus stop from the suggestions.')
-            else ...[
-              for (final feed in feeds) ...[
-                Text(
-                  '${feed.displayName} · '
-                  '${_date.isAfter(feed.serviceDateEnd) ? 'bundled timetable expired' : 'bundled timetable valid'} '
-                  'through ${localizations.formatMediumDate(feed.serviceDateEnd)}',
-                ),
-                if (_date.isBefore(feed.serviceDateStart))
-                  Text(
-                    'Selected date is before the bundled timetable starts '
-                    '(${localizations.formatMediumDate(feed.serviceDateStart)}).',
-                  ),
-              ],
-              if (operators!.contains('prasarana_rapid_bus_kl'))
-                const Text('Only bus routes in the bundled feed are shown.'),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  onPressed: () => Navigator.pop(context, station),
-                  icon: const Icon(Icons.trip_origin),
-                  label: const Text('Use as From'),
+            for (final group in departures)
+              _ServiceCard(
+                service: group.key,
+                directionFirst: true,
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final row in group.value)
+                      Chip(
+                        label: Text(
+                          _clock(row.seconds, exact: true) +
+                              (row.endsAt == null
+                                  ? ''
+                                  : ' · Ends at ${row.endsAt}'),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              if (departures.isEmpty && frequencies.isEmpty)
-                const Text(
-                  'No departures or frequency windows in the bundled data for this date.',
-                ),
-              if (departures.isNotEmpty) ...[
-                const _SectionTitle(
-                  title: 'Scheduled departures',
-                  description:
-                      'Times are listed by direction. Check where shorter trips end.',
-                ),
-                for (final group in departures)
-                  _ServiceCard(
-                    service: group.key,
-                    directionFirst: true,
-                    child: Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        for (final row in group.value)
-                          Chip(
-                            label: Text(
-                              _clock(row.seconds, exact: true) +
-                                  (row.endsAt == null
-                                      ? ''
-                                      : ' · Ends at ${row.endsAt}'),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-              ],
-              if (frequencies.isNotEmpty) ...[
-                const _SectionTitle(
-                  title: 'Service frequency',
-                  description:
-                      'Approximate intervals, not exact departures. Route variants may overlap.',
-                ),
-                for (final group in frequencies)
-                  _ServiceCard(
-                    service: group.key,
-                    note: group.value.any((row) => row.lineLevel)
-                        ? 'Line-level windows; not station-specific first or last trains.'
-                        : 'Estimated windows at this stop.',
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        for (final row in group.value)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              '${_clock(row.startSeconds)}–${_clock(row.endSeconds)}'
-                              ' · about every ${_interval(row.headwaySeconds)}',
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-              ],
-            ],
           ],
-        ),
-      ),
+          if (frequencies.isNotEmpty) ...[
+            const _SectionTitle(
+              title: 'Service frequency',
+              description:
+                  'Approximate intervals, not exact departures. Route variants may overlap.',
+            ),
+            for (final group in frequencies)
+              _ServiceCard(
+                service: group.key,
+                note: group.value.any((row) => row.lineLevel)
+                    ? 'Line-level windows; not station-specific first or last trains.'
+                    : 'Estimated windows at this stop.',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (final row in group.value)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Text(
+                          '${_clock(row.startSeconds)}–${_clock(row.endSeconds)}'
+                          ' · about every ${_interval(row.headwaySeconds)}',
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        ],
+      ],
     );
   }
 }

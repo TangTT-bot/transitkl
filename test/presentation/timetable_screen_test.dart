@@ -30,7 +30,7 @@ void main() {
         ),
       ),
     );
-    await tester.tap(find.byTooltip('Timetables'));
+    await tester.tap(find.byKey(const Key('timetables-tab')));
     await tester.pumpAndSettle();
   }
 
@@ -93,7 +93,12 @@ void main() {
     expect(find.text('Service frequency'), findsNothing);
 
     final date = find.byKey(const Key('timetable-date-button'));
-    await tester.scrollUntilVisible(date, -140, scrollable: scrollable);
+    await tester.scrollUntilVisible(
+      date.hitTestable(),
+      -140,
+      scrollable: scrollable,
+    );
+    await tester.pumpAndSettle();
     await tester.tap(date);
     await tester.pumpAndSettle();
     await tester.tap(find.text('18'));
@@ -122,10 +127,13 @@ void main() {
       await tester.pumpAndSettle();
       final from = find.byKey(const Key('origin-station-field'));
       expect(tester.widget<TextField>(from).controller!.text, 'SS 15 (LRT)');
-      expect(find.text('Timetables'), findsNothing);
+      expect(
+        tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
+        0,
+      );
       expect(searches, isEmpty);
 
-      await tester.tap(find.byTooltip('Timetables'));
+      await tester.tap(find.byKey(const Key('timetables-tab')));
       await tester.pumpAndSettle();
       final station = find.byKey(const Key('timetable-station-field'));
       expect(tester.widget<TextField>(station).controller!.text, 'SS 15 (LRT)');

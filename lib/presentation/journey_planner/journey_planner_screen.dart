@@ -10,8 +10,12 @@ import '../../domain/routing/routing_graph.dart';
 import '../../domain/search/journey_search_service.dart';
 import '../favourites/favourites_controller.dart';
 import '../favourites/favourites_screen.dart';
+import '../settings/appearance_controller.dart';
+import '../settings/settings_screen.dart';
 import '../shared/station_search_field.dart';
 import '../timetable/timetable_screen.dart';
+
+enum _HomeTab { plan, timetables, saved }
 
 class JourneyPlannerScreen extends StatefulWidget {
   const JourneyPlannerScreen({
@@ -19,6 +23,7 @@ class JourneyPlannerScreen extends StatefulWidget {
     this.initialDeparture,
     this.searchRunner = runJourneySearch,
     this.favouritesRepository,
+    this.appearance,
     super.key,
   });
 
@@ -26,6 +31,7 @@ class JourneyPlannerScreen extends StatefulWidget {
   final DateTime? initialDeparture;
   final JourneySearchRunner searchRunner;
   final FavouritesRepository? favouritesRepository;
+  final AppearanceController? appearance;
 
   @override
   State<JourneyPlannerScreen> createState() => _JourneyPlannerScreenState();
@@ -34,6 +40,10 @@ class JourneyPlannerScreen extends StatefulWidget {
 class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
   late final JourneySearchService _searchService;
   FavouritesController? _favourites;
+  _HomeTab _tab = _HomeTab.plan;
+  bool _timetableOpened = false;
+  int _timetableVersion = 0;
+  StationGroup? _timetableStation;
   int _originFieldVersion = 0;
   int _destinationFieldVersion = 0;
   late DateTime _departure;
@@ -74,162 +84,278 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colours = Theme.of(context).colorScheme;
+    final favourites = _favourites;
+    return PopScope(
+      canPop: _tab == _HomeTab.plan,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && _tab != _HomeTab.plan) _selectTab(_HomeTab.plan);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(switch (_tab) {
+            _HomeTab.plan => 'TransitKL',
+            _HomeTab.timetables => 'Timetables',
+            _HomeTab.saved => 'Saved',
+          }),
+          actions: [
+            IconButton(
+              tooltip: 'Settings',
+              onPressed: _openSettings,
+              icon: const Icon(Icons.settings_outlined),
+            ),
+            const SizedBox(width: 8),
+          ],
+        ),
+        body: SafeArea(
+          bottom: false,
+          child: IndexedStack(
+            index: _tab.index,
+            sizing: StackFit.expand,
+            children: [
+              _tabContent(_HomeTab.plan, _buildPlan(context)),
+              _tabContent(
+                _HomeTab.timetables,
+                _timetableOpened
+                    ? TimetableScreen(
+                        key: ValueKey(_timetableVersion),
+                        data: widget.data,
+                        stations: _searchService.stations,
+                        initialDate: _departure,
+                        initialStation: _timetableStation ?? _origin,
+                        onUseAsFrom: (station) => _applySavedSelection((
+                          origin: station,
+                          destination: null,
+                        )),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              _tabContent(
+                _HomeTab.saved,
+                favourites != null
+                    ? FavouritesScreen(
+                        controller: favourites,
+                        onUse: _applySavedSelection,
+                        onTimetable: _viewTimetable,
+                      )
+                    : const Center(
+                        child: Text('Saved journeys are unavailable.'),
+                      ),
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: MediaQuery.viewInsetsOf(context).bottom > 0
+            ? null
+            : NavigationBar(
+                selectedIndex: _tab.index,
+                indicatorColor: colours.secondaryContainer,
+                onDestinationSelected: (index) =>
+                    _selectTab(_HomeTab.values[index]),
+                destinations: const [
+                  NavigationDestination(
+                    key: Key('plan-tab'),
+                    icon: Icon(Icons.route_outlined),
+                    selectedIcon: Icon(Icons.route),
+                    label: 'Plan',
+                  ),
+                  NavigationDestination(
+                    key: Key('timetables-tab'),
+                    icon: Icon(Icons.schedule_outlined),
+                    selectedIcon: Icon(Icons.schedule),
+                    label: 'Timetables',
+                  ),
+                  NavigationDestination(
+                    key: Key('saved-tab'),
+                    icon: Icon(Icons.bookmark_outline),
+                    selectedIcon: Icon(Icons.bookmark),
+                    label: 'Saved',
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  Widget _tabContent(_HomeTab tab, Widget child) => ExcludeFocus(
+    excluding: _tab != tab,
+    child: TickerMode(enabled: _tab == tab, child: child),
+  );
+
+  Widget _buildPlan(BuildContext context) {
     final favourites = _favourites;
     final origin = _origin;
     final destination = _destination;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('TransitKL'),
-        actions: [
-          IconButton(
-            tooltip: 'Timetables',
-            onPressed: _openTimetable,
-            icon: const Icon(Icons.schedule),
-          ),
-          if (favourites != null)
-            IconButton(
-              tooltip: 'Favourites',
-              onPressed: () => _openFavourites(favourites),
-              icon: const Icon(Icons.star_outline),
-            ),
-          IconButton(
-            tooltip: 'About this data',
-            onPressed: _showDataInformation,
-            icon: const Icon(Icons.info_outline),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+    final hasBus = widget.data.sources.any(
+      (feed) => feed.id == 'prasarana_rapid_bus_kl',
+    );
+    final unavailable = widget.data.sources.where(
+      (feed) =>
+          DateUtils.dateOnly(_departure).isAfter(feed.serviceDateEnd) ||
+          DateUtils.dateOnly(_departure).isBefore(feed.serviceDateStart),
+    );
+    return ListView(
+      key: const PageStorageKey('plan-scroll'),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+      children: [
+        Row(
           children: [
-            Text(
-              'Plan your journey',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Rail, KTM Komuter, Sunway BRT and published Rapid Bus routes, offline.',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 16),
-            _FeedStatusCard(feeds: widget.data.sources),
-            if (widget.data.sources.any(
-              (feed) => feed.id == 'prasarana_rapid_bus_kl',
-            )) ...[
-              const SizedBox(height: 8),
-              const Text(
-                'Partial bus coverage: only officially published routes and usable trips. '
-                'Not all Klang Valley buses or rail/bus connections are included.',
-                key: Key('bus-coverage-notice'),
+            Expanded(
+              child: Text(
+                'Plan your journey',
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
-            ],
-            const SizedBox(height: 20),
-            StationSearchField(
-              key: ValueKey(('from', _originFieldVersion)),
-              fieldKey: const Key('origin-station-field'),
-              label: 'From',
-              icon: Icons.trip_origin,
-              stations: _searchService.stations,
-              selection: origin,
-              suffixIcon: _stationFavouriteButton(favourites, origin, 'From'),
-              onChanged: (station) => setState(() {
-                _origin = station;
-                _clearResult();
-              }),
             ),
-            const SizedBox(height: 12),
-            StationSearchField(
-              key: ValueKey(('to', _destinationFieldVersion)),
-              fieldKey: const Key('destination-station-field'),
-              label: 'To',
-              icon: Icons.location_on_outlined,
-              stations: _searchService.stations,
-              selection: destination,
-              suffixIcon: _stationFavouriteButton(
-                favourites,
-                destination,
-                'To',
-              ),
-              onChanged: (station) => setState(() {
-                _destination = station;
-                _clearResult();
-              }),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    key: const Key('departure-date-button'),
-                    onPressed: _selectDate,
-                    icon: const Icon(Icons.calendar_today_outlined),
-                    label: Text(_formatDate(_departure)),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    key: const Key('departure-time-button'),
-                    onPressed: _selectTime,
-                    icon: const Icon(Icons.schedule),
-                    label: Text(_formatTime(_departure)),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            FilledButton.icon(
-              key: const Key('find-journey-button'),
-              onPressed: !_searching && _origin != null && _destination != null
-                  ? _findJourney
+            IconButton(
+              tooltip: 'Swap From and To',
+              onPressed: origin != null && destination != null
+                  ? _swapStations
                   : null,
-              icon: _searching
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.route),
-              label: Padding(
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Text(_searching ? 'Finding journey...' : 'Find journey'),
-              ),
+              icon: const Icon(Icons.swap_vert),
             ),
-            if (favourites != null &&
-                origin != null &&
-                destination != null &&
-                origin != destination)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                  onPressed: favourites.canEdit
-                      ? () => _saveFavourite(
-                          favourites.toggleJourney(origin, destination),
-                        )
-                      : null,
-                  icon: Icon(
-                    favourites.hasJourney(origin, destination)
-                        ? Icons.star
-                        : Icons.star_outline,
-                  ),
-                  label: Text(
-                    favourites.hasJourney(origin, destination)
-                        ? 'Remove saved journey'
-                        : 'Save journey',
-                  ),
-                ),
-              ),
-            const SizedBox(height: 24),
-            if (_searchError != null)
-              Text(_searchError!, key: const Key('journey-search-error'))
-            else if (_journey case final journey?)
-              JourneyResultView(graph: widget.data.graph, journey: journey)
-            else if (_searched)
-              const _NoJourneyCard(),
           ],
         ),
-      ),
+        const SizedBox(height: 10),
+        StationSearchField(
+          key: ValueKey(('from', _originFieldVersion)),
+          fieldKey: const Key('origin-station-field'),
+          label: 'From',
+          icon: Icons.trip_origin,
+          stations: _searchService.stations,
+          selection: origin,
+          suffixIcon: _stationFavouriteButton(favourites, origin, 'From'),
+          onChanged: (station) => setState(() {
+            _origin = station;
+            _clearResult();
+          }),
+        ),
+        const SizedBox(height: 12),
+        StationSearchField(
+          key: ValueKey(('to', _destinationFieldVersion)),
+          fieldKey: const Key('destination-station-field'),
+          label: 'To',
+          icon: Icons.location_on_outlined,
+          stations: _searchService.stations,
+          selection: destination,
+          suffixIcon: _stationFavouriteButton(favourites, destination, 'To'),
+          onChanged: (station) => setState(() {
+            _destination = station;
+            _clearResult();
+          }),
+        ),
+        const SizedBox(height: 12),
+        const Text('Departure · Malaysia time'),
+        const SizedBox(height: 4),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                key: const Key('departure-date-button'),
+                onPressed: _selectDate,
+                icon: const Icon(Icons.calendar_today_outlined),
+                label: Text(_formatDate(_departure)),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: OutlinedButton.icon(
+                key: const Key('departure-time-button'),
+                onPressed: _selectTime,
+                icon: const Icon(Icons.schedule),
+                label: Text(_formatTime(_departure)),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        FilledButton.icon(
+          key: const Key('find-journey-button'),
+          onPressed: !_searching && _origin != null && _destination != null
+              ? _findJourney
+              : null,
+          icon: _searching
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : const Icon(Icons.route),
+          label: Padding(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            child: Text(_searching ? 'Finding journey...' : 'Find journey'),
+          ),
+        ),
+        if (favourites != null &&
+            origin != null &&
+            destination != null &&
+            origin != destination)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: favourites.canEdit
+                  ? () => _saveFavourite(
+                      favourites.toggleJourney(origin, destination),
+                    )
+                  : null,
+              icon: Icon(
+                favourites.hasJourney(origin, destination)
+                    ? Icons.star
+                    : Icons.star_outline,
+              ),
+              label: Text(
+                favourites.hasJourney(origin, destination)
+                    ? 'Remove saved journey'
+                    : 'Save journey',
+              ),
+            ),
+          ),
+        if (unavailable.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(
+            'Bundled schedules do not cover this departure date for '
+            '${unavailable.map((feed) => feed.displayName).join(' and ')}.',
+            key: const Key('plan-data-warning'),
+          ),
+        ],
+        if (hasBus) ...[
+          const SizedBox(height: 8),
+          Text(
+            'Offline schedules · Partial bus coverage',
+            key: const Key('bus-coverage-notice'),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+        const SizedBox(height: 16),
+        if (_searchError != null)
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_searchError!, key: const Key('journey-search-error')),
+                  TextButton(
+                    onPressed: _searching ? null : _findJourney,
+                    child: const Text('Retry search'),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else if (_journey case final journey?)
+          JourneyResultView(
+            graph: widget.data.graph,
+            journey: journey,
+            onViewTimetable: (stopId) {
+              final station = _searchService.stations.firstWhere(
+                (station) => station.stopIds.contains(stopId),
+              );
+              _viewTimetable(station);
+            },
+          )
+        else if (_searched)
+          _NoJourneyCard(onChangeDeparture: _selectTime),
+      ],
     );
   }
 
@@ -258,35 +384,40 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
     );
   }
 
-  Future<void> _openTimetable() async {
+  void _selectTab(_HomeTab tab) {
     FocusManager.instance.primaryFocus?.unfocus();
-    final station = await Navigator.of(context).push<StationGroup>(
-      MaterialPageRoute(
-        builder: (context) => TimetableScreen(
-          data: widget.data,
-          stations: _searchService.stations,
-          initialDate: _departure,
-          initialStation: _origin,
-        ),
-      ),
-    );
-    if (!mounted || station == null) return;
     setState(() {
-      _origin = station;
+      _tab = tab;
+      if (tab == _HomeTab.timetables) _timetableOpened = true;
+    });
+  }
+
+  void _viewTimetable(StationGroup station) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {
+      _timetableStation = station;
+      _timetableVersion++;
+      _timetableOpened = true;
+      _tab = _HomeTab.timetables;
+    });
+  }
+
+  void _swapStations() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {
+      final previousOrigin = _origin;
+      _origin = _destination;
+      _destination = previousOrigin;
       _originFieldVersion++;
+      _destinationFieldVersion++;
       _clearResult();
     });
   }
 
-  Future<void> _openFavourites(FavouritesController favourites) async {
+  void _applySavedSelection(FavouriteSelection selection) {
     FocusManager.instance.primaryFocus?.unfocus();
-    final selection = await Navigator.of(context).push<FavouriteSelection>(
-      MaterialPageRoute(
-        builder: (context) => FavouritesScreen(controller: favourites),
-      ),
-    );
-    if (!mounted || selection == null) return;
     setState(() {
+      _tab = _HomeTab.plan;
       if (selection.origin case final origin?) {
         _origin = origin;
         _originFieldVersion++;
@@ -297,6 +428,18 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
       }
       _clearResult();
     });
+  }
+
+  void _openSettings() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (_) => SettingsScreen(
+          feeds: widget.data.sources,
+          appearance: widget.appearance,
+        ),
+      ),
+    );
   }
 
   void _clearResult() {
@@ -387,64 +530,19 @@ class _JourneyPlannerScreenState extends State<JourneyPlannerScreen> {
       _clearResult();
     });
   }
-
-  void _showDataInformation() {
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.fromLTRB(24, 4, 24, 32),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Offline transit data',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Rapid Rail, Sunway BRT and frequency-based buses use estimated waits from published headways. '
-                'KTM Komuter uses exact scheduled departures. Walking allowances '
-                'are estimates. Live delays and cancellations are not included.',
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Some Komuter trips terminate early. Results follow the supplied timetable, including service gaps.',
-              ),
-              for (final feed in widget.data.sources.where(
-                (feed) => feed.coverageNote.isNotEmpty,
-              ))
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(feed.coverageNote),
-                ),
-              const SizedBox(height: 8),
-              const Text('Source: data.gov.my • CC BY 4.0'),
-              const SizedBox(height: 8),
-              for (final feed in widget.data.sources)
-                Text(
-                  '${feed.displayName}: ${_formatDate(feed.serviceDateStart)} '
-                  'to ${_formatDate(feed.serviceDateEnd)}.',
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class JourneyResultView extends StatelessWidget {
   const JourneyResultView({
     required this.graph,
     required this.journey,
+    this.onViewTimetable,
     super.key,
   });
 
   final RoutingGraph graph;
   final Journey journey;
+  final ValueChanged<String>? onViewTimetable;
 
   @override
   Widget build(BuildContext context) {
@@ -469,53 +567,43 @@ class JourneyResultView extends StatelessWidget {
                 graph: graph,
                 timing: timing,
                 journeyDate: journey.departure,
+                onViewTimetable: onViewTimetable == null
+                    ? null
+                    : () => onViewTimetable!(timing.leg.fromStopId),
               ),
             ),
         Card(
           color: Theme.of(context).colorScheme.primaryContainer,
           child: Padding(
             padding: const EdgeInsets.all(18),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Total from ${_formatTime(journey.departure)}'),
-                      Text(
-                        _formatDuration(journey.totalTravelSeconds),
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'Waiting (included): ${_formatDuration(journey.totalWaitingSeconds)}',
-                      ),
-                      Text(
-                        'Riding + walking: ${_formatDuration(journey.totalMovingSeconds)}',
-                      ),
-                      Text(
-                        '${journey.transferCount} transfer${journey.transferCount == 1 ? '' : 's'}',
-                      ),
-                      Text(
-                        'Walking ${_formatDuration(journey.totalWalkingSeconds)}',
-                      ),
-                    ],
-                  ),
+                Text(
+                  'Arrive ${_formatJourneyTime(journey.arrival, journey.departure)}',
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      const Text('Arrive'),
-                      Text(
-                        _formatJourneyTime(journey.arrival, journey.departure),
-                        textAlign: TextAlign.end,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ],
-                  ),
+                const SizedBox(height: 6),
+                Wrap(
+                  spacing: 14,
+                  runSpacing: 4,
+                  children: [
+                    Text(_formatDuration(journey.totalTravelSeconds)),
+                    Text(
+                      '${journey.transferCount} transfer${journey.transferCount == 1 ? '' : 's'}',
+                    ),
+                    Text(
+                      'Walking ${_formatDuration(journey.totalWalkingSeconds)}',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text('Total from ${_formatTime(journey.departure)}'),
+                Text(
+                  'Waiting (included): ${_formatDuration(journey.totalWaitingSeconds)}',
+                ),
+                Text(
+                  'Riding + walking: ${_formatDuration(journey.totalMovingSeconds)}',
                 ),
               ],
             ),
@@ -542,11 +630,13 @@ class _ScheduledWaitNotice extends StatelessWidget {
     required this.graph,
     required this.timing,
     required this.journeyDate,
+    this.onViewTimetable,
   });
 
   final RoutingGraph graph;
   final JourneyLegTiming timing;
   final DateTime journeyDate;
+  final VoidCallback? onViewTimetable;
 
   @override
   Widget build(BuildContext context) {
@@ -574,44 +664,11 @@ class _ScheduledWaitNotice extends StatelessWidget {
             ),
             Text('Wait at this stop: ${_formatDuration(leg.waitSeconds)}.'),
             const Text('Try a later start time to reduce the wait.'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FeedStatusCard extends StatelessWidget {
-  const _FeedStatusCard({required this.feeds});
-
-  final List<TransitFeedMetadata> feeds;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          children: [
-            Icon(
-              Icons.offline_bolt_outlined,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (final feed in feeds)
-                    Text(
-                      '${feed.displayName} • '
-                      '${feed.id == 'prasarana_rapid_bus_kl' ? '${feed.includedRouteCount} published routes • ' : ''}'
-                      '${DateUtils.dateOnly(DateTime.now()).isAfter(feed.serviceDateEnd) ? 'expired' : 'valid until'} '
-                      '${_formatDate(feed.serviceDateEnd)}',
-                    ),
-                ],
+            if (onViewTimetable != null)
+              TextButton(
+                onPressed: onViewTimetable,
+                child: const Text('View boarding timetable'),
               ),
-            ),
           ],
         ),
       ),
@@ -730,7 +787,9 @@ class _JourneyLegCard extends StatelessWidget {
 }
 
 class _NoJourneyCard extends StatelessWidget {
-  const _NoJourneyCard();
+  const _NoJourneyCard({required this.onChangeDeparture});
+
+  final VoidCallback onChangeDeparture;
 
   @override
   Widget build(BuildContext context) {
@@ -744,11 +803,18 @@ class _NoJourneyCard extends StatelessWidget {
               color: Theme.of(context).colorScheme.error,
             ),
             const SizedBox(width: 12),
-            const Expanded(
-              child: Text(
-                'No journey was found within six hours. Try another date, '
-                'time, or stop. Missing published data or an unconfigured walking '
-                'connection can also prevent a result.',
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'No journey was found within six hours. Try another time, date, or stop.',
+                  ),
+                  TextButton(
+                    onPressed: onChangeDeparture,
+                    child: const Text('Change departure time'),
+                  ),
+                ],
               ),
             ),
           ],
